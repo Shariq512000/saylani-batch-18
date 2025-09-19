@@ -1,0 +1,12 @@
+Signup and Login on Github.com
+Create New Repository
+Enter Name Of Repository and Click On Create Repository Button
+Click On "uploading an existing file" option
+Click On "Choose Your File" Option
+Select your html file and upload
+Enter You Comment and click on commit changes
+
+Navigate on Your Repository
+Click On Setting 
+Click on "pages" on left bar
+Change Branch none to main then click on save
