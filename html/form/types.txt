@@ -1,0 +1,2 @@
+Type:
+        text,Password,email,number,date,Month
