@@ -7,15 +7,44 @@
 </head>
 <body>
     <form>
-        Name: <input type="text" maxlength="12">
+        Name: <input type="text" maxlength="12" size="30" placeholder="Enter Your Name" required>
         <br>
-        Roll Number: <input type="text">
+        Email: <input type="email" placeholder="Enter Your Email">
         <br>
-        Password: <input type="password">
+        Roll Number: <input type="text" placeholder="Enter Your Roll Number">
         <br>
-        Age: <input type="number" min="1" max="99">
+        Password: <input type="password" placeholder="Enter Your Password">
         <br>
-        Date Of Birth: <input type="date" min="2024-09-29" max="2025-09-29">
+        Age: <input type="number" min="1" max="99" placeholder="Enter Your Age">
+        <br>
+        Date Of Birth: <input type="date" min="2024-09-29" max="2025-09-29" placeholder="Enter Your Birth Date">
+        <br>
+        Admission Month: <input type="month" required>
+        <br>
+        Class Timing: <input type="time">
+        <br>
+        Message: <textarea placeholder="Enter Your Message" rows="5" cols="35"></textarea>
+        <br>
+        Gender: Male <input type="radio" value="Male" name="gender" checked="checked"> Female <input type="radio" value="Female" name="gender">
+        <br>
+        Services: 
+        <br>
+        <input type="checkbox" checked="checked"> Internet
+        <br>
+        <input type="checkbox"> Cable
+        <br>
+        Course:
+        <select>
+            <option selected disabled> -- Select Course -- </option>
+            <option>Modern Web and App Development</option>
+            <option>Ai & Data  Science</option>
+            <option>Graphic Design</option>
+        </select>
+        <br>
+        Upload Profile Picture: <input type="file">
+        <br>
+        <!-- <input type="submit" value="Submit Form"> -->
+        <button type="submit">Submit Form</button>
     </form>
 </body>
 </html>

@@ -1,2 +1,2 @@
 Type:
-        text,Password,email,number,date,Month
+        text,Password,email,number,date,Month,Time
