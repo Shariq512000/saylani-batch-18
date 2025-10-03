@@ -7,17 +7,26 @@
 </head>
 <body>
     <form>
-        Name: <input type="text" maxlength="12" size="30" placeholder="Enter Your Name" required>
-        <br>
-        Email: <input type="email" placeholder="Enter Your Email">
-        <br>
-        Roll Number: <input type="text" placeholder="Enter Your Roll Number">
-        <br>
-        Password: <input type="password" placeholder="Enter Your Password">
-        <br>
-        Age: <input type="number" min="1" max="99" placeholder="Enter Your Age">
+        <fieldset>
+            <legend>Personal Details</legend>
+            <label for="userName">
+                Name:
+            </label>
+            <input id="userName" type="text" maxlength="12" size="30" placeholder="Enter Your Name" required>
+            <br>
+            Email: <input type="email" placeholder="Enter Your Email">
+            <!-- <br> -->
+            <!-- Roll Number: <input type="text" placeholder="Enter Your Roll Number" disabled> -->
+            <br>
+            Age: <input type="number" min="1" max="99" placeholder="Enter Your Age">
+            <br>
+            Gender: <label for="male">Male</label> <input type="radio" id="male" value="Male" name="gender" checked> <label for="female">Female</label> <input id="female" type="radio" value="Female" name="gender">
+        </fieldset>
+        <input type="search" placeholder="Search...">
         <br>
         Date Of Birth: <input type="date" min="2024-09-29" max="2025-09-29" placeholder="Enter Your Birth Date">
+        <br>
+        Password: <input type="password" placeholder="Enter Your Password">
         <br>
         Admission Month: <input type="month" required>
         <br>
@@ -25,13 +34,11 @@
         <br>
         Message: <textarea placeholder="Enter Your Message" rows="5" cols="35"></textarea>
         <br>
-        Gender: Male <input type="radio" value="Male" name="gender" checked="checked"> Female <input type="radio" value="Female" name="gender">
-        <br>
         Services: 
         <br>
-        <input type="checkbox" checked="checked"> Internet
+        <input type="checkbox" checked="checked" id="internet"> <label for="internet">Internet</label>
         <br>
-        <input type="checkbox"> Cable
+        <input type="checkbox" id="cable"> <label for="cable">Cable</label>
         <br>
         Course:
         <select>
