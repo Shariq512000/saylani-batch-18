@@ -1,0 +1,46 @@
+/* Universal Selector */
+/* *{
+    color: red;
+} */
+
+/* TYPE Selector */
+/* p, h1, h2{
+    color: red;
+} */
+
+/* CLASS Selector */
+/* .note{
+    color: yellow;
+} */
+/* p.note{
+    color: yellow;
+} */
+
+
+/* ID Selector */
+/* #introduction{
+    color: blueviolet;
+} */
+
+
+/* Child Selector */
+/* li > a {
+    color: red;
+} */
+
+
+/* Descendant Selector */
+/* ul a{
+    color: red;
+} */
+
+/* Adjasent Sibling Selector */
+/* h1+p{
+    color: salmon;
+} */
+
+
+/* General Sibling Selector */
+h1~p{
+    color: salmon;
+}
