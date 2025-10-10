@@ -1,0 +1,13 @@
+body{
+                /* RGB */
+    /* background-color: rgb(0, 0, 0); */ 
+                /* HEX Code */
+    /* background-color: #ee3e80; */
+                /* COLOR NAME */
+    /* background-color: red; */
+}
+
+h1{
+    background-color: red;
+    color: blue;
+}

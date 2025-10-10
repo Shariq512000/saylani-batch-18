@@ -12,10 +12,26 @@
 /* .note{
     color: yellow;
 } */
-/* p.note{
-    color: yellow;
-} */
 
+p{
+    color: red;
+}
+
+.note{
+    color: yellow;
+}
+
+#note{
+    color: aqua;
+}
+
+p.note{
+    color: bisque !important;
+}
+
+#note > span{
+    color: green;
+}
 
 /* ID Selector */
 /* #introduction{
@@ -41,6 +57,6 @@
 
 
 /* General Sibling Selector */
-h1~p{
+/* h1~p{
     color: salmon;
-}
+} */
