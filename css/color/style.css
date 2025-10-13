@@ -7,7 +7,21 @@ body{
     /* background-color: red; */
 }
 
-h1{
-    background-color: red;
-    color: blue;
+/* h1{
+    background-color: blue;
+    color: red;
+} */
+
+.container #box2{
+    background-color: rgba(0, 0, 0, 1);
+    position: relative;
+    left: -150px;
+    top: 150px;
+}
+
+.container > .box{
+    background-color: rgb(255, 0, 0);
+    width: 400px;
+    height: 400px;
+    display: inline-block;
 }
