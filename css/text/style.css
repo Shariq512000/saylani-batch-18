@@ -1,5 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Ephesis&display=swap');
-
-body{
-    font-family: "Ephesis", cursive;
+/* @import url('https://fonts.googleapis.com/css2?family=Playwrite+DE+SAS:wght@100..400&display=swap'); */
+@font-face {
+    font-family: Abc;
+    src: url("fonts/PlaywriteDESAS-VariableFont_wght.ttf");
 }
+
+h1{
+    font-family: Abc, cursive;
+    /* text-align: right; */
+    /* font-size: 50px; */
+    text-shadow: -10px -10px 5px rgba(0,0,0,1);
+}
+p{
+    /* font-weight: 100; */
+    /* font-style: oblique; */
+    text-transform: capitalize;
+    /* line-height: 1; */
+    /* text-decoration: none; */
+    /* letter-spacing: 10px; */
+    /* word-spacing: 20px; */
+    /* vertical-align: text-top; */
+    /* text-indent: 50px; */
+}
+/* #imgPara{
+    vertical-align: text-top;
+} */
