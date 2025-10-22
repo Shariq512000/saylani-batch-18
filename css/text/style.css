@@ -5,15 +5,18 @@
 }
 
 h1{
+    text-align: center;
     font-family: Abc, cursive;
     /* text-align: right; */
     /* font-size: 50px; */
-    text-shadow: -10px -10px 5px rgba(0,0,0,1);
+    text-shadow: -10px -10px 5px rgba(0, 0, 0, 0.7);
 }
 p{
-    /* font-weight: 100; */
-    /* font-style: oblique; */
-    text-transform: capitalize;
+    /* text-indent: 50px; */
+    /* font-family: Abc; */
+    /* font-weight: 700; */
+    /* font-style: italic; */
+    /* text-transform: capitalize; */
     /* line-height: 1; */
     /* text-decoration: none; */
     /* letter-spacing: 10px; */
@@ -21,6 +24,33 @@ p{
     /* vertical-align: text-top; */
     /* text-indent: 50px; */
 }
+/* p:first-letter{
+    color: red;
+} */
+/* p:first-line{
+    color: red;
+} */
 /* #imgPara{
     vertical-align: text-top;
 } */
+
+/* a:visited{
+    color: gray;
+}
+a:link{
+    color: red;
+} */
+
+button:hover{
+    background-color: red;
+    color: white;
+}
+
+button:active{
+    background-color: blue;
+    color: white;
+}
+
+input:focus{
+    background-color: yellow;
+}

@@ -1,0 +1,82 @@
+/* .box{
+    background-color: red;
+    height: 600px;
+    width: 600px;
+}
+
+.box > p{
+    width: 75%;
+    height: 75%;
+    background-color: blue;
+} */
+body{
+    margin: 0;
+}
+p{
+    /* display: inline-block;
+    min-width: 200px;
+    max-width: 900px;
+    min-height: 100px;
+    max-height: 800px;
+    background-color: red; */
+    /* overflow: scroll; */
+}
+
+.box{
+    width: 200px;
+    height: 200px;
+    border-radius: 200px;
+    background-color: red;
+    /* border-width: 5px 4px 3px 2px;
+    border-style: solid dotted dashed double;
+    border-color: blue yellow gray green; */
+    /* border-width: 5px;
+    border-style: dashed;
+    border-color: purple; */
+    border: 5px dashed purple;
+
+}
+
+p{
+    /* border: 2px solid black; */
+    /* padding: 20px; */
+    /* padding-top: 0px;
+    padding-right: 15px;
+    padding-bottom: 0px;
+    padding-left: 15px; */
+    /* text-align: center;
+    width: 250px;
+    padding: 0 15px;
+    margin: 0 auto; */
+    /* margin-top: 20px; */
+
+    border: 3px solid #ff0000;
+    padding: 20px 15px 10px 5px;
+    width: 300px;
+    text-align: center;
+    /* margin: auto; */
+    /* margin-left: 100px; */
+    /* margin: 0;
+    margin-top: 50px; */
+    /* padding-top: 20px;
+    padding-right: 15px;
+    padding-bottom: 10px;
+    padding-left: 5px; */
+    /* display: none; */
+    /* visibility: hidden; */
+    /* box-shadow: 10px 10px 8px rgba(0, 0, 0, 0.6); */
+    margin: 0;
+    margin-left: 10px;
+    margin-top: 10px;
+    border-radius: 2px;
+    /* transition: all 0.4s ease-in-out; */
+}
+/* p:hover{
+    margin: 0;
+    box-shadow: 10px 10px 8px rgba(0, 0, 0, 0.6);
+} */
+
+h1{
+    background-color: red;
+    display: none;
+}

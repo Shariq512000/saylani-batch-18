@@ -1,0 +1,37 @@
+/* p::first-letter{
+    color: red;
+    font-size: 50px;
+}
+
+p::first-line{
+    color: red;
+    font-size: 50px;
+} */
+
+a:link{
+    color: red;
+}
+a:visited{
+    color: gray;
+}
+
+a:hover{
+    /* text-decoration: underline; */
+    color: aqua;
+}
+
+button{
+    background-color: blue;
+    color: #fff;
+}
+button:hover{
+    background-color: red;
+    color: black;
+}
+button:active{
+    background-color: green;
+    color: white;
+}
+input:focus{
+    background-color: green;
+}
