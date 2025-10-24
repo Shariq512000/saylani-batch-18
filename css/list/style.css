@@ -1,0 +1,10 @@
+ul{
+    /* list-style-type: square; */
+    list-style-image: url("star.png");
+}
+
+#olList{
+    /* list-style-type: upper-roman; */
+    /* list-style-position: inside; */
+    list-style: inside upper-roman;
+}

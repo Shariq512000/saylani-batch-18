@@ -1,0 +1,40 @@
+table{
+    /* width: 350px; */
+    /* empty-cells: hide; */
+    /* border-spacing: 15px 5px; */
+    /* border-spacing: 0; */
+    border-collapse: collapse;
+}
+
+*{
+    outline: none;
+}
+
+th,td{
+    width: 150px;
+    border: 1px solid black;
+    padding: 5px;
+    text-transform: uppercase;
+    font-size: 20px;
+    text-align: center;
+    background-color: aqua;
+    /* letter-spacing: 5px; */
+}
+
+td:hover, th:hover{
+    background-color: red;
+}
+
+textarea:focus{
+    border-color: red;
+}
+
+/* button{
+    background-color: blue;
+    color: white;
+}
+
+button:hover{
+    background-color: red;
+    color: black;
+} */
