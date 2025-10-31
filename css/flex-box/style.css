@@ -1,0 +1,21 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.container{
+    background-color: blue;
+    display: flex;
+    /* flex-direction: column-reverse; */
+    /* flex-wrap: wrap; */
+    /* flex-flow: row wrap; */
+    justify-content: space-evenly;
+    /* flex-direction: row-reverse; */
+}
+
+.items{
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    font-size: 40px;
+}

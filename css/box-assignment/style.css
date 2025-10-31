@@ -1,0 +1,46 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+header{
+    padding: 12px;
+    background-color: orangered;
+}
+
+header .logo{
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    background-color: aqua;
+    border-radius: 50%;
+}
+
+header ul{
+    display: inline-block;
+    margin-left: 70%;
+}
+
+header li{
+    display: inline-block;
+}
+
+header a{
+    border-radius: 8px;
+    color: white;
+    font-size: 22px;
+    margin-right: 12px;
+    padding: 8px 15px;
+    text-decoration: none;
+    border: 1px solid #E9E9E9;
+}
+
+header a:hover{
+    background-color: white;
+    color: orangered;
+}
+
+header a.active{
+    background-color: white;
+    color: orangered;
+}

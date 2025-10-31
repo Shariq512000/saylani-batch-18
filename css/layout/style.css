@@ -1,0 +1,92 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+.mainContainer{
+    position: relative;
+    background-color: blue;
+    padding-top: 350px;
+}
+
+.container{
+    /* position: relative; */
+    background-color: yellow;
+    padding-top: 350px;
+}
+
+.box{
+    font-size: 30px;
+    display: inline-block;
+    width: 250px;
+    height: 250px;
+    background-color: red;
+}
+/* body{
+    padding-top: 350px;
+} */
+#box1{
+    background-color: purple;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1;
+}
+
+.coverPhoto{
+    position: relative;
+    height: 350px;
+    background-color: blue;
+}
+
+.profilePicture{
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -100px;
+    left: 50px;
+}
+
+#box3{
+    background-color: rgba(0, 0, 0, 0.5);
+    /* margin-left: 80px; */
+    /* position: relative;
+    left: 80px;
+    top: 80px; */
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#box2{
+    background-color: rgba(0, 255, 100, 0.5);
+    /* margin-left: 80px; */
+    /* position: relative;
+    left: 80px;
+    top: 80px; */
+    position: absolute;
+    right: 0;
+    top: 250px;
+    z-index: 2;
+}
+
+.section1{
+    background-color: red;
+    height: 100vh;
+    overflow: auto;
+}
+
+h1{
+    position: sticky;
+    top: 0;
+}
+
+p{
+    width: 250px;
+    float: left;
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+    padding: 12px;
+}
