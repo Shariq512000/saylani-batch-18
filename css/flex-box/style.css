@@ -6,16 +6,23 @@
 .container{
     background-color: blue;
     display: flex;
-    /* flex-direction: column-reverse; */
-    /* flex-wrap: wrap; */
+    /* flex-direction: column; */
+    flex-wrap: wrap;
     /* flex-flow: row wrap; */
-    justify-content: space-evenly;
-    /* flex-direction: row-reverse; */
+    /* justify-content: space-between; */
+    /* height: 100vh; */
+    /* align-items: center; */
+    /* align-content: center; */
+    /* gap: 20px; */
+    /* column-gap: 20px;
+    row-gap: 50px; */
+    /* gap: 50px 20px; */
 }
 
 .items{
     width: 200px;
     height: 200px;
     background-color: red;
-    font-size: 40px;
+    font-size: 35px;
+    /* margin-left: 20px; */
 }
