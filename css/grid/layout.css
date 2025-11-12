@@ -1,0 +1,24 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: grid;
+    grid-template-columns: 30% 70%;
+    grid-template-rows: 120px 700px 120px;
+    gap: 10px;
+    background-color: aqua;
+}
+
+header,aside,main,footer{
+    background-color: white;
+}
+
+header,footer{
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+header h1, footer h2{
+    text-align: center;
+}

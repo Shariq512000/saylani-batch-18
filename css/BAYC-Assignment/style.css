@@ -44,3 +44,18 @@ nav a:hover{
 img{
     width: 100%;
 }
+
+@media screen and (max-width: 1660px){
+}
+
+@media screen and (max-width: 1440px){
+}
+
+@media screen and (max-width: 1280px){
+}
+
+@media screen and (max-width: 992px){
+}
+
+@media screen and (max-width: 548px){
+}
