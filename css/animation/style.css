@@ -1,0 +1,21 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.box{
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    animation-name: test;
+    animation-duration: 4s;
+}
+
+
+@keyframes test{
+    0%   {background-color: red;}
+  25%  {background-color: yellow;}
+  50%  {background-color: blue;}
+  75%  {background-color: black;}
+  100% {background-color: green;}
+}
