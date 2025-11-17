@@ -7,15 +7,43 @@
     width: 200px;
     height: 200px;
     background-color: red;
-    animation-name: test;
+    /* animation-name: test;
     animation-duration: 4s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-fill-mode: both; */
+    animation: test 4s ease-in-out 0s infinite alternate both;
 }
 
 
-@keyframes test{
-    0%   {background-color: red;}
-  25%  {background-color: yellow;}
-  50%  {background-color: blue;}
-  75%  {background-color: black;}
-  100% {background-color: green;}
+@keyframes test {
+    /* from{background-color: red;}
+    to{background-color: black;} */
+    0%{
+        transform: translate(0,0);
+        background-color: black;
+        opacity: 0.2;
+    }
+    25%{
+        transform: translate(300px,0);
+        background-color: orange;
+        opacity: 0.4;
+    }
+    50%{
+        transform: translate(300px,300px);
+        background-color: purple;
+        opacity: 0.6;
+    }
+    75%{
+        transform: translate(600px,300px);
+        background-color: blue;
+        opacity: 0.8;
+    }
+    100%{
+        transform: translate(600px,600px);
+        background-color: yellow;
+        opacity: 1;
+    }
 }
