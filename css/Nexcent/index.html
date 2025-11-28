@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <title>Nexcent</title>
 </head>
 <body>
+
     <header>
         <div class="logo">
             <img src="assets/images/Logo.png" alt="">
@@ -22,18 +24,267 @@
                 <li><button class="registerBtn"><span>Register Now</span> <i class="fa-solid fa-arrow-right"></i></button></li>
             </ul>
         </nav>
+        <input type="checkbox" class="hamBurgerCheck" id="hamBurgerCheck">
+        <label for="hamBurgerCheck" class="hamBurgerIcon"><i class="fa-solid fa-list"></i></label>
+        <aside>
+            <label for="hamBurgerCheck" class="closeIcon">
+                <i class="fa-solid fa-x"></i>
+            </label>
+            <nav>
+                <ul>
+                    <li>
+                        <div class="logo">
+                            <img src="assets/images/Logo.png" alt="">
+                        </div>
+                    </li>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Community</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Pricing</a></li>
+                </ul>
+            </nav>
+            <div class="menuBtn">
+                <button class="registerBtn"><span>Register Now</span> <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </aside>
     </header>
 
     <section class="bannerSection">
         <div class="content">
-            <div class="textCont">
-                <h1>Lessons and insights <br> <span>from 8 years</span></h1>
-                <p>Where to grow your business as a photographer: site or social media?</p>
-                <button class="bannerBtn">Register</button>
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="textCont">
+                        <h1>Lessons and insights <br> <span>from 8 years</span></h1>
+                        <p>Where to grow your business as a photographer: site or social media?</p>
+                        <button class="bannerBtn registerBtn">Register</button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="imageCont">
+                        <img src="assets/images/banner-img.png" alt="">
+                    </div>
+                </div>
             </div>
 
-            <div class="imageCont">
-                <img src="assets/images/banner-img.png" alt="">
+        </div>
+    </section>
+
+    <section class="section2">
+        <div class="headingCont">
+            <h3>Our Clients</h3>
+            <p>We have been working with some Fortune 500+ clients</p>
+        </div>
+
+        <div class="gallerySec">
+            <div class="galleryImg">
+                <img src="assets/images/sec2/1.png" alt="">
+            </div>
+
+            <div class="galleryImg">
+                <img src="assets/images/sec2/2.png" alt="">
+            </div>
+
+            <div class="galleryImg">
+                <img src="assets/images/sec2/3.png" alt="">
+            </div>
+
+            <div class="galleryImg">
+                <img src="assets/images/sec2/4.png" alt="">
+            </div>
+
+            <div class="galleryImg">
+                <img src="assets/images/sec2/5.png" alt="">
+            </div>
+
+            <div class="galleryImg">
+                <img src="assets/images/sec2/6.png" alt="">
+            </div>
+
+            <div class="galleryImg">
+                <img src="assets/images/sec2/7.png" alt="">
+            </div>
+        </div>
+    </section>
+
+    <section class="section3">
+        <div class="sec3cont">
+            <div class="headingCont">
+                <h3>Manage your entire community <br> in a single system</h3>
+                <p>Who is Nextcent suitable for?</p>
+            </div>
+
+            <div class="sec3Body">
+                <div class="row justify-content-between">
+                    <div class="col-md-3">
+                        <div class="sec3Card">
+                            <div class="cardImg">
+                                <img src="assets/images/sec3/1.png" alt="">
+                            </div>
+                            <h6>Membership <br> Organisations</h6>
+                            <p>Our membership management software provides full automation of membership renewals and payments</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="sec3Card">
+                            <div class="cardImg">
+                                <img src="assets/images/sec3/2.png" alt="">
+                            </div>
+                            <h6>National <br> Associations</h6>
+                            <p>Our membership management software provides full automation of membership renewals and payments</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="sec3Card">
+                            <div class="cardImg">
+                                <img src="assets/images/sec3/3.png" alt="">
+                            </div>
+                            <h6>Clubs And <br> Groups</h6>
+                            <p>Our membership management software provides full automation of membership renewals and payments</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section4">
+        <div class="container">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-md-4">
+                    <div class="sec4Img">
+                        <img src="assets/images/sec4.png" alt="">
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="sec4Cont">
+                        <h2>The unseen of spending three years at Pixelgrade</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet justo ipsum. Sed accumsan quam vitae est varius fringilla. Pellentesque placerat vestibulum lorem sed porta. Nullam mattis tristique iaculis. Nullam pulvinar sit amet risus pretium auctor. Etiam quis massa pulvinar, aliquam quam vitae, tempus sem. Donec elementum pulvinar odio.</p>
+                        <button class="registerBtn">Learn More</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section5">
+        <div class="sec5Cont">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="sec5Left">
+                        <h3>Helping a local <br> <span>business reinvent itself</span></h3>
+                        <p>We reached here with our hard work and dedication</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="sec5-rightCont">
+                        <div class="row row-gap-3">
+                            <div class="col-md-6">
+                                <div class="sec5-rightCard">
+                                    <div class="cardImg">
+                                        <img src="assets/images/sec5/1.png" alt="">
+                                    </div>
+                                    <div class="cardCont">
+                                        <h6>2,245,341</h6>
+                                        <p>Members</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="sec5-rightCard">
+                                    <div class="cardImg">
+                                        <img src="assets/images/sec5/2.png" alt="">
+                                    </div>
+                                    <div class="cardCont">
+                                        <h6>46,328</h6>
+                                        <p>Clubs</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="sec5-rightCard">
+                                    <div class="cardImg">
+                                        <img src="assets/images/sec5/3.png" alt="">
+                                    </div>
+                                    <div class="cardCont">
+                                        <h6>828,867</h6>
+                                        <p>Event Bookings</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="sec5-rightCard">
+                                    <div class="cardImg">
+                                        <img src="assets/images/sec5/4.png" alt="">
+                                    </div>
+                                    <div class="cardCont">
+                                        <h6>1,926,436</h6>
+                                        <p>Payments</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section8">
+        <div class="sec8Cont">
+            <div class="headingCont">
+                <h3>Caring is the new marketing</h3>
+                <p>The Nextcent blog is the best place to read about the latest membership insights, <br> trends and more. See who's joining the community, <br> read about how our community are increasing their membership income and lot's more.</p>
+            </div>
+            <div class="sec8CardContainer">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="sec8Card">
+                            <div class="imgSec">
+                                <img src="assets/images/sec8/1.png" alt="">
+                            </div>
+                            <div class="contSec">
+                                <p>Creating Streamlined Safeguarding Processes with OneRen</p>
+                                <a href="#">
+                                    Readmore <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="sec8Card">
+                            <div class="imgSec">
+                                <img src="assets/images/sec8/2.png" alt="">
+                            </div>
+                            <div class="contSec">
+                                <p>What are your safeguarding responsibilities and how can you manage them?</p>
+                                <a href="#">
+                                    Readmore <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="sec8Card">
+                            <div class="imgSec">
+                                <img src="assets/images/sec8/3.png" alt="">
+                            </div>
+                            <div class="contSec">
+                                <p>Revamping the Membership Model with Triathlon Australia</p>
+                                <a href="#">
+                                    Readmore <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
