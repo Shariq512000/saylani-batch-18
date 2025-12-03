@@ -1,0 +1,177 @@
+:root{
+    --primary-color: #DB4444;
+    --text-color: #000000;
+    --secondary-color: #F5F5F5;
+    --text-light: #FAFAFA;
+}
+
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
+}
+
+.discountSection{
+    padding: 50px 135px;
+}
+
+.discountSection .sectionHeader .leftSection .headingSec .date{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.discountSection .sectionHeader .leftSection .headingSec .date .borderSection{
+    width: 20px;
+    height: 40px;
+    background-color: var(--primary-color);
+    border-radius: 4px;
+}
+
+.discountSection .sectionHeader .leftSection .headingSec .date h6{
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.discountSection .sectionHeader .leftSection .headingSec .headingCont{
+    font-size: 38px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.discountSection .sectionHeader .leftSection .headingSec{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.discountSection .sectionHeader .leftSection .countdown{
+    display: flex;
+    align-items: center;
+    gap: 17px;
+}
+
+.countdown .remaining h6{
+    font-size: 14px;
+}
+
+.countdown .remaining h5{
+    font-size: 34px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.countdown .seprator{
+    font-size: 32px;
+    padding-top: 15px;
+    color: var(--primary-color);
+}
+
+.sectionHeader .leftSection{
+    display: flex;
+    gap: 90px;
+    align-items: flex-end;
+}
+
+.sectionHeader .rightSection .sliderBtn{
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.4s ease-in-out;
+}
+
+.sectionHeader .rightSection .sliderBtn:hover{
+    opacity: 0.8;
+    transform: scale(1.08);
+}
+
+.sectionHeader .rightSection{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.discountSection .sectionHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.discountSection .sectionBody .cardContainer{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 35px;
+}
+
+.discountSection .sectionBody .cardContainer .productCard{
+    width: calc((100% - 105px) / 4);
+    flex-shrink: 0;
+}
+
+.cardContainer .productCard .imgContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+    background-color: var(--secondary-color);
+    height: 300px;
+    position: relative;
+}
+
+.imgContainer .discount{
+    font-size: 14px;
+    color: var(--text-light);
+    padding: 3px 8px;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    position: absolute;
+    top: 12px;
+    left: 12px;
+}
+
+.imgContainer .actionBtns .actionBtn{
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+}
+
+.imgContainer .actionBtns{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+}
+
+.imgContainer .addToCart{
+    font-size: 18px;
+    color: #FFFFFF;
+    padding: 10px 0;
+    text-align: center;
+    background-color: #000000;
+    position: absolute;
+    bottom: -47px;
+    width: 100%;
+    transition: all 0.4s ease-in-out;
+}
+
+.productCard:hover .imgContainer .addToCart{
+    bottom: 0;
+}
