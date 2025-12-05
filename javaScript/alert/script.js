@@ -1,0 +1,1 @@
+alert('Hello World i am learning javascript');alert('Second Alert');
