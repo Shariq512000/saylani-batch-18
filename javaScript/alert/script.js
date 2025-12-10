@@ -1,1 +1,2 @@
-alert('Hello World i am learning javascript');alert('Second Alert');
+alert("Thank you for your input")
+alert('Alert 2')
