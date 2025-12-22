@@ -31,14 +31,14 @@
 
 
 
-// let age = 25
+let age = 25
 
-// if(age <= 18){
-//     alert("First Block")
-// }else if(age == 25){
-//     alert("Second Block")
-// }else if(age <= 25){
-//     alert("Third Block")
-// }else{
-//     alert("Else Block")
-// }
+if(age <= 18){
+    alert("First Block")
+}else if(age == 25){
+    alert("Second Block")
+}else if(age <= 25){
+    alert("Third Block")
+}else{
+    alert("Else Block")
+}

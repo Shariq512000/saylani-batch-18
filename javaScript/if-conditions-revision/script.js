@@ -12,6 +12,6 @@ let age = 18
 
 // console.log(age === 18)
 //Dollar | PKR
-if(age <= 18){
+if(age !== "18"){
     alert("You are Adult")
 }
