@@ -21,6 +21,26 @@
 // let city4 = "Quetta"
 
 ///               0         1          2             3         4
-let cities = ["Karachi", "Lahore", "Islamabad", "Peshawar", "Quetta"]
+// let cities = ["Karachi", "Lahore", "Islamabad", "Peshawar", "Quetta"]
 
-alert("Welcome To " + cities[4])
+// let cities = []
+
+// cities[0] = "Karachi"
+// cities[1] = "Lahore"
+// cities[2] = "Islamabad"
+// cities[3] = "Peshawar"
+// cities[4] = "Quetta"
+
+// alert(cities[3])
+
+// let city = "Karachi";
+
+// alert(city)
+
+// city = "Lahore"
+
+// alert(city)
+
+// city = "Karachi"
+
+// alert("Welcome To " + cities[4])
