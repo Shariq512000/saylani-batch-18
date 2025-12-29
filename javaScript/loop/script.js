@@ -10,19 +10,43 @@
 
 
 
-let userCity = "Quetta"  /// user input
+let userCity = "Ziyarat"  /// user input
 
 let cities = ["Karachi", "Lahore", "Islamabad", "Peshawar", "Quetta", "Hydrabad", "Larkana"]
 
-// console.log(cities.length);
+let isMatched = false;
 
-for(let i = 0; i < cities.length; i++){
-    console.log(cities[i])
-    if(userCity == cities[i]){
-        console.log("City Matched")
+for(let i=0; i < cities.length; i++){
+
+    if(cities[i] == userCity){
+        isMatched = true;
         break;
     }
+    
 }
+
+// console.log(5 < 6)
+
+if(isMatched){
+    alert("City Matched")
+}else{
+    alert("City Did Not Matched")
+}
+
+console.log("End Of Loop");
+
+
+
+
+// console.log(cities.length);
+
+// for(let i = 0; i < cities.length; i++){
+//     console.log(cities[i])
+//     if(userCity == cities[i]){
+//         console.log("City Matched")
+//         break;
+//     }
+// }
 
 // if(userCity == cities[0]){
 //     console.log("City Matched")
@@ -40,7 +64,7 @@ for(let i = 0; i < cities.length; i++){
 
 // console.log(cities[0])
 
-console.log("End Of Loop")
+// console.log("End Of Loop")
 
 
 
@@ -53,3 +77,9 @@ console.log("End Of Loop")
 //     yearArray.push(i)
 // }
 // console.log("End Of Loop", yearArray)
+
+// for(let i=0; i < 5; i++){
+//     console.log(i)
+// }
+
+// console.log("End Of Loop")
