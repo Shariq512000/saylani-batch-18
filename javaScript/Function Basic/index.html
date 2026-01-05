@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Functions Basic</title>
+    <style>
+        #result{
+            background-color: red;
+        }
+
+        #result p{
+            color: white;
+        }
+
+        #result p span{
+            color: yellow;
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
 
@@ -21,8 +35,6 @@
         <button>Submit</button>
     </form> -->
 
-    <!-- <button onclick="test()">Run Function</button> -->
-
     <label for="userName">
         Name:
         <input id="userName" type="text" placeholder="Enter Your Name">
@@ -34,6 +46,8 @@
     </label>
     <br>
     <button onclick="getData()">Submit</button>
+
+    <div id="result"></div>
     
     <script src="script.js"></script>
 </body>
