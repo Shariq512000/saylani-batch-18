@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Calculator</title>
+</head>
+<body>
+    
+    <label for="firstNum">
+        First Number: <input type="number" id="firstNum" placeholder="Enter First Number">
+    </label>
+    <br>
+    <label for="secondNum">
+        Second Number: <input type="number" id="secondNum" placeholder="Enter Second Number">
+    </label>
+    <br>
+    <select id="operator">
+        <option value="" selected disabled>Select Operator</option>
+        <option value="Addition">Addition</option>
+        <option value="Subtraction">Subtraction</option>
+        <option value="Multiplication">Multiplication</option>
+        <option value="Division">Division</option>
+    </select>
+    <br>
+    <button onclick="calculate()">Calculate</button>
+
+    <div id="result"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

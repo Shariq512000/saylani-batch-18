@@ -1,7 +1,7 @@
 function getData(){
-    let userName = document.getElementById("userName").value;
-    let rollNumber = document.getElementById("rollNumber").value
-    console.log(userName, rollNumber)
+    let userName = document.getElementById("userName").value; // John
+    let rollNumber = document.getElementById("rollNumber").value // 123
+    // console.log(userName, rollNumber)
     // alert("Function Run")
 
     // let abc = "value";
