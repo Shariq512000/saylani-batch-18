@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>String's Method</title>
+    <style>
+        #caption{
+            color: black;
+            font-size: 16px;
+        }
+        #caption span{
+            margin-left: 10px;
+            color: blue;
+            font-size: 12px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <p id="caption"></p>
+    
+    <script>
+        let para = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, consequatur. Iusto, voluptatibus excepturi amet praesentium et nesciunt quae quo corporis? Ab, maiores placeat! Eius, odit soluta. Nobis provident delectus maiores. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab eveniet, quo dicta esse iure magni molestiae, optio sed saepe quam ducimus eius a consequatur mollitia perferendis enim ipsam harum officiis! Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, esse consectetur. Voluptatibus perspiciatis delectus ducimus quod ipsam voluptate voluptates nihil, autem quidem cupiditate ad debitis facere eum a, illo omnis."
+        if(para.length > 100){
+            document.getElementById("caption").innerHTML = `${para.slice(0, 100)} <span onclick="seeAll()" >See More...</span>`
+        }else{
+            document.getElementById("caption").innerHTML = para
+        }
+
+        function seeAll(){
+            document.getElementById("caption").innerHTML = `${para} <span onclick="seeLess()" >See Less...</span>`
+        }
+
+        function seeLess(){
+            document.getElementById("caption").innerHTML = `${para.slice(0, 100)} <span onclick="seeAll()" >See More...</span>`
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // let dummyText = "A b c"
+        // console.log(dummyText.slice(0, 2))
+        // console.log(dummyText)
+        // console.log(dummyText.length)
+
+        // let cities = ["Karachi", "Lahore", "Islamabad", "Peshawar"]
+        // let newArr = cities.slice(0, 2)
+    </script>
+</body>
+</html>
