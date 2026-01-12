@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment</title>
+</head>
+<body>
+    
+
+    <script>
+        const nums = [65, 55, 48, 12, 99, 1158, 108, 699, 210]
+
+        let largest = nums[0]; // 1158
+        let smallest = nums[0];
+
+        for(let i = 0; i < nums.length; i++){
+
+            if(largest < nums[i]){
+                largest = nums[i]
+            }
+
+            if(smallest > nums[i]){
+                smallest = nums[i]
+            }
+
+        }
+
+        console.log(largest);
+        console.log(smallest);
+    </script>
+</body>
+</html>

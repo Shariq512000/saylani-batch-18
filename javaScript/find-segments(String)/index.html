@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Segments</title>
+</head>
+<body>
+    
+    <script>
+        // World War II --> the Second World War
+        // i = 32
+        let str = `It is startling to think that, even in the darkest depths of World War II, J. R. R. Tolkien was
+            writing the trilogy, which contains, with the weird applicability available only to poetry and
+            myth, the essential notion that the good gray wizard can understand the evil magi precisely
+            because he World War II is just enough like them to grasp their minds and motives in ways that they cannot
+            grasp his World War II`
+
+        // let newStr = str.replace("World War II", "the Second World War")
+        let newStr = str.replaceAll("World War II", "the Second World War").replaceAll("World War III", "the Third World War")
+
+        console.log(newStr);
+
+        console.log("------------------------------------------------------------------------------");
+
+        console.log(str)
+
+        // `Element at index ${i} is ${fruits[i]}`
+            
+        // let textIndex = str.indexOf("World War II")
+        // if(textIndex !== -1){
+        //     str = str.slice(0, textIndex) + "the Second World War" + str.slice(textIndex + 12)
+        // }
+        // for(let i=0; i < str.length; i++){
+        //     if(str.slice(i, 12 + i) == "World War II"){
+        //         str = str.slice(0, i) + "the Second World War" + str.slice(i + 12)
+        //     }
+        // }
+        // console.log(str)
+
+        // console.log(str.charAt(str.length - 1))
+    </script>
+</body>
+</html>
