@@ -5,11 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Number Methods</title>
 </head>
-<body>
+<body id="body">
+
+    <button onclick="changeColor()">Change Color</button>
     
     <script>
-        let num = 5.49;
-        num = Math.round(num);
+        // let num = 5.499;
+        // num = Math.round(num);
+
+        // console.log(num)
+
+
+        // let num = 5.00000001;
+        // num = Math.ceil(num);
+
+        // console.log(num)
+
+        // let num = 5.9999999;
+        // num = Math.floor(num);
+
+        // console.log(num)
+
+        // let randomNumber = Math.random() * 6;
+
+        // console.log(Math.ceil(randomNumber));
+
+
+
+
+
+
+
+
+        function changeColor(){
+            let redNumber = Math.ceil(Math.random() * 255);
+            let greenNumber = Math.ceil(Math.random() * 255);
+            let blueNumber = Math.ceil(Math.random() * 255);
+
+            document.getElementById("body").style.backgroundColor = `rgb(${redNumber},${greenNumber},${blueNumber})`
+        }
+        
+
+
+
+
+
+
+
 
         // -1.5 , -1, 0
     </script>
