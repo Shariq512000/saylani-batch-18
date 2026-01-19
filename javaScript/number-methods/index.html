@@ -8,7 +8,7 @@
 <body id="body">
 
     <button onclick="changeColor()">Change Color</button>
-    
+
     <script>
         // let num = 5.499;
         // num = Math.round(num);
@@ -30,30 +30,58 @@
 
         // console.log(Math.ceil(randomNumber));
 
-
-
-
-
-
+        // console.log(Math.random());
 
 
         function changeColor(){
-            let redNumber = Math.ceil(Math.random() * 255);
-            let greenNumber = Math.ceil(Math.random() * 255);
-            let blueNumber = Math.ceil(Math.random() * 255);
+            let redNumber = Math.floor(Math.random() * 256);
+            let greenNumber = Math.floor(Math.random() * 256);
+            let blueNumber = Math.floor(Math.random() * 256);
 
             document.getElementById("body").style.backgroundColor = `rgb(${redNumber},${greenNumber},${blueNumber})`
         }
-        
 
 
 
+        // let str = "shAriQ";
 
+        // let capStr = str.slice(0,1).toUpperCase() + str.slice(1).toLowerCase()
 
+        // console.log(capStr)
 
+        // let para = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam totam sequi cumque praesentium libero sapiente sint soluta minus laudantium officia? Rem totam asperiores facilis ullam id suscipit nisi laboriosam nulla."
 
+        // let splittedText = para.split(" ");
+
+        // let newArr = []
+
+        // for(let i=0; i < splittedText.length; i++){
+        //     let capStr = splittedText[i].slice(0,1).toUpperCase() + splittedText[i].slice(1).toLowerCase()
+        //     // console.log(capStr)
+        //     newArr.push(capStr)
+        // }
+
+        // let capPara = newArr.join(" ")
+
+        // console.log(capPara)
+
+        // str.toUpperCase()
 
         // -1.5 , -1, 0
+
+
+        // let numberStr = '100.6';
+        // let convertedNumber = Number(numberStr)
+        // console.log(convertedNumber)
+
+        // let num = 55;
+        // let strNumber = num.toString();
+        // console.log(typeof strNumber);
+
+        // let number = 215.326549865849548
+        // let newNumber = number.toFixed(2)
+
+        // console.log(newNumber);
     </script>
 </body>
 </html>
