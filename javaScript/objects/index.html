@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object</title>
+</head>
+<body>
+    
+    <script>
+        // let plan1Name = "Basic"
+        // let plan1Price = "$3.99";
+        // let plan1Space = "100 GB";
+        // let plan1Data = "1000 GB";
+        // let plan1Pages = 10;
+        // let plan2Name = "Professional"
+        // let plan2Price = "$5.99";
+        // let plan2Space = "500 GB";
+        // let plan2Data = "5000 GB";
+        // let plan2Pages = 50;
+        // let plan3Name = "Ultimate"
+        // let plan3Price = "$9.99";
+        // let plan3Space = "2000 GB";
+        // let plan3Data = "20000 GB";
+        // let plan3Pages = 500
+
+        let plan1 = {
+            price: "$3.99",
+            space: "100 GB",
+            data: "1000 GB",
+            name: "Basic",
+            pages: 10,
+            moreDetail: {
+                discount: true,
+                discountPercentage: 20,
+                discountMonths: ["January", "March", "April", "December"]
+            }
+        }
+
+        plan1.duration = "1 Month"
+
+        // alert(plan1.moreDetail.discountMonths)
+        console.log(plan1)
+
+        // let obj = {};
+
+        // obj.name = "Name"
+        // obj.price = 123
+
+        // console.log(obj)
+
+        let plan2 = {
+            name: "Professional",
+            price: "$5.99",
+            space: "500 GB",
+            data: "5000 GB",
+            pages: 50
+        }
+
+        // {
+        //     status: "success",
+        //     products: [
+        //         {name: "Redmi Note 9", price: 23000, category: "Electronics"},
+        //         {name: "Lether Jacket", price: 5000, category: "Clothing"},
+        //         {name: "50000 mah Powerbank", price: 10000, category: "Electronics"},
+        //         {name: "1kg Potato", price: 100, category: "Vegatable"},
+        //     ]
+        // }
+
+        // alert(`The ${plan1.name} Plan Price is ${plan1.price}`)
+    </script>
+</body>
+</html>
