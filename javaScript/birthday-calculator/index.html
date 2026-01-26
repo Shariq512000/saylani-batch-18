@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Calculator</title>
+</head>
+<body>
+
+    <form onsubmit="calculateBirthday(); return false">
+        <label for="dateOfBirth">
+            Enter Your Date Of Birth:<input type="date" id="dateOfBirth" required>
+        </label>
+        <br>
+        <button>Submit</button>
+    </form>
+
+    <script>
+
+        const months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "Octuber", "November", "December"]
+
+        function calculateBirthday(){
+            
+            let userInput = document.getElementById("dateOfBirth").value;
+            let userDate = new Date(`${userInput} 00:00:00`);     // 5, jan 2003
+            let today = new Date();                               // 26, jan 2026
+            today.setHours(0);
+            today.setMinutes(0);
+            today.setSeconds(0);
+            today.setMilliseconds(0);
+
+            let currentYear = today.getFullYear();                // 2026;
+
+            let birthdayThisYear = new Date(`${userInput} 00:00:00`); 
+            birthdayThisYear.setFullYear(currentYear)             // 5, jan 2026
+
+            let userYear;
+            let previousBirthday;
+            let nextBirthday;
+
+            if(today.getTime() >= birthdayThisYear.getTime()){           /// Agar is Saal Birthday Guzar gaya hai
+                userYear = today.getFullYear() - userDate.getFullYear()
+                previousBirthday = `${birthdayThisYear.getDate()} ${months[birthdayThisYear.getMonth()]} ${birthdayThisYear.getFullYear()}`
+                nextBirthday = `${birthdayThisYear.getDate()} ${months[birthdayThisYear.getMonth()]} ${birthdayThisYear.getFullYear() + 1}`
+            }else{
+                userYear = today.getFullYear() - userDate.getFullYear() - 1
+                previousBirthday = `${birthdayThisYear.getDate()} ${months[birthdayThisYear.getMonth()]} ${birthdayThisYear.getFullYear() - 1}`
+                nextBirthday = `${birthdayThisYear.getDate()} ${months[birthdayThisYear.getMonth()]} ${birthdayThisYear.getFullYear()}`
+            }
+            
+            if(today.getTime() == birthdayThisYear.getTime()){
+                alert("Happy Birthday")
+            }
+        }
+    </script>
+</body>
+</html>
