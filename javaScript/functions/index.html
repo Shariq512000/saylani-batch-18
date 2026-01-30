@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functions</title>
+</head>
+<body>
+    
+    <script>
+                //  Parameter
+        // function sum(num1, num2){
+        //     let result = num1 + num2 
+        //     console.log(result)
+        // }
+
+        // sum(2, 5)     // Argument
+        // sum(9, 8)
+
+
+        //            Default Parameter
+        // function sum(num1 = 2, num2 = 5){
+        //     let result = num1 + num2 
+        //     console.log(result)
+        // }
+
+        // sum(8)
+        // sum(9, 8)
+
+        // function greeting(userName){
+        //     console.log(`Hello ${userName}`)
+        // }
+
+        // greeting("Abc")
+        // greeting("Shariq")
+
+        //          Default Parameter
+        // function sum(nums = []){     /// Void
+        //     // console.log(nums)
+        //     let result = 0
+        //     for(let i = 0; i < nums.length; i++){
+        //         result += nums[i]
+        //     }
+        //     console.log(result)
+        // }
+
+        // function sum(nums = []){    /// Returned Function
+        //     let result = 0
+        //     for(let i = 0; i < nums.length; i++){
+        //         result += nums[i]
+        //     }
+        //     return result
+        // }
+
+
+        // let allNumbers = [6,9,97,4,5,8,10,48,10,645,45]
+        // let allNumbers2 = [197,9,8,10,48,10,645,45,400]
+
+
+        // // alert(sum())
+        
+        // let funcResult = sum(allNumbers2)
+
+        // console.log(funcResult)
+
+
+        // 1)Void  2)Returned
+
+
+
+
+
+
+
+
+
+
+
+        function test(numbers){
+            let result = 0;
+            for(let i=0; i < numbers.length; i++){
+                result += numbers[i]
+            }
+            // console.log("result", result)
+            return result
+        }
+
+        let functionReturnValue = test([5, 6, 68, 10, 22, 100, 102])    /// Argument
+        // test([5, 6, 68, 10, 22, 170, 102])
+        // test([5, 6, 68, 10, 22, 100, 113])
+        // test([5, 6, 681, 10, 22, 100, 113])
+
+        console.log("functionReturnValue", functionReturnValue)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

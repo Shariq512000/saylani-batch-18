@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
+    <style>
+        .location{
+            color: green;
+        }
+        .err{
+            color: red;
+        }
+    </style>
 </head>
 <body>
 
@@ -14,16 +22,35 @@
         <br>
         <button>Check Weather</button>
     </form>
+
+    <div id="result">
+        
+    </div>
     
     <script>
         function getWeather(){
             let userCity = document.getElementById("cityName").value;
-            fetch(`https://api.weatherapi.com/v1/current.json?key=f81d0f8072c84e4cb3553800262601&q=${userCity}`).then(function(res){
-                return res.json()
-            }).then(function(response){
-                console.log(response)
-            }).catch((error) => {
-                console.log("Err", error)
+            // fetch(`https://api.weatherapi.com/v1/current.json?key=f81d0f8072c84e4cb3553800262601&q=${userCity}`).then(function(res){
+            //     return res.json()
+            // }).then(function(response){
+            //     console.log(response)
+            // }).catch((error) => {
+            //     console.log("Err", error)
+            // })
+            fetch(`https://api.weatherapi.com/v1/current.json?key=f81d0f8072c84e4cb3553800262601&q=${userCity}`).then(function(rawResponse){
+                // console.log("Res", response);
+                return rawResponse.json()
+            }).then(function(res){
+                console.log("Res", res)
+                document.getElementById("result").innerHTML = `<div class="">
+                    <img src="https:${res.current.condition.icon}" alt="Weather Image">
+                    <br>
+                    <div class="location">${res.location.name}, ${res.location.region}, ${res.location.country}</div>
+                    <div class="">${res.current.temp_c}°C</div>
+                </div>`
+            }).catch(function(error){
+                console.log("Error", error)
+                document.getElementById("result").innerHTML = "<h1 class='err'>Something Went Wrong</h1>"
             })
         }
     </script>
