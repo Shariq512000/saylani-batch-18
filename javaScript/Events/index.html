@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events</title>
+</head>
+<body>
+    
+    <!-- <a href="JavaScript:void(0)" onclick="popup('Hi')">Click Me</a> -->
+    <br>
+    <!-- <img src="nature.jpg" width="1000" alt="" id="myImg" onmouseover="changeSource('new')" onmouseleave="changeSource()"> -->
+
+    <!-- <input type="text" placeholder="Enter Your Name" onfocus="this.style.backgroundColor = 'rgb(22,56,255)'; this.style.color = 'red'" onblur="this.style.backgroundColor = 'white'"> -->
+
+    <!-- <form onsubmit="validateEmail('email'); return false">
+        <label for="">
+            Email : <input type="email" id="email" required>
+        </label>
+        <br>
+        <input type="submit" value="Submit">
+    </form> -->
+
+    <form onsubmit="preFilledData('cnic'); return false">
+        <label for="">
+            CNIC : <input type="number" id="cnic" required>
+        </label>
+        <br>
+        <label for="">
+            Gender : <input type="text" id="gender" disabled>
+        </label>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+
+        function preFilledData(fieldId){
+            let userCNIC = document.getElementById(fieldId).value;
+            if (userCNIC === "") {
+                alert("CNIC Required.")
+                return;
+            }
+
+            let lastNumber = Number(userCNIC.slice(-1)) // 0-9
+
+            if(lastNumber % 2 == 0){ // 0,2,4,6,8
+                document.getElementById("gender").value = "Female"
+            }else{
+                document.getElementById("gender").value = "Male"
+            }
+        }
+
+
+        function validateEmail(fieldId){
+            let userEmail = document.getElementById(fieldId).value
+            if (userEmail === "") {
+                alert("Email address required.")
+                return;
+            }else if(userEmail.slice(-4) != ".com"){
+                alert("Email address Invalid.")
+            }else{
+                alert("Email Submited")
+            }
+        }
+
+        // let testEmail = "abcdefghi@gmail.com";
+        // testEmail.slice(-4)
+
+        function popup(message){
+            alert(message)
+        }
+
+
+        function changeSource(type){
+            if(type == 'new'){
+                document.getElementById("myImg").src = "apple.jpg"
+            }else{
+                document.getElementById("myImg").src = "nature.jpg"
+            }
+        }
+        // let obj = {name: "Shariq"}
+        // obj.rollNumber = "123"
+    </script>
+</body>
+</html>

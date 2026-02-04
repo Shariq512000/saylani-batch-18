@@ -76,26 +76,39 @@
 
 
 
-        function test(numbers){
-            let result = 0;
-            for(let i=0; i < numbers.length; i++){
-                result += numbers[i]
+        // function test(numbers){
+        //     let result = 0;
+        //     for(let i=0; i < numbers.length; i++){
+        //         result += numbers[i]
+        //     }
+        //     // console.log("result", result)
+        //     return result
+        // }
+
+        // let functionReturnValue = test([5, 6, 68, 10, 22, 100, 102])    /// Argument
+        // // test([5, 6, 68, 10, 22, 170, 102])
+        // // test([5, 6, 68, 10, 22, 100, 113])
+        // // test([5, 6, 681, 10, 22, 100, 113])
+
+        // console.log("functionReturnValue", functionReturnValue)
+
+        let var1 = "Global"
+
+
+        function sum(num1 = 5, num2 = 2){
+            let var2 = "Local"
+            console.log(num1)
+            console.log(num2)
+            
+            if(true){
+                let var3 = "Test"
+                console.log(var2)
+                console.log(var1)
             }
-            // console.log("result", result)
-            return result
+            return num1 + num2
         }
 
-        let functionReturnValue = test([5, 6, 68, 10, 22, 100, 102])    /// Argument
-        // test([5, 6, 68, 10, 22, 170, 102])
-        // test([5, 6, 68, 10, 22, 100, 113])
-        // test([5, 6, 681, 10, 22, 100, 113])
-
-        console.log("functionReturnValue", functionReturnValue)
-
-
-
-
-
+        console.log("Function", sum(7, 6))    // Argument
 
 
 
