@@ -7,15 +7,28 @@
 </head>
 <body>
     
+    <!-- onclick
+    onsubmit
+
+    onMouseover
+    onMouseEnter
+
+
+    onMouseout
+    onMouseLeave
+
+    onfocus
+    onblur -->
+
     <!-- <a href="JavaScript:void(0)" onclick="popup('Hi')">Click Me</a> -->
     <br>
     <!-- <img src="nature.jpg" width="1000" alt="" id="myImg" onmouseover="changeSource('new')" onmouseleave="changeSource()"> -->
 
-    <!-- <input type="text" placeholder="Enter Your Name" onfocus="this.style.backgroundColor = 'rgb(22,56,255)'; this.style.color = 'red'" onblur="this.style.backgroundColor = 'white'"> -->
+    <!-- <input type="text" placeholder="Enter Your Name" onfocus="this.style.backgroundColor = 'rgb(22,56,255)'; this.style.color = 'red'" onblur="this.style.backgroundColor = 'yellow'"> -->
 
-    <!-- <form onsubmit="validateEmail('email'); return false">
+    <!-- <form onsubmit="validateEmail('userEmail'); return false">
         <label for="">
-            Email : <input type="email" id="email" required>
+            Email : <input type="email" id="userEmail" required>
         </label>
         <br>
         <input type="submit" value="Submit">
@@ -56,13 +69,18 @@
             let userEmail = document.getElementById(fieldId).value
             if (userEmail === "") {
                 alert("Email address required.")
-                return;
             }else if(userEmail.slice(-4) != ".com"){
                 alert("Email address Invalid.")
             }else{
                 alert("Email Submited")
             }
         }
+
+        // let arr = ["1", "2", "3", "4", "5", "6", "7", "8"]
+
+
+
+        /// starting, ending
 
         // let testEmail = "abcdefghi@gmail.com";
         // testEmail.slice(-4)

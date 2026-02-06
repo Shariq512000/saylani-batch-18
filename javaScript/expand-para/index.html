@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expand Paragraph</title>
+</head>
+<body>
+    <p id="caption">
+        Lorem ipsum dolor sit amet, <a href="javascript:void(0)" onclick="expandPara()">See More</a>
+    </p>
+
+    <script>
+        function expandPara(type){
+            let fullStr = `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores ipsam ducimus perferendis, unde impedit nisi vel ratione maiores pariatur molestiae voluptatem facere assumenda nostrum necessitatibus, illo reprehenderit, perspiciatis dolor itaque? <a href='javascript:void(0)' onclick='expandPara("short")'>See Less</a>`
+            let shortStr = `${fullStr.slice(0, 27)} <a href='javascript:void(0)' onclick='expandPara()'>See More</a>`
+
+            if(type == "short"){
+                document.getElementById("caption").innerHTML = shortStr
+            }else{
+                document.getElementById("caption").innerHTML = fullStr
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manuplating</title>
+    <style>
+        .hidden{
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <img id="myImg" class="imgStyle" onmouseover="hideImage()" src="https://images.unsplash.com/photo-1761839262867-af53d08b0eb5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" width="500" alt="">
+    <br>
+    <h1>Sensitive Image</h1>
+
+    <script>
+        function hideImage(){
+            let myImg = document.getElementById("myImg")
+            myImg.className += " hidden"
+            myImg.src = "apple.jp"
+        }
+    </script>
+</body>
+</html>
