@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+    <style>
+        td,th{
+            padding: 5px 15px;
+            border: 1px solid gray;
+        }
+    </style>
+</head>
+<body>
+    
+    <form onsubmit="addStudent(); return false">
+        <label for="">
+            Student Name: <input type="text" id="studentName">
+        </label>
+        <br>
+        <label for="">
+            Batch: <input type="text" id="studentBatch">
+        </label>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Index Number</th>
+                <th>Name</th>
+                <th>Batch</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            
+        </tbody>
+    </table>
+
+    <script>
+
+        let students = []
+
+        function addStudent(){
+            let studentName = document.getElementById("studentName").value;
+            let studentBatch = document.getElementById("studentBatch").value;
+            let studentObj = {
+                name: studentName,
+                batch: studentBatch
+            }
+            students.push(studentObj)
+            printTable()
+        }
+
+        function deleteStudent(index){
+            // console.log(index)
+            students.splice(index, 1)
+
+            printTable()
+        }
+
+        function printTable(){
+            let rows = ""
+            for(let i=0; i < students.length; i++){
+                rows += `
+                    <tr>
+                        <td>${i}</td>
+                        <td>${students[i].name}</td>
+                        <td>${students[i].batch}</td>
+                        <td>
+                            <button onClick="deleteStudent(${i})">Delete</button>
+                        </td>
+                    </tr>
+                `
+            }
+
+            document.getElementById("tbody").innerHTML = rows
+        }
+
+        
+    </script>
+
+</body>
+</html>
