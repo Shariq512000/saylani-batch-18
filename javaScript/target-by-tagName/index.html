@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body id="body">
+    <!-- <button onclick="changeStyle()" id="btn">Change Color</button> -->
+
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit dolore nihil qui perferendis a, eos voluptatibus asperiores sit? Fugit dolorum reprehenderit cum architecto sunt eum consequuntur dolorem recusandae veniam ipsa?</p>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem veritatis dicta ipsum sed fuga possimus vel, ut hic deserunt quos temporibus aliquid mollitia voluptates aliquam sapiente dolorum. Hic, aut accusamus.</p>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, assumenda a fugit ipsa ducimus repellendus illum molestiae mollitia quod temporibus saepe. Cumque, dicta. Officia mollitia repellendus quidem atque ipsa iste?</p>
+
+    <div id="paraContainer">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat vel perferendis, est minus odio soluta distinctio non veritatis cum dignissimos quis rem similique voluptatem eveniet, asperiores nemo voluptatibus hic provident?</p>
+        <p class="secondPara">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Earum repellat fugiat molestiae, similique enim quidem totam eum quia ducimus voluptatem exercitationem blanditiis optio rerum voluptates magni et cum vel quod.</p>
+    </div>
+
+    <button onclick="targetByTagName()">Taget Element</button>
+
+    <script>
+        // function changeStyle(){
+        //     document.getElementById("btn").style.fontSize = "30px"
+        //     document.getElementById("btn").style.backgroundColor = "blue"
+        // }
+
+        function targetByTagName(){
+
+            // let paraContainer = document.getElementById("paraContainer")
+            // let paras = paraContainer.getElementsByTagName("p")
+            // console.log(paras)
+            console.log(
+                document.querySelector("#paraContainer .secondPara")
+            )
+            // let paras = document.getElementsByTagName("p")
+            // console.log(paras)
+            // paras[1].style.color = "green"
+        }
+    </script>
+</body>
+</html>
