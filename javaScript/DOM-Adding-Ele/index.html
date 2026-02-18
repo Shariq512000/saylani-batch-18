@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adding Node</title>
+</head>
+<body>
+
+    <div class="" id="parentEle">
+        <h1>Heading 1</h1>
+        <h6>Heading 6</h6>
+    </div>
+    
+    <script>
+        let paraEle = document.createElement("p");
+        // console.log(paraEle)
+        paraEle.setAttribute("class", "myPara")
+        paraEle.setAttribute("id", "test")
+
+        let paraText = document.createTextNode("Hello World")
+        // console.log(paraEle, paraText)
+
+        paraEle.appendChild(paraText)
+
+        // console.log(paraEle)
+
+        // document.getElementById("parentEle").appendChild(paraEle)
+        let parentEle = document.getElementById("parentEle");
+        let firstEle = parentEle.firstChild;
+        let forthChild = parentEle.childNodes[3];
+
+        parentEle.removeChild(forthChild)
+
+        // parentEle.insertBefore(paraEle, firstEle)
+    </script>
+</body>
+</html>

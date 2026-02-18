@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Attribute</title>
+    <style>
+        .test{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="test" class="abc" style="" onclick="">Hello World</h1>
+    
+    <script>
+        let ele = document.getElementById("test");
+        let attrArr = ele.attributes;
+        // console.log(attrArr[1].nodeValue)
+        console.log(attrArr)
+        // console.log(ele.hasAttribute("class"))
+        // console.log(ele.getAttribute("class"))
+        // console.log(ele.setAttribute("class", "test"))
+    </script>
+</body>
+</html>
