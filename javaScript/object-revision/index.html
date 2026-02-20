@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // let obj = {
+      //     key: "value",
+      //     key2: "value2",
+      //     key3: "value3"
+      // }
+      // obj.key4 = "value4"
+      // delete obj.key
+      // console.log("key2" in obj)
+
+
+
+
+    //   let plan1 = {
+    //     name: "Basic", /// Property
+    //     price: 3.99,
+    //     space: 100,
+    //     transfer: 1000,
+    //     pages: 10,
+    //     discountMonths: [1, 6, 7],
+    //     calculateAnnual: function (discountPercent) { // Method
+
+    //       let bestPrice = this.price; // 3.99
+    //       let currentDate = new Date();
+    //       let currentMonth = currentDate.getMonth(); // 1
+    //       for (let i = 0; i < this.discountMonths.length; i++) {
+    //         if (currentMonth == this.discountMonths[i]) {
+    //           bestPrice = bestPrice * discountPercent; /// 3.192
+    //         }
+    //       }
+
+    //       let annualCharge = bestPrice * 12;
+
+    //       return annualCharge;
+    //     },
+    //   };
+
+    //   let finalPrice = plan1.calculateAnnual(0.85);
+    //   console.log(finalPrice);
+
+
+
+
+    // let plan1 = {
+    //     name: "Basic",
+    //     price: 3.99,
+    //     space: 100,
+    //     transfer: 1000,
+    //     pages: 10,
+    //     discountMonths: [1, 6, 7],
+    // };
+
+    // let plan2 = {
+    //     name: "Professional",
+    //     price: 3.99,
+    //     space: 100,
+    //     transfer: 1000,
+    //     pages: 10,
+    //     discountMonths: [1, 6, 7],
+    // };
+
+    // let plan3 = {
+    //     name: "Professional",
+    //     price: 3.99,
+    //     space: 100,
+    //     transfer: 1000,
+    //     pages: 10,
+    //     discountMonths: [1, 6, 7],
+    // };
+
+
+    function Plan(name, price, space, transfer, pages, discountMonths){
+        this.name = name
+        this.price = price
+        this.space = space
+        this.transfer = transfer
+        this.pages = pages
+        this.discountMonths = discountMonths
+        this.calculateAnnual = function (discountPercent) { // Method
+
+          let bestPrice = this.price; // 3.99
+          let currentDate = new Date();
+          let currentMonth = currentDate.getMonth(); // 1
+          for (let i = 0; i < this.discountMonths.length; i++) {
+            if (currentMonth == this.discountMonths[i]) {
+              bestPrice = bestPrice * discountPercent; /// 3.192
+            }
+          }
+
+          let annualCharge = bestPrice * 12;
+
+          return annualCharge;
+        }
+    }
+
+    let plan1 = new Plan("Basic", 3.99, 100, 1000, 10, [1, 6, 7]);
+    let plan2 = new Plan("Professional", 5.99, 500, 5000, 50, [6, 7]);
+    let plan3 = new Plan("Ultimate", 9.99, 2000, 20000, 100, [6, 7]);
+
+    console.log(plan1.calculateAnnual(0.85))
+    console.log(plan2.calculateAnnual(0.85))
+    console.log(plan3.calculateAnnual(0.85))
+
+
+
+    </script>
+  </body>
+</html>
