@@ -16,101 +16,128 @@
       // delete obj.key
       // console.log("key2" in obj)
 
+      //   let plan1 = {
+      //     name: "Basic", /// Property
+      //     price: 3.99,
+      //     space: 100,
+      //     transfer: 1000,
+      //     pages: 10,
+      //     discountMonths: [1, 6, 7],
+      //     calculateAnnual: function (discountPercent) { // Method
 
+      //       let bestPrice = this.price; // 3.99 // this refers current object, in my case plan1 is current object
+      //       let currentDate = new Date();
+      //       let currentMonth = currentDate.getMonth(); // 1
+      //       for (let i = 0; i < this.discountMonths.length; i++) {
+      //         if (currentMonth == this.discountMonths[i]) {
+      //           bestPrice = bestPrice * discountPercent; /// 3.192
+      //         }
+      //       }
 
+      //       let annualCharge = bestPrice * 12;
 
-    //   let plan1 = {
-    //     name: "Basic", /// Property
-    //     price: 3.99,
-    //     space: 100,
-    //     transfer: 1000,
-    //     pages: 10,
-    //     discountMonths: [1, 6, 7],
-    //     calculateAnnual: function (discountPercent) { // Method
+      //       return annualCharge;
+      //     },
+      //   };
 
-    //       let bestPrice = this.price; // 3.99
-    //       let currentDate = new Date();
-    //       let currentMonth = currentDate.getMonth(); // 1
-    //       for (let i = 0; i < this.discountMonths.length; i++) {
-    //         if (currentMonth == this.discountMonths[i]) {
-    //           bestPrice = bestPrice * discountPercent; /// 3.192
-    //         }
-    //       }
+      //   let finalPrice = plan1.calculateAnnual(0.85);
+      //   console.log(finalPrice);
 
-    //       let annualCharge = bestPrice * 12;
+      // let plan1 = {
+      //     name: "Basic",
+      //     price: 3.99,
+      //     space: 100,
+      //     transfer: 1000,
+      //     pages: 10,
+      //     discountMonths: [1, 6, 7],
+      // };
 
-    //       return annualCharge;
-    //     },
-    //   };
+      // let plan2 = {
+      //     name: "Professional",
+      //     price: 3.99,
+      //     space: 100,
+      //     transfer: 1000,
+      //     pages: 10,
+      //     discountMonths: [1, 6, 7],
+      // };
 
-    //   let finalPrice = plan1.calculateAnnual(0.85);
-    //   console.log(finalPrice);
+      // let plan3 = {
+      //     name: "Professional",
+      //     price: 3.99,
+      //     space: 100,
+      //     transfer: 1000,
+      //     pages: 10,
+      //     discountMonths: [1, 6, 7],
+      // };
 
+      function Plan(name, price, space, transfer, pages, discountMonths) {
+        this.name = name;
+        this.price = price;
+        this.space = space;
+        this.transfer = transfer;
+        this.pages = pages;
+        this.discountMonths = discountMonths;
+      }
 
+      Plan.prototype.cancelable = true
 
-
-    // let plan1 = {
-    //     name: "Basic",
-    //     price: 3.99,
-    //     space: 100,
-    //     transfer: 1000,
-    //     pages: 10,
-    //     discountMonths: [1, 6, 7],
-    // };
-
-    // let plan2 = {
-    //     name: "Professional",
-    //     price: 3.99,
-    //     space: 100,
-    //     transfer: 1000,
-    //     pages: 10,
-    //     discountMonths: [1, 6, 7],
-    // };
-
-    // let plan3 = {
-    //     name: "Professional",
-    //     price: 3.99,
-    //     space: 100,
-    //     transfer: 1000,
-    //     pages: 10,
-    //     discountMonths: [1, 6, 7],
-    // };
-
-
-    function Plan(name, price, space, transfer, pages, discountMonths){
-        this.name = name
-        this.price = price
-        this.space = space
-        this.transfer = transfer
-        this.pages = pages
-        this.discountMonths = discountMonths
-        this.calculateAnnual = function (discountPercent) { // Method
-
-          let bestPrice = this.price; // 3.99
-          let currentDate = new Date();
-          let currentMonth = currentDate.getMonth(); // 1
-          for (let i = 0; i < this.discountMonths.length; i++) {
-            if (currentMonth == this.discountMonths[i]) {
-              bestPrice = bestPrice * discountPercent; /// 3.192
-            }
+      Plan.prototype.calculateAnnual = function (discountPercent) {
+        // Method
+        let bestPrice = this.price; // 3.99
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        for (let i = 0; i < this.discountMonths.length; i++) {
+          if (currentMonth == this.discountMonths[i]) {
+            bestPrice = bestPrice * discountPercent;
           }
-
-          let annualCharge = bestPrice * 12;
-
-          return annualCharge;
         }
-    }
 
-    let plan1 = new Plan("Basic", 3.99, 100, 1000, 10, [1, 6, 7]);
-    let plan2 = new Plan("Professional", 5.99, 500, 5000, 50, [6, 7]);
-    let plan3 = new Plan("Ultimate", 9.99, 2000, 20000, 100, [6, 7]);
+        let annualCharge = bestPrice * 12;
 
-    console.log(plan1.calculateAnnual(0.85))
-    console.log(plan2.calculateAnnual(0.85))
-    console.log(plan3.calculateAnnual(0.85))
+        return annualCharge;
+      };
 
+      let plan1 = new Plan("Basic", 3.99, 100, 1000, 10, [1, 6, 7]);
+      let plan2 = new Plan("Professional", 5.99, 500, 5000, 50, [6, 7]);
+      let plan3 = new Plan("Ultimate", 9.99, 2000, 20000, 100, [6, 7]);
 
+      console.log(plan1.hasOwnProperty("calculateAnnual"));
+      console.log(plan2);
+      console.log(plan3);
 
+      function Student(name, fatherName, rollNumber, batch, course){
+        this.name = name,
+        this.fatherName = fatherName,
+        this.rollNumber = rollNumber,
+        this.batch = batch,
+        this.course = course
+      }
+
+      let students = []
+
+      function getStudentData(){
+        let studentName = document.getElementById("studentName")
+        let fatherName = document.getElementById("fatherName")
+        let course = document.getElementById("course")
+        let batch = document.getElementById("batch")
+        let rollNumber = document.getElementById("rollNumber")
+        let objStudent = new Student(studentName, fatherName, rollNumber, batch, course)
+        students.push(objStudent)
+      }
+      // let student1 = new Student("Student1", "Test1", 123, 18, "Web & App")
+      // let student2 = new Student("Student1", "Test1", 123, 18, "Web & App")
+      // let student3 = new Student("Student1", "Test1", 123, 18, "Web & App")
+      // let student4 = new Student("Student1", "Test1", 123, 18, "Web & App")
+      // let student5 = new Student("Student1", "Test1", 123, 18, "Web & App")
+      // let student6 = new Student("Student1", "Test1", 123, 18, "Web & App")
+      // let student7 = new Student("Student1", "Test1", 123, 18, "Web & App")
+      // let student8 = new Student("Student1", "Test1", 123, 18, "Web & App")
+      // let student9 = new Student("Student1", "Test1", 123, 18, "Web & App")
+      // let student10 = new Student("Student1", "Test1", 123, 18, "Web & App")
+      // let student11 = new Student("Student1", "Test1", 123, 18, "Web & App")
+      // let student12 = new Student("Student1", "Test1", 123, 18, "Web & App")
+      // let student13 = new Student("Student1", "Test1", 123, 18, "Web & App")
+      // let student14 = new Student("Student1", "Test1", 123, 18, "Web & App")
     </script>
   </body>
 </html>
