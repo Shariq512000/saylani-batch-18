@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Popup Window</title>
+</head>
+<body>
+    <button onclick="openWindow()">Open Popup</button>
+    
+
+    <script>
+        function openWindow(){
+            let newWindow = window.open()
+            // newWindow.document.write("<h1>Hello World From New Tab</h1><p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Assumenda consequuntur distinctio laudantium veritatis. Vel nam odit ab voluptatum unde quos sequi omnis laborum optio! Ad quae nesciunt ullam aspernatur modi!</p>")
+            // newWindow.location.assign("https://github.com")
+            newWindow.location.assign("about.html")
+            // setTimeout, setInterval 
+        }
+    </script>
+</body>
+</html>

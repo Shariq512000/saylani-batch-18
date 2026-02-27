@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SetTime & SetInterval</title>
+</head>
+<body>
+    
+    <script>
+
+        // synchronous, asynchronous
+        // Api Call --> 10 Sec
+        console.log("First")
+
+        setTimeout(function(){
+            console.log("Function")
+        }, 3000) // 2 PARAMETER => FUNCTION, TIME ----------> asynchronous
+
+        setTimeout(function(){
+            console.log("Function 0")
+        }, 0) // asynchronous
+        
+        console.log("Second")
+        console.log("Third")
+
+    </script>
+</body>
+</html>
