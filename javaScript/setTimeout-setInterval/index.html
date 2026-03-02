@@ -7,22 +7,51 @@
 </head>
 <body>
     
+    <div class="time" id="time"></div>
+
     <script>
 
         // synchronous, asynchronous
         // Api Call --> 10 Sec
-        console.log("First")
+        // console.log("First")
 
-        setTimeout(function(){
-            console.log("Function")
-        }, 3000) // 2 PARAMETER => FUNCTION, TIME ----------> asynchronous
+        // setTimeout(function(){
+        //     console.log("Function")
+        // }, 3000) // 2 PARAMETER => FUNCTION, TIME ----------> asynchronous
 
-        setTimeout(function(){
-            console.log("Function 0")
-        }, 0) // asynchronous
+        // setTimeout(function(){
+        //     console.log("Function 0")
+        // }, 0) // asynchronous
         
-        console.log("Second")
-        console.log("Third")
+        // console.log("Second");
+        // console.log("Third");
+
+        // const myInterval = setInterval(function(){
+        //     console.log("Repeat")
+        // }, 3000) // 2 PARAMETER => FUNCTION, TIME
+
+        // setTimeout(function(){
+        //     clearInterval(myInterval)
+        // }, 10000)
+
+        // 09:02:22
+                            //9
+        function formatHours(hour){
+            if(hour == 0){
+                return 12
+            }else if(hour > 12){
+                return hour - 12
+            }else{
+                return hour
+            }
+        }
+
+        setInterval(function(){
+            let currentDate = new Date();
+            let formatedHours = formatHours(currentDate.getHours())
+            let currentTime = `${formatedHours}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`
+            document.getElementById("time").innerText = currentTime
+        }, 1000)
 
     </script>
 </body>

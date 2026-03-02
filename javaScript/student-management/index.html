@@ -22,6 +22,10 @@
             Batch: <input type="text" id="studentBatch">
         </label>
         <br>
+        <label for="">
+            Roll Number: <input type="text" id="studentRollNumber">
+        </label>
+        <br>
         <button type="submit">Submit</button>
     </form>
 
@@ -31,6 +35,7 @@
                 <th>Index Number</th>
                 <th>Name</th>
                 <th>Batch</th>
+                <th>Roll Number</th>
                 <th></th>
             </tr>
         </thead>
@@ -46,9 +51,17 @@
         function addStudent(){
             let studentName = document.getElementById("studentName").value;
             let studentBatch = document.getElementById("studentBatch").value;
+            let studentRollNumber = document.getElementById("studentRollNumber").value;
+            for(let i = 0; i < students.length; i++){
+                if(students[i].rollNumber == studentRollNumber){
+                    alert("Duplicate Entry");
+                    return;
+                }
+            }
             let studentObj = {
                 name: studentName,
-                batch: studentBatch
+                batch: studentBatch,
+                rollNumber: studentRollNumber
             }
             students.push(studentObj)
             printTable()
@@ -69,6 +82,7 @@
                         <td>${i}</td>
                         <td>${students[i].name}</td>
                         <td>${students[i].batch}</td>
+                        <td>${students[i].rollNumber}</td>
                         <td>
                             <button onClick="deleteStudent(${i})">Delete</button>
                         </td>
