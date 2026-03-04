@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Storage</title>
+</head>
+<body>
+    
+    <button onclick="setLocalStorage()">Set Item on localStorage</button>
+    <button onclick="setSessionStorage()">Set Item on sessionStorage</button>
+
+    <script>
+        // localStorage
+        // sessionStorage
+            // setItem, getItem, removeItem, clear
+        function setLocalStorage(){
+            localStorage.setItem("localKey", "localValue")
+            localStorage.setItem("localKey2", "localValue2")
+            localStorage.setItem("localKey3", "localValue3")
+            localStorage.setItem("localKey4", "localValue4")
+            localStorage.setItem("localKey5", "localValue5")
+            localStorage.setItem("localKey6", "localValue6")
+            localStorage.setItem("localKey7", "localValue7")
+
+        }
+
+        // console.log(localStorage.getItem("localKey"))
+
+        // localStorage.removeItem("localKey")
+
+        // localStorage.clear();
+
+        function setSessionStorage(){
+            sessionStorage.setItem("sessionKey", "sessionValue")
+        }
+    </script>
+</body>
+</html>

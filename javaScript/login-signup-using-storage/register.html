@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<body>
+    <h1>Register</h1>
+
+    <form onsubmit="registerUser(); return false">
+        <label for="userName">
+            Name: <input type="text" id="userName">
+        </label>
+        <br>
+        <label for="userEmail">
+            Email: <input type="email" id="userEmail">
+        </label>
+        <br>
+        <label for="userPassword">
+            Password: <input type="text" id="userPassword">
+        </label>
+        <br>
+        <button>Register</button>
+    </form>
+
+    <a href="login.html">
+        Already Have an Account
+    </a>
+
+    <script src="script.js"></script>
+</body>
+</html>
