@@ -8,6 +8,21 @@
 <body>
     <h1>Login</h1>
 
+    <form onsubmit="loginUser(); return false">
+        <label for="userEmail">
+            Email: <input type="email" id="userEmail">
+        </label>
+        <br>
+        <label for="userPassword">
+            Password: <input type="text" id="userPassword">
+        </label>
+        <br>
+        <button>Login</button>
+    </form>
+
+    <a href="register.html">
+        Don't Have an Account
+    </a>
     
     <script src="script.js"></script>
 </body>

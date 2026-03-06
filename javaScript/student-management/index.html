@@ -46,7 +46,15 @@
 
     <script>
 
-        let students = []
+        let strStudents = localStorage.getItem("students")
+
+        let students = [];
+
+        if(strStudents){
+            students = JSON.parse(strStudents)
+        }
+
+        printTable()
 
         function addStudent(){
             let studentName = document.getElementById("studentName").value;
@@ -64,6 +72,8 @@
                 rollNumber: studentRollNumber
             }
             students.push(studentObj)
+            let strArr = JSON.stringify(students);
+            localStorage.setItem("students", strArr)
             printTable()
         }
 
