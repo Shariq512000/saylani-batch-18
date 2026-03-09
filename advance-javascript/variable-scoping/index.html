@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variable Scoping</title>
+</head>
+<body>
+    
+    <script>
+        var test = "abc"
+        let globalVar = "Global Value"; // Global Variable
+
+        if(true){
+            let blockVar = "Block Value1"; // Block Level or Local Variable
+            if(true){
+
+                let blockVar2 = "Block Value2" 
+
+                if(true){
+                    let blockVar3 = "Block Value3"
+                    // console.log(blockVar2)
+                }
+
+            }
+        }
+        // console.log(blockVar)
+    </script>
+</body>
+</html>
