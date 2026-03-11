@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function</title>
+</head>
+<body>
+    
+    <script>
+        // function sum(num1 = 5, num2 = 8){
+        //     console.log("num1", num1)
+        //     console.log("num2", num2)
+        //     console.log("result", num1 + num2)
+        // }
+        // sum(8)
+
+        // function sum(...nums){
+        //     // console.log("nums", nums)
+        //     let total = 0; // 82
+        //     for(let i=0; i < nums.length; i++){
+        //         total += nums[i]
+        //     }
+        //     console.log("total", total)
+        // }
+
+        const sum = (...nums) => {
+            // console.log("nums", nums)
+            let total = 0; // 82
+            for(let i=0; i < nums.length; i++){
+                total += nums[i]
+            }
+            console.log("total", total)
+        }
+
+        let arr = [5,10,12,55,71,2,6,9]
+
+        sum(...arr)
+
+        // normalFunc();
+        // arrowFunc();
+
+        function normalFunc(parameter){
+            console.log("normalFunc", this)
+        };
+
+        const arrowFunc = (parameter) => {
+            console.log("arrowFunc",this)
+        }
+
+        // normalFunc();
+        // arrowFunc()
+    </script>
+</body>
+</html>

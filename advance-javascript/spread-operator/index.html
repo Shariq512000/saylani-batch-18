@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spread Operator</title>
+</head>
+<body>
+    
+    <script>
+        let arr1 = ["item1", "item2", "item3", "item4"]
+        let arr2 = ["item5", "item6", "item7", "item8"]
+
+        let combinedArr = [...arr1, ...arr2]
+
+        // for(let i = 0; i < arr1.length; i++){
+        //     combinedArr.push(arr1[i])
+        // }
+
+        // for(let i = 0; i < arr2.length; i++){
+        //     combinedArr.push(arr2[i])
+        // }
+
+        console.log(combinedArr);
+    </script>
+</body>
+</html>
