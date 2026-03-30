@@ -24,32 +24,66 @@
         //     console.log("total", total)
         // }
 
-        const sum = (...nums) => {
-            // console.log("nums", nums)
-            let total = 0; // 82
-            for(let i=0; i < nums.length; i++){
-                total += nums[i]
-            }
-            console.log("total", total)
-        }
+        // const sum = (...nums) => {
+        //     // console.log("nums", nums)
+        //     let total = 0; // 82
+        //     for(let i=0; i < nums.length; i++){
+        //         total += nums[i]
+        //     }
+        //     console.log("total", total)
+        // }
 
-        let arr = [5,10,12,55,71,2,6,9]
+        // let arr = [5,10,12,55,71,2,6,9]
 
-        sum(...arr)
+        // sum(...arr)
 
-        // normalFunc();
-        // arrowFunc();
+        // // normalFunc();
+        // // arrowFunc();
 
-        function normalFunc(parameter){
-            console.log("normalFunc", this)
-        };
+        // function normalFunc(parameter){
+        //     console.log("normalFunc", this)
+        // };
 
-        const arrowFunc = (parameter) => {
-            console.log("arrowFunc",this)
-        }
+        // const arrowFunc = (parameter) => {
+        //     console.log("arrowFunc",this)
+        // }
 
         // normalFunc();
         // arrowFunc()
+
+
+        // function sum(para1 = 5, para2 = 8){
+        //     console.log(para1 + para2)
+        // }
+
+
+        // function totalVal(para1, para2, ...numbers){
+        //     console.log(para1);
+        //     console.log(para2);
+        //     console.log(numbers);
+
+        //     // let totalNum = 0; // 60
+        //     // for(let i=0; i < numbers.length; i++){
+        //     //     totalNum += numbers[i]
+        //     // }
+        //     // console.log(numbers)
+        // }
+
+        // totalVal(10, 15, 5, 19, 11, 8, 6, 7, 9, 44)
+
+        // Hoisting
+        normalFunc(5)
+
+        function normalFunc(para){
+            console.log(para)
+        }
+
+        arrowFunc(5)
+        const arrowFunc = (para) => {
+            console.log(para)
+        }
+
+
     </script>
 </body>
 </html>

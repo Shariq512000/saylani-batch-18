@@ -8,20 +8,65 @@
 <body>
     
     <script>
-        let arr1 = ["item1", "item2", "item3", "item4"]
-        let arr2 = ["item5", "item6", "item7", "item8"]
+        // let arr1 = ["item1", "item2", "item3", "item4"]
+        // let arr2 = ["item5", "item6", "item7", "item8"]
 
-        let combinedArr = [...arr1, ...arr2]
+        // let combinedArr = [...arr1, ...arr2]
 
-        // for(let i = 0; i < arr1.length; i++){
+        // // for(let i = 0; i < arr1.length; i++){
+        // //     combinedArr.push(arr1[i])
+        // // }
+
+        // // for(let i = 0; i < arr2.length; i++){
+        // //     combinedArr.push(arr2[i])
+        // // }
+
+        // console.log(combinedArr);
+
+        let arr1 = [1,2,3,4,5]
+        let arr2 = [6,7,8,9,10]
+        let arr3 = [11,12,13,14,15]
+        let arr4 = [16,17,18,19,20]
+
+        let combinedArr = [...arr1, ...arr2, ...arr3, ...arr4]
+
+        // for(let i=0; i < arr1.length; i++){
         //     combinedArr.push(arr1[i])
         // }
 
-        // for(let i = 0; i < arr2.length; i++){
+        // for(let i=0; i < arr2.length; i++){
         //     combinedArr.push(arr2[i])
         // }
 
-        console.log(combinedArr);
+        // for(let i=0; i < arr3.length; i++){
+        //     combinedArr.push(arr3[i])
+        // }
+
+        // for(let i=0; i < arr4.length; i++){
+        //     combinedArr.push(arr4[i])
+        // }
+
+        console.log(combinedArr)
+
+        let obj1 = {
+            property1: "value1",
+            property2: "value2",
+            property3: "value3",
+        }
+
+        let obj2 = {
+            property4: "value4",
+            property5: "value5",
+            property6: "value6",
+        }
+
+        let combinedObj = {
+            ...obj1,
+            ...obj2
+        }
+
+        console.log(combinedObj)
+
     </script>
 </body>
 </html>

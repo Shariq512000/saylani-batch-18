@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      img {
+        width: 100%;
+        /* height: 100%; */
+      }
+      .container {
+        padding: 20px;
+      }
+      .cardWrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        gap: 20px;
+      }
+      .card {
+        border-radius: 8px;
+        border: 1px solid #e9e9e9;
+        padding: 15px;
+        display: flex;
+        gap: 8px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease-in-out;
+      }
+      .card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0px 15px 15px rgba(0, 0, 0, 0.2);
+      }
+      .card .cardImg {
+        height: 220px;
+      }
+      .cardImg img {
+        height: 100%;
+      }
+
+      .card h6 {
+        font-size: 22px;
+        text-align: center;
+        font-family: sans-serif;
+      }
+      .card p {
+        font-weight: bold;
+        color: rgb(23, 117, 23);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="cardWrapper" id="cardWrapper"></div>
+    </div>
+
+    <script>
+      // fetch("https://fakestoreapi.com/products").then((res) => {
+      //     return res.json();
+      // }).then((data) => {
+      //     // console.log(data);
+      //     let allCards = ""
+      //     for(let i=0; i < data.length; i++){
+      //         // console.log(data[i])
+      //         allCards += `
+      //         <div class="card">
+      //             <div class="cardImg">
+      //                 <img src="${data[i].image}" alt="">
+      //             </div>
+      //             <h6>${data[i].title}</h6>
+      //             <p>$${data[i].price}</p>
+      //         </div>
+      //         `
+      //     }
+      //     // console.log(allCards)
+      //     document.getElementById("cardWrapper").innerHTML = allCards
+      // }).catch((err) => {
+      //     console.log("Err", err)
+      // })
+
+      const getApiData = async () => {
+        try {
+          const data = await fetch("https://fakestoreapi.com/products"); // Wait
+          const jsonData = await data.json();
+          let allCards = "";
+          for (let i = 0; i < jsonData.length; i++) {
+            allCards += `
+                <div class="card">
+                    <div class="cardImg">
+                        <img src="${jsonData[i].image}" alt="">
+                    </div>
+                    <h6>${jsonData[i].title}</h6>
+                    <p>$${jsonData[i].price}</p>
+                </div>
+                `;
+          }
+          document.getElementById("cardWrapper").innerHTML = allCards;
+        } catch (error) {
+          console.log("Err", error);
+        }
+      };
+
+      getApiData();
+
+      console.log("Test");
+
+      // function getApiData(){}
+
+      // console.log("Line1"); //sync
+      // console.log("Line2");
+      // console.log("Line3");
+
+      // setTimeout(() => {
+      //     console.log("setTimeout")
+      // } , 1000)
+
+      // setInterval(() => {
+      //     console.log("setInterval")
+      // }, 1000)
+    </script>
+  </body>
+</html>

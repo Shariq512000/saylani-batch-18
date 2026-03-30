@@ -27,20 +27,68 @@
             property16: "value16",
         };
 
-        let {property1, property4, property10, property14, ...restOfObj} = obj;
+        let {property1, property3, property12, property14, ...filteredObj} = obj;
 
-        console.log(property1, property4, property10, property14, restOfObj);
+        console.log(property1)
+        console.log(property3)
+        console.log(property12)
+        console.log(property14)
+        console.log(filteredObj)
+
+        // console.log(`Test ${property1} sdas ${property3} asdasdo ${property12} dasd ${property14}`)
+
+        // let {property1, property4, property10, property14, ...restOfObj} = obj;
+
+        // console.log(property1, property4, property10, property14, restOfObj);
+
+        // obj.property1 , obj.property3, obj.property5, obj.property7
+
+        // let {property1, property3, property5, property7, ...newObj} = obj;
+
+        // console.log(property1, property3, property5, property7);
+
+        // console.log(newObj)
+
+        // console.log(obj.property1 , obj.property3, obj.property5, obj.property7);
+
 
         const fruits = ["Bananas", "Oranges", "Apples", "Mangos", "Mangos2", "Mangos3", "Mangos4", "Mangos5"];
-        // // Destructuring
-        let [fruit1, fruit2, fruit3, fruit4, ...restOfFruits] = fruits;
+
+        let [fruit1, ,fruit2, fruit3, ...restOfFruits] = fruits
 
         // let fruit1 = fruits[0];
         // let fruit2 = fruits[1];
         // let fruit3 = fruits[2];
         // let restOfFruits = fruits.slice(3);
 
-        console.log(fruit1, fruit2, fruit3, restOfFruits)
+        // console.log(fruit1)
+        // console.log(fruit2)
+        // console.log(fruit3)
+        // console.log(restOfFruits)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // // Destructuring
+        // let [fruit1, fruit2, fruit3, fruit4, ...restOfFruits] = fruits;
+
+        // let fruit1 = fruits[0];
+        // let fruit2 = fruits[1];
+        // let fruit3 = fruits[2];
+        // let restOfFruits = fruits.slice(3);
+
+        // console.log(fruit1, fruit2, fruit3, restOfFruits)
 
     </script>
 </body>
