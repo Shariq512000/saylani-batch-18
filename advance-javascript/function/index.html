@@ -72,17 +72,35 @@
         // totalVal(10, 15, 5, 19, 11, 8, 6, 7, 9, 44)
 
         // Hoisting
-        normalFunc(5)
+        // normalFunc(5)
 
-        function normalFunc(para){
-            console.log(para)
-        }
+        // function normalFunc(para){
+        //     console.log(para)
+        // }
 
-        arrowFunc(5)
-        const arrowFunc = (para) => {
-            console.log(para)
-        }
+        // arrowFunc(5)
+        // const arrowFunc = (para) => {
+        //     console.log(para)
+        // }
 
+        // function totalNum(...nums){
+        //     console.log(nums)
+        //     let totalNum = 0;
+
+        //     for(let i = 0; i < nums.length; i++){
+        //         totalNum += nums[i]
+        //     }
+
+        //     console.log(totalNum)
+        // }
+
+        const totalNum = num1 => num1 + 1
+
+        let incrementalNum = totalNum(5);
+
+        console.log(incrementalNum)
+
+        // totalNum(5, 10, 156, 65, 86, 106, 6, 46, 20)
 
     </script>
 </body>

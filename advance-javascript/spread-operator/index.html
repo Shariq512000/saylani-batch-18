@@ -60,12 +60,22 @@
             property6: "value6",
         }
 
-        let combinedObj = {
-            ...obj1,
-            ...obj2
+        let obj3 = {
+            property7: "value7",
+            property8: "value8",
+            property9: "value9",
         }
 
-        console.log(combinedObj)
+        let combinedObj = {
+            ...obj1,
+            ...obj2,
+            ...obj3
+        }
+
+        console.log("combinedObj", combinedObj);
+
+
+
 
     </script>
 </body>
