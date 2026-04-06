@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Class</title>
+  </head>
+  <body>
+    <script>
+      class Car {
+        constructor(name) {
+          this.name = name;
+        }
+        alertName(){
+            alert(this.name)
+        }
+      }
+
+      class Model extends Car{
+        constructor(name, model){
+            super(name);
+            this.model = model
+        }
+        alertModel(){
+            alert(this.model)
+        }
+      }
+
+      const myCar1 = new Model("Ford", 2011);
+
+      console.log(myCar1);
+
+      myCar1.alertName();
+      myCar1.alertModel();
+    //   const myCar2 = new Car("Audi", 2019);
+    </script>
+  </body>
+</html>

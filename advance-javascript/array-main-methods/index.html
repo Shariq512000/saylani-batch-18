@@ -23,8 +23,26 @@
         ];
 
         // Filter //
-        // [{name: "Test 2", age: 22, batch: 17},{name: "Test 4", age: 32, batch: 17}]
-        // let filteredArr = students.filter((student) => student.age >= 18) // Filter Method Returns an Array
+        // []
+        // let filteredArr = students.filter((student) => student.age >= 18);
+
+        // function filter(func){
+        //     let arr = this.array;
+        //     for(let i = 0; i < arr.length; i++){
+        //         func(arr[i])
+        //     }
+        // }
+
+        // console.log(filteredArr)
+
+
+        // Map
+
+        //[12, 22, 16, 32]
+
+        // let updatedData = students.map((student) => ({id: student.id, name: student.name}));
+
+        // console.log(updatedData);
 
 
         // Map
@@ -48,8 +66,34 @@
 
 
         //Find always return item;
+        // null
+        // let studentById = students.find((student) => student.id == 6 );
 
-        let studentById = students.find((student) => student.id == 6 )
+        // console.log(studentById)
+
+        
+        let newArr = [5, 6, 2, 10, 15, 65, 78, 20];
+        
+        let checkedNumber = 10;
+        // let isMatched = false;
+
+        // for(let i=0; i < newArr.length; i++){
+        //     if(checkedNumber == newArr[i]){
+        //         isMatched = true;
+        //         break;
+        //     }
+        // }
+
+        // console.log(isMatched)
+
+
+        // Includes
+
+        // true or false;
+
+        let isMatched = newArr.includes(checkedNumber);
+
+        console.log(isMatched)
         
     </script>
 

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Higher Order Function</title>
+</head>
+<body>
+    
+
+    <script>
+        // Higher Order Function: Ek aesa function ya as an argument 1 function accept kre ya 1 function return
+        // Callback Function: Ek aesa function jo as an argument pass
+
+        const higherOrderFunc = (num1, num2, cb) => { // Higher Order Function
+            let result = num1 + num2;
+            cb(result)
+        }
+
+        const myFunc = (totalNum) => {alert(totalNum)} // Callback Function
+
+        higherOrderFunc(2, 13, myFunc)
+
+    </script>
+</body>
+</html>
