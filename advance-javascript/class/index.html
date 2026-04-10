@@ -7,32 +7,82 @@
   </head>
   <body>
     <script>
-      class Car {
-        constructor(name) {
+
+      // class Car {
+      //   constructor(name) {
+      //     this.name = name;
+      //   }
+      //   alertName() {
+      //     alert(this.name);
+      //   }
+      // }
+
+      // // class Student {
+      // //   constructor(name, course, batch){
+      // //     this.name = name;
+      // //     this.course = course;
+      // //     this.batch = batch
+      // //   }
+      // //   showStudentName(){
+      // //     alert(this.name)
+      // //   }
+      // // }
+
+
+      // // const student1 = new Student("Test Name", "Web Development", 18)
+      // // const student2 = new Student("Test Name2", "Web Development", 18)
+      // // const student3 = new Student("Test Name3", "Web Development", 18)
+      // // const student4 = new Student("Test Name4", "Web Development", 18)
+      // // const student5 = new Student("Test Name5", "Web Development", 18)
+
+
+      // // // const myCar = new Car("BMW");
+      // // // myCar.alertName()
+
+      // // console.log(student1)
+      // // console.log(student2)
+      // // console.log(student3)
+      // // console.log(student4)
+      // // console.log(student5)
+
+
+      // class Model extends Car {
+      //   constructor(name, model) {
+      //     super(name);
+      //     this.model = model;
+      //   }
+      //   alertModel() {
+      //     alert(this.model);
+      //   }
+      // }
+
+      // const myCar1 = new Model("Ford", 2011);
+
+      // console.log(myCar1);
+
+      // myCar1.alertName();
+      // myCar1.alertModel();
+      //   const myCar2 = new Car("Audi", 2019);
+
+
+
+      class Human{
+        constructor(name, age){
           this.name = name;
-        }
-        alertName(){
-            alert(this.name)
+          this.age = age
         }
       }
 
-      class Model extends Car{
-        constructor(name, model){
-            super(name);
-            this.model = model
-        }
-        alertModel(){
-            alert(this.model)
+      class Student extends Human{
+        constructor(name, age, batch, course){
+          super(name, age);
+          this.batch = batch;
+          this.course = course
         }
       }
 
-      const myCar1 = new Model("Ford", 2011);
-
-      console.log(myCar1);
-
-      myCar1.alertName();
-      myCar1.alertModel();
-    //   const myCar2 = new Car("Audi", 2019);
+      const student1 = new Student("Test", 23, 18, "Web Development")
+      console.log(student1)
     </script>
   </body>
 </html>

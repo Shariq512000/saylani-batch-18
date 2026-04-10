@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Set</title>
+  </head>
+  <body>
+    <script>
+      // let arr = new Set();
+      // arr.add(1);
+      // arr.add(2);
+      // arr.add(3);
+      // arr.add(1);
+
+      // console.log(typeof arr)
+
+      // let obj = {
+      //     "test": 4,
+      //     "a": 1,
+      //     "d": 5,
+      //     "b": 6
+      // }
+      // console.log(obj)
+
+      // let obj = new Map([
+      //     ["Key1", "Value1"],
+      //     ["Key2", "Value2"],
+      //     ["Key3", "Value3"],
+      // ]);
+      // console.log(obj.size)
+      // obj.set("Key1", "value 1")
+      // console.log(obj.get("Key2"))
+      // obj.delete("Key1");
+      // obj.clear();
+      // console.log(obj.has("Key1"))
+      // console.log(obj.keys())
+      // console.log(obj.values())
+
+      // Create Objects
+      const apples = { name: "Apples" };
+      const bananas = { name: "Bananas" };
+      const oranges = { name: "Oranges" };
+
+      // Create a Map
+      const fruits = new Map();
+
+      // Add new Elements to the Map
+      fruits.set(apples, 500);
+      fruits.set(bananas, 300);
+      fruits.set(oranges, 200);
+
+      console.log(fruits.get(apples))
+    </script>
+  </body>
+</html>
