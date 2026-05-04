@@ -14,7 +14,7 @@ const Extra = () => {
 
   useEffect(() => {
     console.log("Run UseEffect")
-  }, [state1, state9]) // Function, Dependency Array
+  }, [state7, state9]) // Function, Dependency Array
 
   return (
     <div className="App">

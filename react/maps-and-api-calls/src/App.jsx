@@ -1,51 +1,48 @@
-import { useState } from 'react';
-import './App.css';
+import { useEffect, useState } from 'react';
+import axios from "axios";
+import "App.css"
 
 function App() {
 
-  const [todo, setTodo] = useState("");
-  const [time, setTime] = useState("");
-  const [todoList, setTodoList] = useState([]);
+  const [products, setProducts] = useState([])
+
+  // Api Methods = Get, Post, Put, Patch, Delete
+
+  const getData = async() => {
+    try {
+      const apiRes = await axios.get('https://dummyjson.com/products');
+      setProducts(apiRes.data.products)
+    } catch (error) {
+      console.log("Err", error)
+    }
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+
+  // console.log("Test")
+
+  // const test = () => {
+
+  //   console.log("Run Function")
+  // }
+
+  // useEffect(() => {
+  //   test()
+  // } , [])
+
 
   return (
     <div className="App">
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        let obj = {
-          work: todo,
-          time: time
-        }
-        setTodoList([...todoList, obj])
-        setTodo("")
-        setTime("")
-      }}>
-
-        <input type="text" value={todo} placeholder='Enter Your Work' onChange={
-          (event) => {setTodo(event.target.value)}
-        } />
-
-        <br />
-
-        <input type="time" value={time} onChange={
-          (event) => {setTime(event.target.value)}
-        } />
-
-        <br />
-
-        <button type='submit'>Add Work</button>
-      </form>
-
-      {todoList.map((eachTodo, index) => {
-        return(
-          <div className="" key={index}>
-            <h1>{eachTodo.work}</h1>
-            <p>{eachTodo.time}</p>
-          </div>
-        )
-      })}
-
+      
     </div>
   );
 }
 
 export default App;
+
+
+// Mount
+// Update
+// Unmount
