@@ -2,19 +2,26 @@ import React, { useEffect, useState } from "react";
 
 const Extra = () => {
 
-    const [state1, setState1] = useState(false);
-    const [state2, setState2] = useState(false);
-    const [state3, setState3] = useState(false);
-    const [state4, setState4] = useState(false);
-    const [state5, setState5] = useState(false);
-    const [state6, setState6] = useState(false);
-    const [state7, setState7] = useState(false);
-    const [state8, setState8] = useState(false);
-    const [state9, setState9] = useState(false);
+  const [state1, setState1] = useState(false);
+  const [state2, setState2] = useState(false);
+  const [state3, setState3] = useState(false);
+  const [state4, setState4] = useState(false);
+  const [state5, setState5] = useState(false);
+  const [state6, setState6] = useState(false);
+  const [state7, setState7] = useState(false);
+  const [state8, setState8] = useState(false);
+  const [state9, setState9] = useState(false);
 
   useEffect(() => {
     console.log("Run UseEffect")
-  }, [state7, state9]) // Function, Dependency Array
+  }, [state4, state9]) // Function, Dependency Array
+
+
+  // const [categoryState, setCategoryState] = useState("All")
+
+  // useEffect(() => {
+  //   apiCall(`https://domain.com/products?category=${categoryState}`)
+  // }, [categoryState]) // Function, Dependency Array
 
   return (
     <div className="App">

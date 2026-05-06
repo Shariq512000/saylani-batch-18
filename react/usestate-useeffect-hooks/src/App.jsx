@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Extra from "./components/Extra";
+import Test from "./components/Test";
 
 function App() {
   // let num = 1;
@@ -33,7 +34,7 @@ function App() {
   //   setNum(num - 1);
   // };
 
-  // // localStorage.setItem("MyNumber", num)
+  // // // localStorage.setItem("MyNumber", num)
 
   // return (
   //   <div className="App">
@@ -43,13 +44,13 @@ function App() {
   //   </div>
   // );
 
-  const [isShow, setShow] = useState(false)
+  const [isShow, setShow] = useState(false) // true
 
   return(
     <div className="">
-      {/* <h1>Main Component</h1>
+      <h1>Main Component</h1>
 
-      { isShow ? <Extra /> : null}
+      {/* { isShow ? <Test /> : null }
 
       <button onClick={() => { setShow(!isShow) }}> {isShow ? "Hide" : "Show"} </button> */}
 
