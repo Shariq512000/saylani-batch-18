@@ -6,9 +6,12 @@ import Card from "./component/card";
 function App() {
   const [products, setProducts] = useState([]);
 
+  // get, post, put, patch, delete
+
   const getApiData = async () => {
     try {
       const apiRes = await axios.get("https://dummyjson.com/products"); // intezaar krta hai response aane ka
+      console.log(apiRes.data);
       setProducts(apiRes.data.products);
     } catch (error) {
       console.log("Err", error);

@@ -1,8 +1,9 @@
 import React from "react";
 
 const Card = (props) => {
+  const { product } = props;
 
-    const {product} = props
+  console.log(product);
 
   const discountedPrice = (
     product.price -
@@ -44,8 +45,10 @@ const Card = (props) => {
         </div>
       </div>
     </div>
+    // <div className="">
+    //   <h1>{product.title}</h1>
+    // </div>
   );
-
 };
 
 export default Card;
