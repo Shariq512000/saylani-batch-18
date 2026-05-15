@@ -3,8 +3,6 @@ import React from "react";
 const Card = (props) => {
   const { product } = props;
 
-  console.log(product);
-
   const discountedPrice = (
     product.price -
     (product.price * product.discountPercentage) / 100
