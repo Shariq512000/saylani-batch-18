@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 import Card from "./component/card";
@@ -10,7 +10,7 @@ function App() {
 
   // get, post, put, patch, delete
 
-  const getApiData = async () => {
+  const getApiData = useCallback(async () => {
     // https://dummyjson.com/products/category/smartphones
     try {
       const apiRes = await axios.get(
@@ -23,7 +23,7 @@ function App() {
     } catch (error) {
       console.log("Err", error);
     }
-  };
+  }, [selectedCategory]);
 
   const getCategories = async () => {
     try {
@@ -38,7 +38,7 @@ function App() {
 
   useEffect(() => {
     getApiData();
-  }, [selectedCategory]);
+  }, [selectedCategory, getApiData]);
 
   useEffect(() => {
     getCategories();
