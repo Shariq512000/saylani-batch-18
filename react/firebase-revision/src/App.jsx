@@ -6,6 +6,8 @@ import { Navigate, Route, Routes } from "react-router";
 import Dashboard from "./pages/Dashboard";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Forget from "./pages/Forget";
 
 function App() {
   const firebaseConfig = {
@@ -57,6 +59,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forget" element={<Forget />} />
           <Route path="*" element={<Navigate to={"/login"} />} />
         </Routes>
       )}
