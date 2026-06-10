@@ -8,6 +8,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Forget from "./pages/Forget";
+import Home from "./pages/Home";
 
 function App() {
   const firebaseConfig = {
@@ -52,8 +53,9 @@ function App() {
       ) : isUserLogedin ? (
         // /login
         <Routes>
+          <Route path="/home" element={<Home />} />
           <Route path="/" element={<Dashboard />} />
-          <Route path="*" element={<Navigate to={"/"} />} />
+          <Route path="*" element={<Navigate to={"/home"} />} />
         </Routes>
       ) : (
         <Routes>
