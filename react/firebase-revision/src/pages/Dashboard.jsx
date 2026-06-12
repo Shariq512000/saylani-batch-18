@@ -1,14 +1,44 @@
 import { computeHeadingLevel } from "@testing-library/dom";
 import { getAuth, sendEmailVerification, signOut, updateProfile } from "firebase/auth";
-import React, { useState } from "react";
+import { collection, getDocs, getFirestore, query, where } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { Alert, Button, Modal } from "react-bootstrap";
+import PostCard from "../component/PostCard";
 
 const Dashboard = () => {
   const auth = getAuth();
   const currentUser = auth.currentUser;
 
   const [show, setShow] = useState(false);
-  const [showAlert, setShowAlert] = useState(false)
+  const [showAlert, setShowAlert] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [reFetch, setReFetch] = useState(false);
+
+  const db = getFirestore();
+
+  const getPost = async () => {
+    try {
+      const q = query(collection(db, "posts"), where("userId", "==", currentUser.uid));
+
+      const querySnapshot = await getDocs(q);
+      let productArr = []
+      querySnapshot.forEach((doc) => {
+        let newObj = {
+          ...doc.data(),
+          id: doc.id
+        }
+        productArr.push(newObj)
+      });
+      setPosts(productArr.reverse())
+
+    } catch (error) {
+      console.log("Err", error)
+    }
+  }
+
+  useEffect(() => {
+    getPost();
+  }, [reFetch])
 
 
   const handleClose = () => {
@@ -54,10 +84,10 @@ const Dashboard = () => {
   const sendVerificationEmail = () => {
     // console.log("sendVerificationEmail")
     sendEmailVerification(auth.currentUser)
-    .then(() => {
-      // Email verification sent!
-      // ...
-    });
+      .then(() => {
+        // Email verification sent!
+        // ...
+      });
   }
 
   return (
@@ -66,7 +96,7 @@ const Dashboard = () => {
 
       {currentUser.emailVerified == false ?
         <Alert key={'warning'} variant={'warning'}>
-          Your Email Is Not Verified, <span style={{cursor: "pointer", textDecoration: "underline"}} onClick={sendVerificationEmail}>Click Here</span> To Verify
+          Your Email Is Not Verified, <span style={{ cursor: "pointer", textDecoration: "underline" }} onClick={sendVerificationEmail}>Click Here</span> To Verify
         </Alert>
         :
         null
@@ -92,6 +122,22 @@ const Dashboard = () => {
       <button onClick={() => { setShow(true) }}>Update Profile</button>
       <br />
       <button onClick={logout}>Logout</button>
+
+      <div className="" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+        {
+          posts.map((eachPost) => {
+            return (
+              <PostCard
+                refetchFunc={() => {setReFetch(!reFetch)}}
+                db={db}
+                currentUser={currentUser}
+                key={eachPost.id}
+                post={eachPost}
+              />
+            )
+          })
+        }
+      </div>
 
 
       <Modal show={show} onHide={handleClose}>
