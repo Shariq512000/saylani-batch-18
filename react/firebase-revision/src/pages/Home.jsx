@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { getFirestore, doc, setDoc, collection, addDoc, query, where, getDocs, serverTimestamp } from "firebase/firestore";
+import { getFirestore, doc, setDoc, collection, addDoc, query, where, getDocs, serverTimestamp, orderBy, limit, startAfter } from "firebase/firestore";
 import ProductCard from '../component/productCard';
 import { getAuth } from 'firebase/auth';
 import PostCard from '../component/PostCard';
+import axios from 'axios';
 
 const Home = () => {
     const [title, setTitle] = useState("");
     const [imageUrl, setImageUrl] = useState("");
+    const [file, setFile] = useState("");
     const [posts, setPosts] = useState([]);
     const [reFetch, setReFetch] = useState(false);
 
@@ -17,6 +19,18 @@ const Home = () => {
 
     const addPost = async (e) => {
         e.preventDefault();
+
+        console.log("file", file);
+        console.log("title", title)
+
+        const formData = new FormData();
+        // {}
+        formData.append("file", file);
+        //{file: file}
+        formData.append("upload_preset", "posts-image");
+
+        const res = await axios.post("https://api.cloudinary.com/v1_1/dw2jrfzql/upload", formData);
+
         try {
             const docRef = await addDoc(collection(db, "posts"), {
                 user_name: currentUser.displayName,
@@ -24,7 +38,7 @@ const Home = () => {
                 email: currentUser.email,
                 userId: currentUser.uid,
                 title,
-                imageUrl,
+                imageUrl: res.data.url,
                 posted_time: serverTimestamp()
             });
             setReFetch(!reFetch)
@@ -37,7 +51,7 @@ const Home = () => {
 
     const getPost = async() => {
         try {
-            const q = query(collection(db, "posts"));
+            const q = query(collection(db, "posts"), orderBy("posted_time", "asc"), limit(10), startAfter(0));
 
             const querySnapshot = await getDocs(q);
             let productArr = []
@@ -63,12 +77,14 @@ const Home = () => {
         <div>
             <form onSubmit={addPost}>
                 <label htmlFor="">
-                    Title: <input type="text" value={title} onChange={(e) => { setTitle(e.target.value) }} />
+                    image url: <input type="file" onChange={(e) => {setFile(e?.target?.files[0])}} />
                 </label>
                 <br />
                 <label htmlFor="">
-                    image url: <input type="text" value={imageUrl} onChange={(e) => { setImageUrl(e.target.value) }} />
+                    Title: <textarea value={title} onChange={(e) => { setTitle(e.target.value) }} />
                 </label>
+                <br />
+                
                 <br />
                 <button type='submit'>Add</button>
             </form>
