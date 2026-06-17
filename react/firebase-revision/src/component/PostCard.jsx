@@ -18,7 +18,9 @@ const PostCard = ({ post, db, refetchFunc, currentUser }) => {
         setPhotoUrl("")
     }
 
-    const date = new Date(post.posted_time.seconds * 1000);
+    const postInSec = post?.posted_time?.seconds || 0
+
+    const date = new Date( postInSec * 1000);
     // 12-6-2026 9:
     const formatedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
 
