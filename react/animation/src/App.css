@@ -1,0 +1,47 @@
+body,html{
+  overflow-x: hidden;
+}
+.box{
+  width: 200px;
+  height: 200px;
+  background-color: red;
+}
+#box2{
+  background-color: blue;
+}
+
+#box3{
+  background-color: yellow;
+}
+
+#box4{
+  background-color: green;
+}
+
+.banner{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+.contentSection{
+  width: calc((100% - 50px) / 2);
+}
+
+.img{
+  height: 700px;
+  width: 550px;
+  background-color: red;
+}
+
+/* .card {
+  width: 120px;
+  height: 120px;
+  background: #6366f1;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 3rem;
+  border-radius: 16px;
+} */

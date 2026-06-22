@@ -8,7 +8,6 @@ import { Link } from 'react-router';
 
 const Home = () => {
     const [title, setTitle] = useState("");
-    const [imageUrl, setImageUrl] = useState("");
     const [file, setFile] = useState("");
     const [posts, setPosts] = useState([]);
     const [reFetch, setReFetch] = useState(false);
