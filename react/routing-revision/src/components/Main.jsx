@@ -16,6 +16,20 @@ const Main = () => {
       <Link to={"/abc"}>Abc</Link>
       <br /> */}
       {/* <Home /> */}
+
+
+      {/* const path = "/"
+      if(path == "/"){
+        return(<Home />)
+      }else if(path == "/about"){
+        return(<About />)
+      }else if(path == "/contact"){
+        return(<Contact />)
+      }else{
+        path = "/"
+      } */}
+
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
