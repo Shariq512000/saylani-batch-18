@@ -69,13 +69,18 @@ section{
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: red;
+  background-color: skyblue;
 }
 
 #sec2{
-  background-color: blue;
+  background-color: peachpuff;
 }
 
 #sec3{
   background-color: green;
+}
+
+section h1{
+  font-size: 670px;
+  transform: translateX(860px);
 }

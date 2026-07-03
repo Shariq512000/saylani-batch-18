@@ -1,83 +1,49 @@
-import logo from './logo.svg';
 import './App.css';
-import { useRef, useState } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 
 function App() {
 
-  // const [animationPixel, setAnimationPixel] = useState(0)
-
-  // const animationContainer = useRef();
-  // const animationInput = useRef()
-
   gsap.registerPlugin(useGSAP); // register the hook to avoid React version discrepancies 
-
-  // useGSAP(() => {
-  //   // gsap.to(".box", { x: 800, duration: 2, repeat: -1, yoyo: true, delay: 1, backgroundColor: "blue" })
-  //   const tl = gsap.timeline();
-  //   tl.from("h1", { y: -50, duration: 1, opacity: 0, delay: 1, stagger: 0.5 })
-  //   tl.to("h1", { y: 50, duration: 1, opacity: 0, delay: 1, stagger: 0.5 })
-  //   // gsap.to(".box", { x: animationPixel, duration: 2 })
-  // })
-
-  // useGSAP(() => {
-  //   // gsap.to("#box1", { x: 400, duration: 2, delay: 1 })
-  //   // gsap.to("#box2", { x: 400, duration: 1, delay: 3 })
-  //   // gsap.to("#box3", { x: 400, duration: 1, delay: 4 })
-  //   const tl = gsap.timeline();
-  //   tl.to("#box1", { x: 400, duration: 2, delay: 1 })
-  //   tl.to("#box2", { x: 400, duration: 2 })
-  //   tl.to("#box3", { x: 400, duration: 2 })
-  // })
+  gsap.registerPlugin(ScrollTrigger);
 
   useGSAP(() => {
-    gsap.from("#sec1 h1", { y: -60, opacity: 0, duration: 2, delay: 1 })
-    gsap.from("#sec2 h1", { y: -60, opacity: 0, duration: 2, delay: 1 })
-
+    gsap.to(
+      "#sec2 h1",
+      {
+        x: -900,
+        duration: 2,
+        scrollTrigger: {
+          trigger: "#sec2",
+          start: "top 0%",
+          end: "top -150%",
+          scrub: 2,
+          markers: true,
+          pin: true,
+          // snap: {
+          //   snapTo: "labels", // snap to the closest label in the timeline
+          //   duration: { min: 0.2, max: 3 }, // the snap animation should be at least 0.2 seconds, but no more than 3 seconds (determined by velocity)
+          //   delay: 0.2, // wait 0.2 seconds from the last scroll event before doing the snapping
+          //   ease: "power1.inOut", // the ease of the snap animation ("power3" by default)
+          // },
+        }
+      }
+    )
   })
 
 
   return (
     <div className="">
+      <section>
 
-      {/* <div className="box" id='box1'></div>
-      <div className="box" id='box2'></div>
-      <div className="box" id='box3'></div> */}
-
-      {/* <label htmlFor="">
-        <input type="number" ref={animationInput} />
-      </label>
-      <button onClick={() => { setAnimationPixel(animationInput.current.value) }}>Animate</button>
-
-      <div className="upparSec" ref={animationContainer}>
-        <div className="box"></div>
-      </div>
-      <br />
-      <br /> */}
-
-      {/* <div className="lowerSec">
-        <div className="box"></div>
-      </div> */}
-
-      {/* <div className="skills">
-        <h1>HTML</h1>
-        <h1>CSS</h1>
-        <h1>JAVASCRIPT</h1>
-        <h1>REACT</h1>
-      </div> */}
-      <section id='sec1'>
-        <h1>Section 1</h1>
       </section>
 
       <section id='sec2'>
-        <h1>Section 2</h1>
+        <h1>Experiences</h1>
       </section>
 
-      <section id='sec3'>
-        <h1>Section 3</h1>
-      </section>
-
+      <section id='sec3'></section>
     </div>
   );
 }
