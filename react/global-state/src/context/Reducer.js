@@ -2,8 +2,7 @@ export const reducer = (state, action) => {
     switch (action.type) {
 
         case "USER_LOGIN": {
-            console.log("Calling Type:", "USER_LOGIN")
-            return { ...state, isLogin: true, user: action.payload }
+            return { ...state, isLogin: true, user: action.user }
         }
 
         case "USER_LOGOUT": {

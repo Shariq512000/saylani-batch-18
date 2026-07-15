@@ -1,28 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { GlobalContext } from '../context/Context'
 
 const Home = () => {
+    const { state } = useContext(GlobalContext);
 
-    const { state, dispatch } = useContext(GlobalContext);
-
-    console.log("state", state)
-
-    const setUser = () => {
-        dispatch({
-            type: "USER_LOGIN",
-            payload: {
-                firstName: "Shariq",
-                lastName: "Siddiqui"
-            }
-        })
-    }
-
-    useEffect(() => {
-        setUser()
-    }, [])
+    console.log("State", state)
 
     return (
         <div>
+            {state.user.firstName} {state.user.lastName}
         </div>
     )
 }
