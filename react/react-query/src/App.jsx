@@ -4,9 +4,6 @@ import Home from './pages/Home';
 import { Routes, Route, Navigate, Link } from "react-router";
 import About from './pages/About';
 import {
-  useQuery,
-  useMutation,
-  useQueryClient,
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
