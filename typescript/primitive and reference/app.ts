@@ -50,6 +50,87 @@
 //     test.toLowerCase()
 // }
 
-// let empty: null = null
+// let empty: string | null = null
 
-// let arr: number[] = [5,6,8]
+// let arr: (number | string)[] = [];
+
+//tuples
+
+// let tpl:[string, number] = ["abc", 5];
+
+//Object
+
+type Age = number
+
+
+
+type Student = {
+    name: string,
+    age:Age,
+    address?: string,
+    rollNumber: number
+}
+
+let user1:Student = {
+    name: "Student1",
+    age: 20,
+    rollNumber: 123,
+    address: "H#275"
+}
+
+let user2:Student = {
+    name: "Student1",
+    age: 20,
+    rollNumber: 123,
+    address: "H#275"
+}
+
+let teacher: Student & {salary:number} = {
+    name: "Teacher",
+    age: 23,
+    rollNumber: 1001564,
+    salary: 5000
+}
+
+
+// enum CardinalDirections {
+//     North = "north",
+//     East= "east",
+//     South= "south",
+//     West= "west"
+// }
+
+// enum CardinalDirections {
+//     North,
+//     East,
+//     South,
+//     West
+// }
+
+// console.log(CardinalDirections.South)
+
+// enum Status {
+//     NotFount = 404,
+//     ServerError = 500,
+//     BadRequest = 400,
+//     Unautorized = 401
+// }
+
+// function checkStatus(status: Status){
+
+// }
+
+// checkStatus(Status.NotFount)
+
+enum Role{
+    Admin = "admin",
+    ShopOwner="shop owner",
+    Customer="customer"
+}
+
+
+function checkRole(role: Role){
+
+}
+
+checkRole(Role.Admin)

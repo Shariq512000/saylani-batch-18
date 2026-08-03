@@ -5,7 +5,6 @@ import { getProducts } from "../api-endpoints";
 
 export default async function Home() {
   const data = await getProducts();
-  console.log("data", data)
   return (
     <div>
       <h1>Hello World</h1>
