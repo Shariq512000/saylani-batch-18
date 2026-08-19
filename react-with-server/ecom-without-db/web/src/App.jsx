@@ -6,13 +6,13 @@ import './App.css';
 
 function App() {
 
-  const baseUrl = "https://ecom-test-backend.vercel.app" //http://localhost:5000
+  const baseUrl = "http://localhost:5000" //https://ecom-test-backend.vercel.app
 
   const [allProducts, setAllProducts] = useState([])
 
   const getAllProducts = async () => {
     try {
-      const apiRes = await axios.get(`${baseUrl}/get-all-products`);
+      const apiRes = await axios.get(`${baseUrl}/products`);
       // console.log("apiRes", apiRes.data)
       setAllProducts(apiRes.data.products)
     } catch (error) {
@@ -34,7 +34,7 @@ function App() {
     onSubmit: async (values) => {
       // console.log(values)
       try {
-        await axios.post(`${baseUrl}/add-product`, {
+        await axios.post(`${baseUrl}/product`, {
           title: values.title,
           price: values.price,
           description: values.description,
@@ -44,6 +44,7 @@ function App() {
         getAllProducts()
       } catch (error) {
         console.log("Err", error)
+        alert(error.response.data.message)
       }
     }
   })
