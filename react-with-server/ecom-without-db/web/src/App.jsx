@@ -6,11 +6,15 @@ import './App.css';
 
 function App() {
 
-  const baseUrl = "http://localhost:5000" //https://ecom-test-backend.vercel.app
+  const baseUrl = "" //https://ecom-test-backend.vercel.app
 
-  const [allProducts, setAllProducts] = useState([])
+  const [allProducts, setAllProducts] = useState([]);
 
   const getAllProducts = async () => {
+    // const apiReq = {
+    //   method: "get",
+    //   url: "/products"
+    // }
     try {
       const apiRes = await axios.get(`${baseUrl}/products`);
       // console.log("apiRes", apiRes.data)
@@ -29,10 +33,20 @@ function App() {
       productImage: '',
       title: '',
       price: 0,
-      description: '',
+      description: ''
     },
     onSubmit: async (values) => {
       // console.log(values)
+      // const apiReq = {
+      //   method: "post",
+      //   url: "/product",
+      //   body:{
+      //     title: values.title,
+      //     price: values.price,
+      //     description: values.description,
+      //     image: values.productImage
+      //   }
+      // }
       try {
         await axios.post(`${baseUrl}/product`, {
           title: values.title,
@@ -54,7 +68,14 @@ function App() {
 
       <form onSubmit={formik.handleSubmit}>
         <label>
-          Image Url: <input type="url" placeholder="https://example/1.png" name="productImage" onChange={formik.handleChange} value={formik.values.productImage} />
+          Image Url:
+          <input
+            type="url"
+            placeholder="https://example/1.png"
+            name="productImage"
+            onChange={formik.handleChange}
+            value={formik.values.productImage}
+          />
         </label>
         <br />
         <label>
