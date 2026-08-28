@@ -9,17 +9,37 @@ const PORT = 5000;
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    // db.query(`CREATE TABLE students (
-    //     firstName VARCHAR(255),
-    //     lastName VARCHAR(255),
-    //     course VARCHAR(255),
-    //     batch VARCHAR(255),
-    //     rollNumber VARCHAR(255),
-    //     age INT
-    //   );`)
-    res.send("Hello World");
-});
+// app.get('/', async (req, res) => {
+//     try {
+//         await db.query(`CREATE TABLE IF NOT EXIST students (
+//             id SERIAL PRIMARY KEY,
+//             first_name VARCHAR(255),
+//             last_name VARCHAR(255),
+//             course VARCHAR(255),
+//             batch VARCHAR(255),
+//             roll_number VARCHAR(255),
+//             age INT
+//           );`)
+//         res.send("Hello World");
+
+//     } catch (error) {
+//         console.log("Err", error)
+//     }
+// });
+
+
+// const imaginaryReq = {
+//     method: "post",
+//     url: "/student",
+//     body: {
+//         "firstName": "Shariq",
+//         "lastName": "Siddiqui",
+//         "course": "Web & App",
+//         "batch": "18",
+//         "rollNumber": "10011",
+//         "age": 23
+//     }
+// }
 
 app.post("/student", async (req, res) => {
     // firstName, lastName, course, batch, rollNumber, age
@@ -30,14 +50,14 @@ app.post("/student", async (req, res) => {
     }
 
     try {
-        const dbRes = await db.query(`INSERT INTO students (firstName, lastName, course, batch, rollNumber, age) 
+        const dbRes = await db.query(`INSERT INTO students (first_name, last_name, course, batch, roll_number, age) 
         VALUES 
-        ('${reqBody.firstName}', 
-        '${reqBody.lastName}', 
-        '${reqBody.course}', 
-        '${reqBody.batch}', 
-        '${reqBody.rollNumber}', 
-        ${reqBody.age});`)
+        ($1, 
+        $2, 
+        $3, 
+        $4, 
+        $5, 
+        $6);`, [reqBody.firstName, reqBody.lastName, reqBody.course, reqBody.batch, reqBody.rollNumber, reqBody.age])
         res.status(201).send({ status: "success", message: "Student Added Successfully" })
     } catch (error) {
         console.log("Err", error);

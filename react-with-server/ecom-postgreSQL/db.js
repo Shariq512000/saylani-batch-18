@@ -1,9 +1,9 @@
-import { Pool } from 'pg';
+import { Pool } from 'pg'; //postgres
 
 export const db = new Pool({
     user: "postgres",
     host: "localhost",
-    database: "postgres",
+    database: "ecom",
     password: "123456",
     port: "5432",
 })
