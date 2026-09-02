@@ -11,14 +11,15 @@ app.use(express.json());
 
 // app.get('/', async (req, res) => {
 //     try {
-//         await db.query(`CREATE TABLE IF NOT EXIST students (
+//         await db.query(`CREATE TABLE IF NOT EXISTS students (
 //             id SERIAL PRIMARY KEY,
-//             first_name VARCHAR(255),
-//             last_name VARCHAR(255),
+//             first_name VARCHAR(255) NOT NULL,
+//             last_name VARCHAR(255) NOT NULL,
 //             course VARCHAR(255),
 //             batch VARCHAR(255),
-//             roll_number VARCHAR(255),
-//             age INT
+//             roll_number VARCHAR(255) UNIQUE,
+//             age INT,
+//             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 //           );`)
 //         res.send("Hello World");
 
