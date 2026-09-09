@@ -1,6 +1,8 @@
 import { Pool } from 'pg'; //postgres
 import "dotenv/config"
 
+// console.log("process.env.DB_USER", process.env.DB_USER)
+
 export const db = new Pool({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
