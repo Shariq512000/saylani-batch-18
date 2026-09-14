@@ -1,6 +1,7 @@
 import express from "express";
 import { db } from "./db.js"
 import cors from "cors";
+import bcrypt from "bcryptjs";
 
 const app = express();
 const PORT = 5000;
@@ -124,8 +125,8 @@ app.delete("/student/:id", async (req, res) => {
 
 ////////// NEW CODE ///////////////
 
-// CREATE TYPE user_role AS ENUM ('buyer', 'seller', 'admin');
 // signup --> email=abc@gmail.com
+// CREATE TYPE user_role AS ENUM ('buyer', 'seller', 'admin');
 // CREATE TABLE IF NOT EXISTS users (
 //     id SERIAL PRIMARY KEY,
 
@@ -145,25 +146,31 @@ app.delete("/student/:id", async (req, res) => {
 //     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 // );
 
-// app.post('/signup', (req, res) => {
-//     const reqBody = req.body;
-//     // {
-//     //     firstName, --> required
-//     //     lastName, --> required
-//     //     email, --> required
-//     //     password, --> required
-//     //     phone --> optional
-//     // }
-//     if (!reqBody.firstName || !reqBody.lastName || !reqBody.email || !reqBody.password) {
-//         res.status(400).send({ status: "error", message: "Required Parameter Missing" })
-//         return;
-//     }
-//     try {
-//         const dbQuery = `INSERT INTO users ()`
-//     } catch (error) {
-
-//     }
-// })
+app.post('/signup', async (req, res) => {
+    const reqBody = req.body;
+    // {
+    //     firstName, --> required
+    //     lastName, --> required
+    //     email, --> required
+    //     password, --> required
+    //     phone --> optional
+    // }
+    // if (!reqBody.firstName || !reqBody.lastName || !reqBody.email || !reqBody.password) {
+    //     res.status(400).send({ status: "error", message: "Required Parameter Missing" })
+    //     return;
+    // }
+    try {
+        // const dbQuery = `INSERT INTO users (first_name, last_name, email, password_hash, phone) VALUES ($1,$2,$3,$4,$5);`
+        // const dbValues = [reqBody.firstName, reqBody.lastName, reqBody.email, reqBody.password, reqBody.phone || ""]
+        // const dbRes = await db.query(dbQuery, dbValues);
+        // const salt = bcrypt.genSaltSync(10);
+        const salt = await bcrypt.genSalt(12);
+        res.status(201).send({ status: "success", message: `user created with email: ${reqBody.email}`, salt: salt })
+    } catch (error) {
+        console.log("Err", error);
+        res.status(500).send({ status: "error", message: "Internal Server Error" })
+    }
+})
 
 
 
@@ -174,3 +181,6 @@ app.listen(PORT, () => {
 
 
 // CRUD
+
+
+// 123456 --> 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92
