@@ -2,6 +2,7 @@ import express from "express";
 import { db } from "./db.js"
 import cors from "cors";
 import bcrypt from "bcryptjs";
+import { customAlphabet } from "nanoid";
 
 const app = express();
 const PORT = 5000;
@@ -11,6 +12,11 @@ const PORT = 5000;
 
 app.use(cors())
 app.use(express.json());
+
+// app.get('/', (req, res) => {
+//     const nanoid = customAlphabet("1234567890", 6);
+//     res.send(nanoid())
+// })
 
 // app.get('/', async (req, res) => {
 //     try {
@@ -53,75 +59,75 @@ app.use(express.json());
 //     }
 // }
 
-app.post("/student", async (req, res) => {
-    const reqBody = req.body;
-    if (!reqBody.firstName || !reqBody.lastName || !reqBody.course || !reqBody.batch || !reqBody.rollNumber || !reqBody.age) {
-        res.status(400).send({ status: "error", message: "Required Parameter Missing" })
-        return;
-    }
+// app.post("/student", async (req, res) => {
+//     const reqBody = req.body;
+//     if (!reqBody.firstName || !reqBody.lastName || !reqBody.course || !reqBody.batch || !reqBody.rollNumber || !reqBody.age) {
+//         res.status(400).send({ status: "error", message: "Required Parameter Missing" })
+//         return;
+//     }
 
-    try {
-        const dbRes = await db.query(`INSERT INTO students (first_name, last_name, course, batch, roll_number, age) 
-        VALUES 
-        ($1, 
-        $2, 
-        $3, 
-        $4, 
-        $5, 
-        $6);`, [reqBody.firstName, reqBody.lastName, reqBody.course, reqBody.batch, reqBody.rollNumber, reqBody.age])
-        res.status(201).send({ status: "success", message: "Student Added Successfully" })
-    } catch (error) {
-        console.log("Err", error);
-        res.status(500).send({ status: "error", message: "Internal Server Error" })
-    }
-})
+//     try {
+//         const dbRes = await db.query(`INSERT INTO students (first_name, last_name, course, batch, roll_number, age) 
+//         VALUES 
+//         ($1, 
+//         $2, 
+//         $3, 
+//         $4, 
+//         $5, 
+//         $6);`, [reqBody.firstName, reqBody.lastName, reqBody.course, reqBody.batch, reqBody.rollNumber, reqBody.age])
+//         res.status(201).send({ status: "success", message: "Student Added Successfully" })
+//     } catch (error) {
+//         console.log("Err", error);
+//         res.status(500).send({ status: "error", message: "Internal Server Error" })
+//     }
+// })
 
-app.get("/students", async (req, res) => {
-    try {
-        const students = await db.query(`SELECT * from students;`);
-        // const students = await db.query(`SELECT id AS student_id, first_name || ' ' || last_name AS full_name from students;`);
-        // const students = await db.query(`SELECT * from students WHERE age = 'Python'`);LIMIT 20
-        // const students = await db.query(`SELECT * from students ORDER BY first_name`);
-        // const students = await db.query(`SELECT * from students LIMIT 20 OFFSET 20`);
-        // const students = await db.query(`SELECT MIN(age) FROM students;`);
-        // console.log("Students", students)
-        res.status(200).send({ status: "success", students: students.rows });
-    } catch (error) {
-        res.status(500).send({ status: "error", message: "Internal Server Error" })
-    }
-})
-// /student/6
-app.put("/student/:id", async (req, res) => {
-    const studentId = req.params.id; //6
-    // firstName, lastName, course, batch, rollNumber, age
-    const reqBody = req.body;
-    if (!reqBody.firstName || !reqBody.lastName || !reqBody.course || !reqBody.batch || !reqBody.rollNumber || !reqBody.age) {
-        res.status(400).send({ status: "error", message: "Required Parameter Missing" })
-        return;
-    }
+// app.get("/students", async (req, res) => {
+//     try {
+//         const students = await db.query(`SELECT * from students;`);
+//         // const students = await db.query(`SELECT id AS student_id, first_name || ' ' || last_name AS full_name from students;`);
+//         // const students = await db.query(`SELECT * from students WHERE age = 'Python'`);LIMIT 20
+//         // const students = await db.query(`SELECT * from students ORDER BY first_name`);
+//         // const students = await db.query(`SELECT * from students LIMIT 20 OFFSET 20`);
+//         // const students = await db.query(`SELECT MIN(age) FROM students;`);
+//         // console.log("Students", students)
+//         res.status(200).send({ status: "success", students: students.rows });
+//     } catch (error) {
+//         res.status(500).send({ status: "error", message: "Internal Server Error" })
+//     }
+// })
+// // /student/6
+// app.put("/student/:id", async (req, res) => {
+//     const studentId = req.params.id; //6
+//     // firstName, lastName, course, batch, rollNumber, age
+//     const reqBody = req.body;
+//     if (!reqBody.firstName || !reqBody.lastName || !reqBody.course || !reqBody.batch || !reqBody.rollNumber || !reqBody.age) {
+//         res.status(400).send({ status: "error", message: "Required Parameter Missing" })
+//         return;
+//     }
 
-    try {
-        const dbRes = await db.query(
-            `UPDATE students SET first_name = $1, last_name = $2, course = $3, batch = $4, roll_number = $5, age = $6 WHERE id = ${studentId};`,
-            [reqBody.firstName, reqBody.lastName, reqBody.course, reqBody.batch, reqBody.rollNumber, reqBody.age])
-        res.status(201).send({ status: "success", message: "Student Updated Successfully" })
-    } catch (error) {
-        console.log("Err", error);
-        res.status(500).send({ status: "error", message: "Internal Server Error" })
-    }
-})
-// /student/6
-app.delete("/student/:id", async (req, res) => {
-    const studentId = req.params.id; // 6
+//     try {
+//         const dbRes = await db.query(
+//             `UPDATE students SET first_name = $1, last_name = $2, course = $3, batch = $4, roll_number = $5, age = $6 WHERE id = ${studentId};`,
+//             [reqBody.firstName, reqBody.lastName, reqBody.course, reqBody.batch, reqBody.rollNumber, reqBody.age])
+//         res.status(201).send({ status: "success", message: "Student Updated Successfully" })
+//     } catch (error) {
+//         console.log("Err", error);
+//         res.status(500).send({ status: "error", message: "Internal Server Error" })
+//     }
+// })
+// // /student/6
+// app.delete("/student/:id", async (req, res) => {
+//     const studentId = req.params.id; // 6
 
-    try {
-        const dbRes = await db.query(`DELETE FROM students WHERE id = ${studentId};`)
-        res.status(200).send({ status: "success", message: "Student Deleted Successfully" })
-    } catch (error) {
-        console.log("Err", error);
-        res.status(500).send({ status: "error", message: "Internal Server Error" })
-    }
-})
+//     try {
+//         const dbRes = await db.query(`DELETE FROM students WHERE id = ${studentId};`)
+//         res.status(200).send({ status: "success", message: "Student Deleted Successfully" })
+//     } catch (error) {
+//         console.log("Err", error);
+//         res.status(500).send({ status: "error", message: "Internal Server Error" })
+//     }
+// })
 
 ////////// NEW CODE ///////////////
 
@@ -155,24 +161,58 @@ app.post('/signup', async (req, res) => {
     //     password, --> required
     //     phone --> optional
     // }
-    // if (!reqBody.firstName || !reqBody.lastName || !reqBody.email || !reqBody.password) {
-    //     res.status(400).send({ status: "error", message: "Required Parameter Missing" })
-    //     return;
-    // }
+    if (!reqBody.firstName || !reqBody.lastName || !reqBody.email || !reqBody.password) {
+        res.status(400).send({ status: "error", message: "Required Parameter Missing" })
+        return;
+    }
     try {
-        // const dbQuery = `INSERT INTO users (first_name, last_name, email, password_hash, phone) VALUES ($1,$2,$3,$4,$5);`
-        // const dbValues = [reqBody.firstName, reqBody.lastName, reqBody.email, reqBody.password, reqBody.phone || ""]
-        // const dbRes = await db.query(dbQuery, dbValues);
-        // const salt = bcrypt.genSaltSync(10);
         const salt = await bcrypt.genSalt(12);
-        res.status(201).send({ status: "success", message: `user created with email: ${reqBody.email}`, salt: salt })
+        const hash = await bcrypt.hash(reqBody.password, salt);
+        const dbQuery = reqBody.isSeller ?
+            `INSERT INTO users (first_name, last_name, email, password_hash, phone, role) VALUES ($1,$2,$3,$4,$5,$6);` :
+            `INSERT INTO users (first_name, last_name, email, password_hash, phone) VALUES ($1,$2,$3,$4,$5);`
+        const dbValues = reqBody.isSeller ?
+            [reqBody.firstName, reqBody.lastName, reqBody.email, hash, reqBody.phone || "", 'seller'] :
+            [reqBody.firstName, reqBody.lastName, reqBody.email, hash, reqBody.phone || ""]
+        const dbRes = await db.query(dbQuery, dbValues);
+        // const salt = bcrypt.genSaltSync(10);
+        res.status(201).send({ status: "success", message: `user created with email: ${reqBody.email}` })
+    } catch (error) {
+        console.log("Err", error);
+        if (error.code == '23505') {
+            res.status(400).send({ status: "error", message: "User Already Logedin With This Email" })
+        } else {
+            res.status(500).send({ status: "error", message: "Internal Server Error" })
+        }
+    }
+})
+
+
+app.post('/login', async (req, res) => {
+    const reqBody = req.body;
+    if (!reqBody.email || !reqBody.password) {
+        res.status(400).send({ status: "error", message: "required parameter missing" })
+        return;
+    }
+    try {
+        const users = await db.query(`SELECT * FROM users WHERE email = $1`, [reqBody.email]);
+        const currentUser = users.rows[0]
+        if (!currentUser) {
+            res.status(404).send({ status: "error", message: "User Not Found With This Email" })
+            return;
+        }
+        const isPassMatched = await bcrypt.compare(reqBody.password, currentUser.password_hash); // true
+        if (!isPassMatched) {
+            res.status(401).send({ status: "error", message: "Password did not matched" })
+            return;
+        }
+        delete currentUser.password_hash;
+        res.status(200).send({ status: "success", user: currentUser })
     } catch (error) {
         console.log("Err", error);
         res.status(500).send({ status: "error", message: "Internal Server Error" })
     }
 })
-
-
 
 
 app.listen(PORT, () => {
