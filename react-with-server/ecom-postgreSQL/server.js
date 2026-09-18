@@ -3,9 +3,12 @@ import { db } from "./db.js"
 import cors from "cors";
 import bcrypt from "bcryptjs";
 import { customAlphabet } from "nanoid";
+import jwt from 'jsonwebtoken';
+import "dotenv/config"
 
 const app = express();
 const PORT = 5000;
+const SECRET = process.env.JWT_SECRET
 
 //CRUD
 // UserID INT PRIMARY KEY,
@@ -152,6 +155,11 @@ app.use(express.json());
 //     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 // );
 
+// let arr = ["1"]
+// arr[0]
+
+// jwt --> JSON Web Token
+
 app.post('/signup', async (req, res) => {
     const reqBody = req.body;
     // {
@@ -160,6 +168,7 @@ app.post('/signup', async (req, res) => {
     //     email, --> required
     //     password, --> required
     //     phone --> optional
+    //     isSeller --> optional true/false
     // }
     if (!reqBody.firstName || !reqBody.lastName || !reqBody.email || !reqBody.password) {
         res.status(400).send({ status: "error", message: "Required Parameter Missing" })
@@ -187,15 +196,32 @@ app.post('/signup', async (req, res) => {
     }
 })
 
-
 app.post('/login', async (req, res) => {
     const reqBody = req.body;
+    // {
+    //     email: shariq2@gmail.com,
+    //     password: 123456
+    // }
     if (!reqBody.email || !reqBody.password) {
         res.status(400).send({ status: "error", message: "required parameter missing" })
         return;
     }
     try {
-        const users = await db.query(`SELECT * FROM users WHERE email = $1`, [reqBody.email]);
+        const users = await db.query(`SELECT * FROM users WHERE email = $1 AND is_active = true`, [reqBody.email]);
+        // users:{
+        //     rows:[
+        //         {
+        //             id: 6,
+        //             first_name: "Shariq",
+        //             last_name: "Siddiqui",
+        //             email: "shariq2@gmail.com",
+        //             password_hash: "$2b$12$CYUVwG0WgTriEMf/mtiiZegjOGWTbSqrU3v./OCmXLYb47F4/2hFy",
+        //             role: "buyer",
+        //             phone: "033333333",
+        //             is_active: true,
+        //         }
+        //     ]
+        // }
         const currentUser = users.rows[0]
         if (!currentUser) {
             res.status(404).send({ status: "error", message: "User Not Found With This Email" })
@@ -207,6 +233,19 @@ app.post('/login', async (req, res) => {
             return;
         }
         delete currentUser.password_hash;
+
+        let userToken = jwt.sign({
+            ...currentUser,
+            iat: Date.now() / 1000, // miliseconds to seconds
+            exp: (Date.now() / 1000) + (60 * 60 * 24)
+        }, SECRET);
+
+        res.cookie('Token', userToken, {
+            maxAge: 86400000, // 1 day
+            httpOnly: true,
+            secure: true
+        })
+
         res.status(200).send({ status: "success", user: currentUser })
     } catch (error) {
         console.log("Err", error);
@@ -215,12 +254,15 @@ app.post('/login', async (req, res) => {
 })
 
 
+// agar user login hai jb hi response jae wrna error aajae
+// app.get('/products', (req, res) => {
+//     res.send({
+//         products: [
+//             ...
+//         ]
+//     })
+// })
+
 app.listen(PORT, () => {
     console.log(`Server is Running on Port ${PORT}`)
 })
-
-
-// CRUD
-
-
-// 123456 --> 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92
