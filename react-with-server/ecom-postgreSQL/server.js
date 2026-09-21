@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import { customAlphabet } from "nanoid";
 import jwt from 'jsonwebtoken';
 import "dotenv/config"
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = 5000;
@@ -13,8 +14,9 @@ const SECRET = process.env.JWT_SECRET
 //CRUD
 // UserID INT PRIMARY KEY,
 
-app.use(cors())
+app.use(cors({ origin: ["http://localhost:3000", "*"], credentials: true }))
 app.use(express.json());
+app.use(cookieParser());
 
 // app.get('/', (req, res) => {
 //     const nanoid = customAlphabet("1234567890", 6);
@@ -160,7 +162,9 @@ app.use(express.json());
 
 // jwt --> JSON Web Token
 
-app.post('/signup', async (req, res) => {
+////// NON SECURE APIS ///////
+
+app.post('/api/v1/signup', async (req, res) => {
     const reqBody = req.body;
     // {
     //     firstName, --> required
@@ -196,7 +200,7 @@ app.post('/signup', async (req, res) => {
     }
 })
 
-app.post('/login', async (req, res) => {
+app.post('/api/v1/login', async (req, res) => {
     const reqBody = req.body;
     // {
     //     email: shariq2@gmail.com,
@@ -237,7 +241,7 @@ app.post('/login', async (req, res) => {
         let userToken = jwt.sign({
             ...currentUser,
             iat: Date.now() / 1000, // miliseconds to seconds
-            exp: (Date.now() / 1000) + (60 * 60 * 24)
+            exp: (Date.now() / 1000) + (60 * 60 * 24) // add 1 day second
         }, SECRET);
 
         res.cookie('Token', userToken, {
@@ -253,6 +257,73 @@ app.post('/login', async (req, res) => {
     }
 })
 
+
+////// SECURE APIS //////
+
+app.get('/api/v1/me', (req, res) => {
+    console.log("req.cookies", req.cookies)
+    if (!req?.cookies?.Token) {
+        res.status(401).send({
+            message: "Unauthorized"
+        })
+        return;
+    }
+    jwt.verify(req.cookies.Token, SECRET, (err, decodedData) => {
+        if (!err) {
+
+            const nowDate = new Date().getTime() / 1000;
+
+            if (decodedData.exp < nowDate) {
+
+                res.status(401);
+                res.cookie('Token', '', {
+                    maxAge: 1,
+                    httpOnly: true,
+                    // sameSite: "none",
+                    secure: true
+                });
+                res.send({ message: "token expired" })
+
+            } else {
+                let userData = decodedData
+                delete userData.iat
+                delete userData.exp
+                res.send({ status: "success", user: userData })
+
+                // console.log("token approved");
+                // // {name: "abc", description: "des"}
+                // req.body = {
+                //     ...req.body,
+                //     token: decodedData
+                // }
+                // // method: get
+                // // url: '/user-detail'
+                // // body: {abc: 123, token: decodedData}
+                // next();
+            }
+        } else {
+            res.status(401).send({ message: "invalid token" })
+        }
+    });
+    // res.send({ cookie: req.cookies })
+})
+
+
+// CREATE TABLE employees (
+//     id SERIAL PRIMARY KEY,
+//     name VARCHAR(100) NOT NULL,
+//     salary NUMERIC(10, 2),
+//     department_id INT,
+//     FOREIGN KEY (department_id)
+//         REFERENCES departments(id)
+// );
+
+// SELECT
+//     e.name,
+//     d.department_name
+// FROM employees e
+// INNER JOIN departments d
+//     ON e.department_id = d.id;
 
 // agar user login hai jb hi response jae wrna error aajae
 // app.get('/products', (req, res) => {

@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from "axios";
+import { Link } from "react-router";
+import { GlobalContext } from '../context/Context';
 
 const Signup = () => {
+    let { state } = useContext(GlobalContext);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -10,16 +13,19 @@ const Signup = () => {
 
     const signUp = async (e) => {
         e.preventDefault();
+        console.log('document.getElementById("role").checked', document.getElementById("role").checked)
         try {
-            const apiRes = await axios.post("http://localhost:5000/signup", {
+            const apiRes = await axios.post(`${state.baseUrl}/signup`, {
                 "firstName": firstName,
                 "lastName": lastName,
                 "email": email,
                 "password": password,
-                "phone": phone
+                "phone": phone,
+                "isSeller": document.getElementById("role").checked
             })
             alert(apiRes.data.message)
         } catch (error) {
+            alert(error.response.data.message)
             console.log("Err", error)
         }
     }
@@ -47,8 +53,14 @@ const Signup = () => {
                     Phone: <input type="text" onChange={(e) => { setPhone(e.target.value) }} value={phone} />
                 </label>
                 <br />
+                <label htmlFor="">
+                    Signup as Seller: <input type="checkbox" id="role" />
+                </label>
+                <br />
                 <button>Submit</button>
             </form>
+
+            <Link to="/login">Go To Login Page</Link>
         </div>
     )
 }

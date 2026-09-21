@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from "axios";
+import { Link } from "react-router";
+import { GlobalContext } from '../context/Context';
 
 const Login = () => {
+    let { state, dispatch } = useContext(GlobalContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const login = async (e) => {
         e.preventDefault();
         try {
-            const apiRes = await axios.post("http://localhost:5000/login", {
+            const apiRes = await axios.post(`${state.baseUrl}/login`, {
                 "email": email,
                 "password": password,
             }, { withCredentials: true })
-            // alert(apiRes.data.message)
+            dispatch({ type: "USER_LOGIN", user: apiRes.data.user })
+            // alert(apiRes.data.user)
         } catch (error) {
+            alert(error.response.data.message)
             console.log("Err", error)
         }
     }
@@ -31,6 +36,7 @@ const Login = () => {
                 <br />
                 <button>Submit</button>
             </form>
+            <Link to="/signup">Go To Sign Page</Link>
         </div>
     )
 }
