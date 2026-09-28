@@ -6,6 +6,7 @@ import { customAlphabet } from "nanoid";
 import jwt from 'jsonwebtoken';
 import "dotenv/config"
 import cookieParser from "cookie-parser";
+import path from "path";
 
 const app = express();
 const PORT = 5000;
@@ -17,6 +18,8 @@ const SECRET = process.env.JWT_SECRET
 app.use(cors({ origin: ["http://localhost:3000", "*"], credentials: true }))
 app.use(express.json());
 app.use(cookieParser());
+
+// "/"
 
 // app.get('/', (req, res) => {
 //     const nanoid = customAlphabet("1234567890", 6);
@@ -162,7 +165,47 @@ app.use(cookieParser());
 
 // jwt --> JSON Web Token
 
+
+
+
+// CREATE TABLE products (
+//     id SERIAL PRIMARY KEY,
+
+//     user_id INT NOT NULL,
+//     category_id INT NOT NULL,
+
+//     name VARCHAR(255) NOT NULL,
+//     description TEXT,
+//     price DECIMAL(10, 2) NOT NULL,
+//     stock INT DEFAULT 0,
+
+//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+//         FOREIGN KEY (user_id)
+//         REFERENCES users(id)
+//         ON DELETE CASCADE,
+
+//         FOREIGN KEY (category_id)
+//         REFERENCES categories(id)
+//         ON DELETE RESTRICT
+// );
+
+
+// SELECT
+//     p.id,
+//     p.name,
+//     p.price,
+//     p.stock,
+//     u.id AS user_id,
+//     c.id AS category_id
+// FROM products p
+// JOIN users u ON p.user_id = u.id
+// JOIN categories c ON p.category_id = c.id;
+
 ////// NON SECURE APIS ///////
+
+
 
 app.post('/api/v1/signup', async (req, res) => {
     const reqBody = req.body;
@@ -241,7 +284,7 @@ app.post('/api/v1/login', async (req, res) => {
         let userToken = jwt.sign({
             ...currentUser,
             iat: Date.now() / 1000, // miliseconds to seconds
-            exp: (Date.now() / 1000) + (60 * 60 * 24) // add 1 day second
+            exp: (Date.now() / 1000) + (60 * 60 * 24) // add 1 day's second
         }, SECRET);
 
         res.cookie('Token', userToken, {
@@ -257,11 +300,12 @@ app.post('/api/v1/login', async (req, res) => {
     }
 })
 
-
 ////// SECURE APIS //////
+// localhost:5000/api/v1/me
 
-app.get('/api/v1/me', (req, res) => {
-    console.log("req.cookies", req.cookies)
+
+
+app.use("/api/v1/*splat", (req, res, next) => {
     if (!req?.cookies?.Token) {
         res.status(401).send({
             message: "Unauthorized"
@@ -288,26 +332,101 @@ app.get('/api/v1/me', (req, res) => {
                 let userData = decodedData
                 delete userData.iat
                 delete userData.exp
-                res.send({ status: "success", user: userData })
-
-                // console.log("token approved");
-                // // {name: "abc", description: "des"}
-                // req.body = {
-                //     ...req.body,
-                //     token: decodedData
+                // {name: "abc", description: "des"}
+                // {
+                //     method: get
+                //     url: '/user-detail'
+                //     body: {abc: 123}
+                //     user: {
+                //         id: 6,
+                //         first_name: "Shariq",
+                //         last_name: "Siddiqui",
+                //         email: "shariq2@gmail.com",
+                //         role: "buyer",
+                //         phone: "033333333",
+                //         is_active: true,
+                //     }
                 // }
-                // // method: get
-                // // url: '/user-detail'
-                // // body: {abc: 123, token: decodedData}
-                // next();
+                req.user = userData
+
+                next();
             }
         } else {
             res.status(401).send({ message: "invalid token" })
         }
     });
-    // res.send({ cookie: req.cookies })
 })
 
+app.get('/api/v1/me', (req, res) => {
+    res.send({ status: "success", user: req.user })
+})
+
+
+// CREATE TABLE IF NOT EXISTS categories(
+//   id SERIAL PRIMARY KEY,
+//   name VARCHAR(100) NOT NULL UNIQUE,
+//   description TEXT,
+//   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+// );
+
+
+app.get("/api/v1/categories", async (req, res) => {
+    try {
+        const categories = await db.query("SELECT * FROM categories");
+        res.send({ status: "success", categories: categories.rows })
+    } catch (error) {
+        res.status(500).send({ status: "error", message: "Internal Server Error" })
+    }
+})
+
+
+/// ADMIN APIS ///
+
+// req = {
+//     method: "POST",
+//     url: "/api/v1/category",
+//     body: {
+//         "name": "Electronic",
+//         "description": "Test Test Test"
+//     }
+//     user: {
+//          id: 6,
+//          first_name: "Shariq",
+//          last_name: "Siddiqui",
+//          email: "shariq2@gmail.com",
+//          role: "buyer",
+//          phone: "033333333",
+//          is_active: true,
+//    }
+// }
+
+app.use("/api/v1/*splat", (req, res, next) => {
+    if (req.user.role != "admin") {
+        res.status(401).send({ status: "error", message: "You Are Not Authorized For This Action" })
+    } else {
+        next();
+    }
+})
+
+app.post("/api/v1/category", async (req, res) => {
+    // name --> required, description --> optional
+    if (!req.body.name) {
+        res.status(400).send({ status: "error", message: "Required Parameter Missing" })
+        return;
+    }
+    try {
+        const databaseRes = await db.query("INSERT INTO categories (name, description) VALUES ($1, $2)", [req.body.name, req.body.description || ""])
+        res.status(201).send({ status: "success", message: "Category Added" })
+    } catch (error) {
+        console.log("Err", error)
+        if (error.code == '23505') {
+            res.status(400).send({ status: "error", message: "Category Already Exist" })
+        } else {
+            res.status(500).send({ status: "error", message: "Internal Server Error" })
+        }
+    }
+})
 
 // CREATE TABLE employees (
 //     id SERIAL PRIMARY KEY,
@@ -333,6 +452,11 @@ app.get('/api/v1/me', (req, res) => {
 //         ]
 //     })
 // })
+
+const __dirname = path.resolve();//D:\shariq\saylani-batch-18\react-with-server\ecom-without-db
+const __frontend = path.join(__dirname, './web/build')//D:\shariq\saylani-batch-18\react-with-server\ecom-without-db\web\build
+app.use('/', express.static(__frontend))
+app.use("/*splat", express.static(__frontend))
 
 app.listen(PORT, () => {
     console.log(`Server is Running on Port ${PORT}`)

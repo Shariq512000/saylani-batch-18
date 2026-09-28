@@ -1,4 +1,7 @@
 export const reducer = (state, action) => {
+
+    // action = { type: "USER_LOGIN", user: apiRes.data.user }
+
     switch (action.type) {
 
         case "USER_LOGIN": {

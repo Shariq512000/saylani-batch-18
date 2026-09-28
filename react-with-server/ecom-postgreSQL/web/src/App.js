@@ -7,6 +7,8 @@ import { useContext, useEffect } from 'react';
 import { GlobalContext } from './context/Context';
 import Home from './pages/Home';
 import axios from 'axios';
+import UserList from './pages/UserList';
+import CategoryList from './pages/CategoryList';
 
 function App() {
   let { state, dispatch } = useContext(GlobalContext);
@@ -22,6 +24,15 @@ function App() {
     }
   }
 
+  // const objKey = "ghi"
+  // const objValue = "value"
+
+
+  // let obj = {
+  //   [objKey]: objValue
+  // }
+  // console.log("obj", obj[objKey])
+
   useEffect(() => {
     checkUser()
   }, [])
@@ -31,6 +42,14 @@ function App() {
       {state.isLogin ?
         <Routes>
           <Route path="/" element={<Home />} />
+          {state.user.role == "admin" ?
+            <>
+              <Route path="/user-list" element={<UserList />} />
+              <Route path="/category-list" element={<CategoryList />} />
+            </>
+            :
+            null
+          }
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         :
