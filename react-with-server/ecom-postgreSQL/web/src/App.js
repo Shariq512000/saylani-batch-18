@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import axios from 'axios';
 import UserList from './pages/UserList';
 import CategoryList from './pages/CategoryList';
+import Product from './pages/Product';
 
 function App() {
   let { state, dispatch } = useContext(GlobalContext);
@@ -50,6 +51,7 @@ function App() {
             :
             null
           }
+          <Route path='/products' element={<Product />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         :

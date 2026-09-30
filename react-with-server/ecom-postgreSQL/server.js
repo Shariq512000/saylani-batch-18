@@ -140,25 +140,7 @@ app.use(cookieParser());
 ////////// NEW CODE ///////////////
 
 // signup --> email=abc@gmail.com
-// CREATE TYPE user_role AS ENUM ('buyer', 'seller', 'admin');
-// CREATE TABLE IF NOT EXISTS users (
-//     id SERIAL PRIMARY KEY,
 
-//     first_name VARCHAR(100) NOT NULL,
-//     last_name VARCHAR(100) NOT NULL,
-
-//     email VARCHAR(255) NOT NULL UNIQUE,
-//     password_hash TEXT NOT NULL,
-
-//     role user_role NOT NULL DEFAULT 'buyer',
-
-//     phone VARCHAR(20),
-
-//     is_active BOOLEAN NOT NULL DEFAULT TRUE,
-
-//     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-//     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-// );
 
 // let arr = ["1"]
 // arr[0]
@@ -204,6 +186,8 @@ app.use(cookieParser());
 // JOIN categories c ON p.category_id = c.id;
 
 ////// NON SECURE APIS ///////
+
+
 
 
 
@@ -315,6 +299,14 @@ app.use("/api/v1/*splat", (req, res, next) => {
     jwt.verify(req.cookies.Token, SECRET, (err, decodedData) => {
         if (!err) {
 
+            // const decodedData = {
+            //     id: 12,
+            //     email: "shariqsiddqui5145@gmail.com",
+            //     role: "admin",
+            //     created_at: "03:05:2026",
+            //     updated_at: "03:05:2026",
+            // }
+
             const nowDate = new Date().getTime() / 1000;
 
             if (decodedData.exp < nowDate) {
@@ -357,9 +349,34 @@ app.use("/api/v1/*splat", (req, res, next) => {
     });
 })
 
+
+
 app.get('/api/v1/me', (req, res) => {
     res.send({ status: "success", user: req.user })
 })
+
+
+/////////////////// TABLE QUERIES /////////////////////
+
+// CREATE TYPE user_role AS ENUM ('buyer', 'seller', 'admin');
+// CREATE TABLE IF NOT EXISTS users (
+//     id SERIAL PRIMARY KEY,
+
+//     first_name VARCHAR(100) NOT NULL,
+//     last_name VARCHAR(100) NOT NULL,
+
+//     email VARCHAR(255) NOT NULL UNIQUE,
+//     password_hash TEXT NOT NULL,
+
+//     role user_role NOT NULL DEFAULT 'buyer',
+
+//     phone VARCHAR(20),
+
+//     is_active BOOLEAN NOT NULL DEFAULT TRUE,
+
+//     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+//     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+// );
 
 
 // CREATE TABLE IF NOT EXISTS categories(
@@ -368,6 +385,25 @@ app.get('/api/v1/me', (req, res) => {
 //   description TEXT,
 //   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 //   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+// );
+
+// CREATE TABLE products (
+//     id SERIAL PRIMARY KEY,
+
+//     category_id INT NOT NULL,
+
+//     name VARCHAR(255) NOT NULL,
+//     images Text[],
+//     description TEXT,
+//     price DECIMAL(10, 2) NOT NULL,
+//     stock INT DEFAULT 0,
+
+//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+//       FOREIGN KEY (category_id)
+//         REFERENCES categories(id)
+//         ON DELETE RESTRICT
 // );
 
 
@@ -380,8 +416,16 @@ app.get("/api/v1/categories", async (req, res) => {
     }
 })
 
+app.get("/api/v1/products", async (req, res) => {
+    try {
+        const products = await db.query("SELECT * FROM products");
+        res.send({ status: "success", products: products.rows })
+    } catch (error) {
+        console.log("Err", error);
+        res.status(500).send({ status: "error", message: "Internal Server Error" })
+    }
+})
 
-/// ADMIN APIS ///
 
 // req = {
 //     method: "POST",
@@ -401,6 +445,9 @@ app.get("/api/v1/categories", async (req, res) => {
 //    }
 // }
 
+
+/// ADMIN APIS ///
+
 app.use("/api/v1/*splat", (req, res, next) => {
     if (req.user.role != "admin") {
         res.status(401).send({ status: "error", message: "You Are Not Authorized For This Action" })
@@ -408,6 +455,25 @@ app.use("/api/v1/*splat", (req, res, next) => {
         next();
     }
 })
+
+// req = {
+//     method: "Post",
+//     url: "/api/v1/category",
+//     body: {
+//         name: "Test",
+//         description: "Test Description"
+//     }
+//     cookies: {
+//         Token: "valid token"
+//     },
+//     user: {
+//         id: 12,
+//         email: "shariqsiddqui5145@gmail.com",
+//         role: "admin",
+//         created_at: "03:05:2026",
+//         updated_at: "03:05:2026",
+//     }
+// }
 
 app.post("/api/v1/category", async (req, res) => {
     // name --> required, description --> optional
@@ -425,6 +491,23 @@ app.post("/api/v1/category", async (req, res) => {
         } else {
             res.status(500).send({ status: "error", message: "Internal Server Error" })
         }
+    }
+})
+
+app.post("/api/v1/product", async (req, res) => {
+    const reqBody = req.body;
+    if (!reqBody.name || !reqBody?.images?.length || !reqBody.price || !reqBody.category) {
+        res.status(400).send({ status: "error", message: "Required Parameter Missing" });
+        return;
+    }
+    try {
+        const dbQuery = "INSERT INTO products (category_id,name,description,images,price,stock) VALUES ($1,$2,$3,$4,$5,$6)"
+        const dbValues = [reqBody.category, reqBody.name, reqBody.description || "", reqBody.images, reqBody.price, reqBody.stock || 0]
+        const dbRes = await db.query(dbQuery, dbValues);
+        res.status(201).send({ status: "success", message: "Product Added Successful" })
+    } catch (error) {
+        console.log("Err", error);
+        res.status(500).send({ status: "error", message: "Internal Server Error" })
     }
 })
 
