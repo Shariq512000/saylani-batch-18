@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router";
 import { GlobalContext } from '../context/Context';
 import "./Login.css";
+import api from '../component/api';
 
 const Login = () => {
     let { state, dispatch } = useContext(GlobalContext);
@@ -11,9 +12,8 @@ const Login = () => {
     const login = async (e) => {
         e.preventDefault();
         try {
-            const apiRes = await axios.post(`${state.baseUrl}/login`,
-                { "email": email, "password": password, },
-                { withCredentials: true });
+            const apiRes = await api.post(`/login`,
+                { "email": email, "password": password, });
             dispatch({ type: "USER_LOGIN", user: apiRes.data.user });
         } catch (error) {
             alert(error.response.data.message);

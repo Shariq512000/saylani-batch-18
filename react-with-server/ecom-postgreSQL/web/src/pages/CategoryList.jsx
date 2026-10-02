@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "./CategoryList.css";
 import axios from "axios";
 import { GlobalContext } from "../context/Context";
+import api from "../component/api";
 
 const CategoryList = () => {
     let { state } = useContext(GlobalContext)
@@ -12,7 +13,7 @@ const CategoryList = () => {
 
     const getCategories = async () => {
         try {
-            const apiRes = await axios.get(`${state.baseUrl}/categories`, { withCredentials: true })
+            const apiRes = await api.get(`/categories`)
             setCategories(apiRes.data.categories)
         } catch (error) {
             alert(error.response.data.message)
@@ -61,10 +62,10 @@ const CategoryList = () => {
 
         // UI only
         try {
-            const apiRes = await axios.post(`${state.baseUrl}/category`, {
+            const apiRes = await api.post(`/category`, {
                 name: name,
                 description: description
-            }, { withCredentials: true })
+            })
             alert(apiRes.data.message)
             setName("");
             setDescription("");

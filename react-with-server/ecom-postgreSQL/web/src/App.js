@@ -10,13 +10,14 @@ import axios from 'axios';
 import UserList from './pages/UserList';
 import CategoryList from './pages/CategoryList';
 import Product from './pages/Product';
+import api from './component/api';
 
 function App() {
   let { state, dispatch } = useContext(GlobalContext);
   // console.log("state", state)
   const checkUser = async () => {
     try {
-      const apiRes = await axios.get(`${state.baseUrl}/me`, { withCredentials: true })
+      const apiRes = await api.get(`/me`)
       console.log("apiRes", apiRes.data)
       dispatch({ type: "USER_LOGIN", user: apiRes.data.user })
     } catch (error) {

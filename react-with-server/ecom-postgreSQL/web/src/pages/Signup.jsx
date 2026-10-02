@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router";
 import { GlobalContext } from '../context/Context';
 import "./Signup.css";
+import api from '../component/api';
 
 const Signup = () => {
     let { state } = useContext(GlobalContext);
@@ -17,7 +18,7 @@ const Signup = () => {
         e.preventDefault();
 
         try {
-            const apiRes = await axios.post(`${state.baseUrl}/signup`, {
+            const apiRes = await api.post(`/signup`, {
                 "firstName": firstName,
                 "lastName": lastName,
                 "email": email,
