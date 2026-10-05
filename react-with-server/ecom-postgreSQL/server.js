@@ -208,12 +208,8 @@ app.post('/api/v1/signup', async (req, res) => {
     try {
         const salt = await bcrypt.genSalt(12);
         const hash = await bcrypt.hash(reqBody.password, salt);
-        const dbQuery = reqBody.isSeller ?
-            `INSERT INTO users (first_name, last_name, email, password_hash, phone, role) VALUES ($1,$2,$3,$4,$5,$6);` :
-            `INSERT INTO users (first_name, last_name, email, password_hash, phone) VALUES ($1,$2,$3,$4,$5);`
-        const dbValues = reqBody.isSeller ?
-            [reqBody.firstName, reqBody.lastName, reqBody.email, hash, reqBody.phone || "", 'seller'] :
-            [reqBody.firstName, reqBody.lastName, reqBody.email, hash, reqBody.phone || ""]
+        const dbQuery = `INSERT INTO users (first_name, last_name, email, password_hash, phone) VALUES ($1,$2,$3,$4,$5);`
+        const dbValues = [reqBody.firstName, reqBody.lastName, reqBody.email, hash, reqBody.phone || ""]
         const dbRes = await db.query(dbQuery, dbValues);
         // const salt = bcrypt.genSaltSync(10);
         res.status(201).send({ status: "success", message: `user created with email: ${reqBody.email}` })
@@ -416,9 +412,29 @@ app.get("/api/v1/categories", async (req, res) => {
     }
 })
 
+// /api/v1/products?page=1&search=abc
+
 app.get("/api/v1/products", async (req, res) => {
+    const pageNum = req.query.page || 1; // 1
+    const offset = (pageNum - 1) * 10
+    // 1 = skip 0
+    // 2 = skip 10
+    // 3 = skip 20
     try {
-        const products = await db.query("SELECT * FROM products");
+        // const products = await db.query("SELECT * FROM products");
+        const products = await db.query(`
+            SELECT
+                p.id,
+                p.name,
+                p.description,
+                p.images,
+                p.price,
+                p.stock,
+                c.name AS category_name,
+                c.description AS category_description
+            FROM products p
+            JOIN categories c ON p.category_id = c.id LIMIT 10 OFFSET ${offset}
+            `)
         res.send({ status: "success", products: products.rows })
     } catch (error) {
         console.log("Err", error);

@@ -705,6 +705,74 @@
 }
 
 /* =========================
+   PAGINATION
+========================= */
+
+.pagination {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 30px;
+    padding: 20px;
+}
+
+.pagination-btn {
+    padding: 10px 16px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 9px;
+
+    background: white;
+
+    color: #374151;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    border-color: #6366f1;
+
+    background: #eef2ff;
+
+    color: #4f46e5;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.45;
+
+    cursor: not-allowed;
+}
+
+.page-number {
+    min-width: 100px;
+
+    padding: 10px 15px;
+
+    border-radius: 9px;
+
+    background: #eef2ff;
+
+    color: #4f46e5;
+
+    text-align: center;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+/* =========================
    ANIMATION
 ========================= */
 

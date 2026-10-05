@@ -16,6 +16,8 @@ const Product = () => {
     const [stock, setStock] = useState("0");
     const [productName, setProductName] = useState("");
     const [category, setCategory] = useState("");
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
     const getProducts = async () => {
         try {
@@ -410,7 +412,7 @@ const Product = () => {
                                     <div className="product-info">
 
                                         <div className="product-category">
-                                            Category #{product.category_id}
+                                            {product.category_name}
                                         </div>
 
                                         <h3>
@@ -481,7 +483,46 @@ const Product = () => {
 
                     )}
 
+                    {products.length > 0 && (
+                        <div className="pagination">
+                            <button
+                                className="pagination-btn"
+                                disabled={page === 1}
+                                onClick={() => setPage(page - 1)}
+                            >
+                                ← Previous
+                            </button>
+
+                            <div className="pagination-pages">
+                                {Array.from({ length: totalPages }, (_, index) => {
+                                    const pageNumber = index + 1;
+
+                                    return (
+                                        <button
+                                            key={pageNumber}
+                                            className={`page-btn ${page === pageNumber ? "active" : ""
+                                                }`}
+                                            onClick={() => setPage(pageNumber)}
+                                        >
+                                            {pageNumber}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            <button
+                                className="pagination-btn"
+                                disabled={page === totalPages}
+                                onClick={() => setPage(page + 1)}
+                            >
+                                Next →
+                            </button>
+                        </div>
+                    )}
+
                 </div>
+
+
 
             </div>
 
