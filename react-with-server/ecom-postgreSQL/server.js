@@ -552,6 +552,117 @@ app.post("/api/v1/product", async (req, res) => {
 //     })
 // })
 
+
+
+// app.get("/api/v1/products", async (req, res) => {
+//     const {
+//         page = 1,
+//         limit = 10,
+//         category,
+//         search,
+//         minPrice,
+//         maxPrice,
+//         sort
+//     } = req.query;
+
+//     const pageNum = Math.max(parseInt(page) || 1, 1);
+//     const limitNum = Math.min(Math.max(parseInt(limit) || 10, 1), 100);
+//     const offset = (pageNum - 1) * limitNum;
+
+//     try {
+//         const values = [];
+//         const conditions = [];
+
+//         // Category filter
+//         if (category) {
+//             values.push(category);
+//             conditions.push(`p.category_id = $${values.length}`);
+//         }
+
+//         // Search filter
+//         if (search) {
+//             values.push(`%${search}%`);
+
+//             conditions.push(`(
+//                 p.name ILIKE $${values.length}
+//                 OR p.description ILIKE $${values.length}
+//             )`);
+//         }
+
+//         // Minimum price
+//         if (minPrice) {
+//             values.push(Number(minPrice));
+//             conditions.push(`p.price >= $${values.length}`);
+//         }
+
+//         // Maximum price
+//         if (maxPrice) {
+//             values.push(Number(maxPrice));
+//             conditions.push(`p.price <= $${values.length}`);
+//         }
+
+//         // WHERE clause
+//         const whereClause =
+//             conditions.length > 0
+//                 ? `WHERE ${conditions.join(" AND ")}`
+//                 : "";
+
+//         // Sorting
+//         let orderBy = "p.created_at DESC";
+
+//         if (sort === "price_asc") {
+//             orderBy = "p.price ASC";
+//         }
+
+//         if (sort === "price_desc") {
+//             orderBy = "p.price DESC";
+//         }
+
+//         // Pagination
+//         values.push(limitNum);
+//         const limitIndex = values.length;
+
+//         values.push(offset);
+//         const offsetIndex = values.length;
+
+//         const query = `
+//             SELECT
+//                 p.id,
+//                 p.name,
+//                 p.description,
+//                 p.images,
+//                 p.price,
+//                 p.stock,
+//                 c.name AS category_name,
+//                 c.description AS category_description
+//             FROM products p
+//             JOIN categories c
+//                 ON p.category_id = c.id
+//             ${whereClause}
+//             ORDER BY ${orderBy}
+//             LIMIT $${limitIndex}
+//             OFFSET $${offsetIndex}
+//         `;
+
+//         const products = await db.query(query, values);
+
+//         res.send({
+//             status: "success",
+//             page: pageNum,
+//             limit: limitNum,
+//             products: products.rows
+//         });
+
+//     } catch (error) {
+//         console.log("Err", error);
+
+//         res.status(500).send({
+//             status: "error",
+//             message: "Internal Server Error"
+//         });
+//     }
+// });
+
 const __dirname = path.resolve();//D:\shariq\saylani-batch-18\react-with-server\ecom-without-db
 const __frontend = path.join(__dirname, './web/build')//D:\shariq\saylani-batch-18\react-with-server\ecom-without-db\web\build
 app.use('/', express.static(__frontend))
