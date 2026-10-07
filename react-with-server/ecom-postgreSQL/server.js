@@ -412,16 +412,29 @@ app.get("/api/v1/categories", async (req, res) => {
     }
 })
 
-// /api/v1/products?page=1&search=abc
+// /api/v1/products?search=abc&page=1&limit=20
 
 app.get("/api/v1/products", async (req, res) => {
-    const pageNum = req.query.page || 1; // 1
-    const offset = (pageNum - 1) * 10
+    const pageNum = parseInt(req.query.page || 1); // 9
+    const contentLimit = parseInt(req.query.limit || 10); // 20
+    const offset = (pageNum - 1) * contentLimit // 20
     // 1 = skip 0
     // 2 = skip 10
     // 3 = skip 20
+
+
+
     try {
         // const products = await db.query("SELECT * FROM products");
+        const countQuery = `
+            SELECT COUNT(*) AS total
+            FROM products
+        `;
+        const totalProducts = await db.query(countQuery);
+
+        const total = parseInt(totalProducts.rows[0].total);
+        const totalPages = Math.ceil(total / contentLimit); // 10
+
         const products = await db.query(`
             SELECT
                 p.id,
@@ -433,9 +446,20 @@ app.get("/api/v1/products", async (req, res) => {
                 c.name AS category_name,
                 c.description AS category_description
             FROM products p
-            JOIN categories c ON p.category_id = c.id LIMIT 10 OFFSET ${offset}
+            JOIN categories c ON p.category_id = c.id LIMIT ${contentLimit} OFFSET ${offset}
             `)
-        res.send({ status: "success", products: products.rows })
+        res.send({
+            status: "success",
+            products: products.rows,
+            pagination: {
+                page: pageNum,
+                limit: contentLimit,
+                total: total,
+                totalPages,
+                hasNextPage: pageNum < totalPages,
+                hasPreviousPage: pageNum > 1
+            }
+        })
     } catch (error) {
         console.log("Err", error);
         res.status(500).send({ status: "error", message: "Internal Server Error" })

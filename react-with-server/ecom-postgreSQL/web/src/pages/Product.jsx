@@ -16,13 +16,14 @@ const Product = () => {
     const [stock, setStock] = useState("0");
     const [productName, setProductName] = useState("");
     const [category, setCategory] = useState("");
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const [pagination, setPagination] = useState({})
 
-    const getProducts = async () => {
+    const getProducts = async ({ page = 1, limit = 10 }) => {
         try {
-            const apiRes = await api.get(`/products`);
+            const apiRes = await api.get(`/products?page=${page}&limit=${limit}`);
+            console.log("apiRes", apiRes.data)
             setProducts(apiRes.data.products);
+            setPagination(apiRes.data.pagination)
         } catch (error) {
             console.log("err", error);
         }
@@ -38,7 +39,7 @@ const Product = () => {
     };
 
     useEffect(() => {
-        getProducts();
+        getProducts({ page: 1, limit: 10 });
         getCategories();
     }, []);
 
@@ -53,8 +54,8 @@ const Product = () => {
                 "https://api.cloudinary.com/v1_1/dw2jrfzql/upload",
                 formData
             );
-
-            setFiles((prev) => [...prev, uploadedImg.data.url]);
+            // [1.png]
+            setFiles((prev) => [...prev, uploadedImg.data.url]); //
         } catch (error) {
             console.log("Err", error);
         }
@@ -212,10 +213,6 @@ const Product = () => {
                                     <input
                                         type="file"
                                         onChange={(e) => {
-                                            console.log(
-                                                "Upload File:",
-                                                e.target.files[0]
-                                            );
 
                                             uploadImg(
                                                 e.target.files[0]
@@ -372,7 +369,7 @@ const Product = () => {
                         <div>
                             <h2>All Products</h2>
                             <p>
-                                {products.length} products available
+                                {pagination.total} products available
                             </p>
                         </div>
 
@@ -398,6 +395,11 @@ const Product = () => {
                                             <img
                                                 src={product.images[0]}
                                                 alt={product.name}
+                                                onError={(e) => {
+                                                    e.target.parentElement.innerHTML = `<div class="no-image">
+                                                📦
+                                            </div>`
+                                                }}
                                             />
                                         ) : (
                                             <div className="no-image">
@@ -475,54 +477,32 @@ const Product = () => {
 
                             <h3>No Products Found</h3>
 
-                            <p>
-                                Add your first product to get started.
-                            </p>
-
                         </div>
 
-                    )}
-
-                    {products.length > 0 && (
-                        <div className="pagination">
-                            <button
-                                className="pagination-btn"
-                                disabled={page === 1}
-                                onClick={() => setPage(page - 1)}
-                            >
-                                ← Previous
-                            </button>
-
-                            <div className="pagination-pages">
-                                {Array.from({ length: totalPages }, (_, index) => {
-                                    const pageNumber = index + 1;
-
-                                    return (
-                                        <button
-                                            key={pageNumber}
-                                            className={`page-btn ${page === pageNumber ? "active" : ""
-                                                }`}
-                                            onClick={() => setPage(pageNumber)}
-                                        >
-                                            {pageNumber}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-
-                            <button
-                                className="pagination-btn"
-                                disabled={page === totalPages}
-                                onClick={() => setPage(page + 1)}
-                            >
-                                Next →
-                            </button>
-                        </div>
                     )}
 
                 </div>
 
-
+                <div className="">
+                    <div className="">
+                        <button disabled={!pagination.hasPreviousPage} onClick={() => {
+                            getProducts({ page: pagination.page - 1, limit: pagination.limit })
+                        }}>Previous</button>
+                        <p>{pagination.page}</p>
+                        <button disabled={!pagination.hasNextPage} onClick={() => {
+                            getProducts({ page: pagination.page + 1, limit: pagination.limit })
+                        }}>Next</button>
+                    </div>
+                    <label htmlFor="">
+                        Limit:
+                        <select onChange={(e) => { getProducts({ page: 1, limit: e.target.value }) }}>
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </label>
+                </div>
 
             </div>
 
