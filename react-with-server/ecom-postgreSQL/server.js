@@ -412,16 +412,55 @@ app.get("/api/v1/categories", async (req, res) => {
     }
 })
 
-// /api/v1/products?search=abc&page=1&limit=20
+// /api/v1/products?page=1&limit=20&search=15 pro max&category=1
+
+// search = 15 pro max,
+// category = 1,
+// minPrice = 500
+// maxPrice = 5000
+// sort = asd_price
+
+// SELECT * FROM products WHERE category_id = category
 
 app.get("/api/v1/products", async (req, res) => {
-    const pageNum = parseInt(req.query.page || 1); // 9
-    const contentLimit = parseInt(req.query.limit || 10); // 20
+    const pageNum = parseInt(req.query.page || 1); // 2
+    const contentLimit = parseInt(req.query.limit || 10); // 10
     const offset = (pageNum - 1) * contentLimit // 20
     // 1 = skip 0
     // 2 = skip 10
     // 3 = skip 20
 
+    /// FILTERS ///
+    const search = req.query.search;
+    const category = parseInt(req.query.category);
+    const minPrice = parseInt(req.query.minPrice);
+    const maxPrice = parseInt(req.query.maxPrice);
+    const sort = req.query.sort;
+
+    let conditions = []
+    // let conditionValues = []
+    // iPhone 14 pro max, 
+    // iPhone 15 pro max, 
+    // iPhone 14, 
+    // iPhone 13
+    // product name iPhone 15 pro max
+    // search 15 pro max
+    // iPhone 15 pro max = iPhone
+    // maxPrice = 100000
+
+    // if(search){
+    //     conditions.push(`p.name LIKE %${search}%`)
+    // }
+
+    if (category) {
+        conditions.push(`p.category_id = ${category}`)
+    }
+    if (minPrice) {
+        conditions.push(`p.price >= ${minPrice}`)
+    }
+    if (maxPrice) {
+        conditions.push(`p.price <= ${maxPrice}`) // 5000
+    }
 
 
     try {
@@ -432,7 +471,7 @@ app.get("/api/v1/products", async (req, res) => {
         `;
         const totalProducts = await db.query(countQuery);
 
-        const total = parseInt(totalProducts.rows[0].total);
+        const total = parseInt(totalProducts.rows[0].total); // 95 / 10 = 9.5
         const totalPages = Math.ceil(total / contentLimit); // 10
 
         const products = await db.query(`
@@ -446,7 +485,7 @@ app.get("/api/v1/products", async (req, res) => {
                 c.name AS category_name,
                 c.description AS category_description
             FROM products p
-            JOIN categories c ON p.category_id = c.id LIMIT ${contentLimit} OFFSET ${offset}
+            JOIN categories c ON p.category_id = c.id ${conditions.length ? `WHERE ${conditions.join(" AND ")}` : ""} ${sort ? `ORDER BY p.price ${sort == "des_price" ? "DESC" : "ASC"}` : ""} LIMIT ${contentLimit} OFFSET ${offset}
             `)
         res.send({
             status: "success",
@@ -465,6 +504,10 @@ app.get("/api/v1/products", async (req, res) => {
         res.status(500).send({ status: "error", message: "Internal Server Error" })
     }
 })
+
+// const alphabat = ["abc", "def", "ghi"];
+// alphabat.join(" AND ")
+//"abc AND def AND ghi"
 
 
 // req = {
