@@ -283,14 +283,13 @@ app.post('/api/v1/login', async (req, res) => {
 ////// SECURE APIS //////
 // localhost:5000/api/v1/me
 
-
+// /profile
 
 app.use("/api/v1/*splat", (req, res, next) => {
     if (!req?.cookies?.Token) {
-        res.status(401).send({
+        return res.status(401).send({
             message: "Unauthorized"
-        })
-        return;
+        });
     }
     jwt.verify(req.cookies.Token, SECRET, (err, decodedData) => {
         if (!err) {
@@ -402,6 +401,15 @@ app.get('/api/v1/me', (req, res) => {
 //         ON DELETE RESTRICT
 // );
 
+// CREATE TABLE cart_items (
+//     id SERIAL PRIMARY KEY,
+//     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+//     product_id INT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+//     quantity INT NOT NULL CHECK (quantity > 0),
+//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//     UNIQUE (user_id, product_id)   -- one row per product per user
+// );
+
 
 app.get("/api/v1/categories", async (req, res) => {
     try {
@@ -423,43 +431,35 @@ app.get("/api/v1/categories", async (req, res) => {
 // SELECT * FROM products WHERE category_id = category
 
 app.get("/api/v1/products", async (req, res) => {
+    // 11 - 20
     const pageNum = parseInt(req.query.page || 1); // 2
     const contentLimit = parseInt(req.query.limit || 10); // 10
-    const offset = (pageNum - 1) * contentLimit // 20
+    const offset = (pageNum - 1) * contentLimit // 10
     // 1 = skip 0
     // 2 = skip 10
     // 3 = skip 20
 
     /// FILTERS ///
-    const search = req.query.search;
-    const category = parseInt(req.query.category);
-    const minPrice = parseInt(req.query.minPrice);
-    const maxPrice = parseInt(req.query.maxPrice);
-    const sort = req.query.sort;
+    const search = req.query.search; // iPhone
+    const category = parseInt(req.query.category); // 1
+    const minPrice = parseInt(req.query.minPrice); // 75000
+    const maxPrice = parseInt(req.query.maxPrice); // 100000
+    const sort = req.query.sort; // sort --> asc_price || des_price
 
     let conditions = []
-    // let conditionValues = []
-    // iPhone 14 pro max, 
-    // iPhone 15 pro max, 
-    // iPhone 14, 
-    // iPhone 13
-    // product name iPhone 15 pro max
-    // search 15 pro max
-    // iPhone 15 pro max = iPhone
-    // maxPrice = 100000
 
-    // if(search){
-    //     conditions.push(`p.name LIKE %${search}%`)
-    // }
+    if (search) {
+        conditions.push(`p.name ILIKE '%${search}%'`) // iPhone
+    }
 
     if (category) {
         conditions.push(`p.category_id = ${category}`)
     }
     if (minPrice) {
-        conditions.push(`p.price >= ${minPrice}`)
+        conditions.push(`p.price >= ${minPrice}`) //250
     }
     if (maxPrice) {
-        conditions.push(`p.price <= ${maxPrice}`) // 5000
+        conditions.push(`p.price <= ${maxPrice}`) // 800
     }
 
 
@@ -467,7 +467,7 @@ app.get("/api/v1/products", async (req, res) => {
         // const products = await db.query("SELECT * FROM products");
         const countQuery = `
             SELECT COUNT(*) AS total
-            FROM products
+            FROM products AS p ${conditions.length ? `WHERE ${conditions.join(" AND ")}` : ""}
         `;
         const totalProducts = await db.query(countQuery);
 
@@ -491,12 +491,12 @@ app.get("/api/v1/products", async (req, res) => {
             status: "success",
             products: products.rows,
             pagination: {
-                page: pageNum,
-                limit: contentLimit,
-                total: total,
-                totalPages,
-                hasNextPage: pageNum < totalPages,
-                hasPreviousPage: pageNum > 1
+                page: pageNum, // 2
+                limit: contentLimit, // 10
+                total: total, // 95
+                totalPages, // 10
+                hasNextPage: pageNum < totalPages, //10 < 10 = false
+                hasPreviousPage: pageNum > 1 // 1 > 1 = false
             }
         })
     } catch (error) {
@@ -504,10 +504,141 @@ app.get("/api/v1/products", async (req, res) => {
         res.status(500).send({ status: "error", message: "Internal Server Error" })
     }
 })
-
 // const alphabat = ["abc", "def", "ghi"];
 // alphabat.join(" AND ")
 //"abc AND def AND ghi"
+
+/// CART APIs ///
+
+// app.get("/api/v1/cart", auth, async (req, res) => {
+//   try {
+//     const result = await db.query(
+//       `
+//       SELECT
+//         ci.product_id,
+//         ci.quantity,
+//         p.name,
+//         p.images,
+//         p.price,
+//         p.stock,
+//         (p.price * ci.quantity) AS subtotal
+//       FROM cart_items ci
+//       JOIN products p ON p.id = ci.product_id
+//       WHERE ci.user_id = $1
+//       ORDER BY ci.created_at DESC
+//       `,
+//       [req.user.id]
+//     );
+
+//     const total = result.rows.reduce((sum, item) => sum + parseFloat(item.subtotal), 0);
+
+//     res.send({ status: "success", items: result.rows, total: total.toFixed(2) });
+//   } catch (error) {
+//     console.log("Err", error);
+//     res.status(500).send({ status: "error", message: "Internal Server Error" });
+//   }
+// });
+
+// ADD to cart (increments if already in cart)
+//{productId: 1, quantity: 5}
+
+app.post("/api/v1/cart", async (req, res) => {
+    const productId = parseInt(req.body.productId); // 302
+    const quantity = parseInt(req.body.quantity) || 1; // 30
+
+    if (isNaN(productId) || quantity < 1) {
+        return res.status(400).send({ status: "error", message: "Invalid productId or quantity" });
+    }
+
+    try {
+        const product = await db.query("SELECT stock FROM products WHERE id = $1", [productId]); // 25
+        if (product.rows.length === 0) {
+            return res.status(404).send({ status: "error", message: "Product not found" });
+        }
+
+        const existing = await db.query(
+            "SELECT quantity FROM cart_items WHERE user_id = $1 AND product_id = $2",
+            [req.user.id, productId]
+            // 17 , 302
+        );
+        const currentQty = existing.rows[0]?.quantity || 0; // 0
+
+        if (currentQty + quantity > product.rows[0].stock) {
+            return res.status(400).send({ status: "error", message: "Not enough stock" });
+        }
+        // {
+        //     user_id: 17,
+        //     product_id: 1,
+        //     quantity: 5
+        // }
+        const result = await db.query(
+            `
+            INSERT INTO cart_items (user_id, product_id, quantity)
+            VALUES ($1, $2, $3)
+            ON CONFLICT (user_id, product_id)
+            DO UPDATE SET quantity = cart_items.quantity + EXCLUDED.quantity
+            RETURNING *
+            `,
+            [req.user.id, productId, quantity]
+            //17            302      ,  20
+        );
+
+        // {user_id: 1, product_id: 1, quantity: 3}
+
+        res.status(201).send({ status: "success", item: result.rows[0] });
+    } catch (error) {
+        console.log("Err", error);
+        res.status(500).send({ status: "error", message: "Internal Server Error" });
+    }
+});
+
+// // UPDATE quantity (sets exact value, e.g. from +/- buttons)
+// app.patch("/api/v1/cart/:productId", auth, async (req, res) => {
+//   const productId = parseInt(req.params.productId);
+//   const quantity = parseInt(req.body.quantity);
+
+//   if (isNaN(productId) || isNaN(quantity) || quantity < 1) {
+//     return res.status(400).send({ status: "error", message: "Invalid quantity" });
+//   }
+
+//   try {
+//     const product = await db.query("SELECT stock FROM products WHERE id = $1", [productId]);
+//     if (product.rows.length && quantity > product.rows[0].stock) {
+//       return res.status(400).send({ status: "error", message: "Not enough stock" });
+//     }
+
+//     const result = await db.query(
+//       `UPDATE cart_items SET quantity = $1
+//        WHERE user_id = $2 AND product_id = $3
+//        RETURNING *`,
+//       [quantity, req.user.id, productId]
+//     );
+
+//     if (result.rows.length === 0) {
+//       return res.status(404).send({ status: "error", message: "Item not in cart" });
+//     }
+
+//     res.send({ status: "success", item: result.rows[0] });
+//   } catch (error) {
+//     console.log("Err", error);
+//     res.status(500).send({ status: "error", message: "Internal Server Error" });
+//   }
+// });
+
+// // REMOVE one item
+// app.delete("/api/v1/cart/:productId", auth, async (req, res) => {
+//   try {
+//     await db.query("DELETE FROM cart_items WHERE user_id = $1 AND product_id = $2", [
+//       req.user.id,
+//       parseInt(req.params.productId),
+//     ]);
+//     res.send({ status: "success" });
+//   } catch (error) {
+//     console.log("Err", error);
+//     res.status(500).send({ status: "error", message: "Internal Server Error" });
+//   }
+// });
+
 
 
 // req = {

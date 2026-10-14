@@ -16,11 +16,25 @@ const Product = () => {
     const [stock, setStock] = useState("0");
     const [productName, setProductName] = useState("");
     const [category, setCategory] = useState("");
-    const [pagination, setPagination] = useState({})
+    const [pagination, setPagination] = useState({});
+    const [filter, setFilter] = useState({
+        search: "",
+        category: "",
+        minPrice: "",
+        maxPrice: "",
+        sort: ""
+    })
 
-    const getProducts = async ({ page = 1, limit = 10 }) => {
+    const getProducts = async ({ page = 1, limit = 10, apiFilter = filter }) => {
         try {
-            const apiRes = await api.get(`/products?page=${page}&limit=${limit}`);
+            // const filter = "&search=abc&category=1&minPrice=50&maxPrice=500&sort=asc_price"
+            let allFilters = ""
+            // console.log("Object.entries(filter)", Object.entries(filter))
+            Object.entries(apiFilter).map(([key, value]) => {
+                // console.log("key, value", key, value)
+                allFilters = `${allFilters}&${key}=${value}`
+            })
+            const apiRes = await api.get(`/products?page=${page}&limit=${limit}${allFilters}`);
             console.log("apiRes", apiRes.data)
             setProducts(apiRes.data.products);
             setPagination(apiRes.data.pagination)
@@ -74,12 +88,31 @@ const Product = () => {
                 stock: stock
             });
 
-            getProducts();
+            getProducts({ page: 1, limit: 10 });
             alert(apiRes.data.message);
         } catch (error) {
             console.log("Err", error);
         }
     };
+
+    //search, iPhone
+    const handleChange = (name, value) => {
+        //name = search
+        // const currentFilter = { ...filter }
+        // currentFilter = {
+        //     search: "",
+        //     category: "",
+        //     minPrice: "",
+        //     maxPrice: "",
+        //     sort: ""
+        // }
+        // currentFilter[name] = value
+        // setFilter(currentFilter)
+
+        setFilter((prev) => ({ ...prev, [name]: value }))
+
+    }
+
 
     return (
         <div className="product-page">
@@ -361,6 +394,75 @@ const Product = () => {
                 ) : null}
 
                 {/* Products Section */}
+
+                <div className="" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 15 }}>
+                    {/* {
+                        search: "",
+                        category: "",
+                        minPrice: "",
+                        maxPrice: "",
+                        sort: ""
+                    } */}
+                    <div className="">
+                        <label htmlFor="">
+                            Search:
+                            <input type="text" value={filter.search} onChange={(e) => handleChange("search", e.target.value)} />
+                        </label>
+                        <label htmlFor="">
+                            Category:
+                            <select value={filter.category} onChange={(e) => handleChange("category", e.target.value)}>
+                                <option value={""}>
+                                    Select Category
+                                </option>
+
+                                {categories.map((category) => (
+                                    <option
+                                        key={category.id}
+                                        value={category.id}
+                                    >
+                                        {category.name}
+                                    </option>
+                                ))}
+
+                            </select>
+                        </label>
+                        <label htmlFor="">
+                            Min Price:
+                            <input type="number" value={filter.minPrice} onChange={(e) => handleChange("minPrice", e.target.value)} />
+                        </label>
+                        <label htmlFor="">
+                            Max Price:
+                            <input type="number" value={filter.maxPrice} onChange={(e) => handleChange("maxPrice", e.target.value)} />
+                        </label>
+                        <label htmlFor="">
+                            Sort:
+                            <select value={filter.sort} onChange={(e) => handleChange("sort", e.target.value)}>
+                                <option value="">-- Sort By Price --</option>
+                                <option value="asc_price">Low To High</option>
+                                <option value="des_price">High To Low</option>
+                            </select>
+                        </label>
+                        <button onClick={() => { getProducts({ page: 1, limit: 10 }) }}>Search</button>
+                        <button onClick={() => {
+                            setFilter(() => ({
+                                search: "",
+                                category: "",
+                                minPrice: "",
+                                maxPrice: "",
+                                sort: ""
+                            }));
+                            getProducts({
+                                page: 1, limit: 10, apiFilter: {
+                                    search: "",
+                                    category: "",
+                                    minPrice: "",
+                                    maxPrice: "",
+                                    sort: ""
+                                }
+                            })
+                        }}>Clear Filter</button>
+                    </div>
+                </div>
 
                 <div className="products-section">
 
