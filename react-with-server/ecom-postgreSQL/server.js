@@ -510,41 +510,86 @@ app.get("/api/v1/products", async (req, res) => {
 
 /// CART APIs ///
 
-// app.get("/api/v1/cart", auth, async (req, res) => {
-//   try {
-//     const result = await db.query(
-//       `
-//       SELECT
-//         ci.product_id,
-//         ci.quantity,
-//         p.name,
-//         p.images,
-//         p.price,
-//         p.stock,
-//         (p.price * ci.quantity) AS subtotal
-//       FROM cart_items ci
-//       JOIN products p ON p.id = ci.product_id
-//       WHERE ci.user_id = $1
-//       ORDER BY ci.created_at DESC
-//       `,
-//       [req.user.id]
-//     );
+app.get("/api/v1/cart", async (req, res) => {
+    try {
+        // logedin user = 17
+        //899.99 * 20 = 17,999.8
+        const result = await db.query(
+            `
+            SELECT
+                ci.product_id,
+                ci.quantity,
+                p.name,
+                p.images,
+                p.price,
+                p.stock,
+                (p.price * ci.quantity) AS subtotal
+            FROM cart_items ci
+            JOIN products p ON p.id = ci.product_id
+            WHERE ci.user_id = $1
+            ORDER BY ci.created_at DESC
+            `,
+            [req.user.id]
+        );
 
-//     const total = result.rows.reduce((sum, item) => sum + parseFloat(item.subtotal), 0);
+        // result.rows = 2 
+        // [
+        //     {
+        //         product_id: 1,
+        //         quantity: 10,
+        //         name: "Test Product",
+        //         images: [
+        //             "http://res.cloudinary.com/dw2jrfzql/image/upload/v1790919225/zd4tyqchcpajorlgekhi.png"
+        //         ],
+        //         price: 250,
+        //         stock: 15,
+        //         subtotal: 2500
+        //     },
+        //     {
+        //         product_id: 302, // 
+        //         quantity: 20,
+        //         name: "Samsung Galaxy S25",
+        //         images: [
+        //             "s25-front.jpg",
+        //             "s25-back.jpg"
+        //         ],
+        //         price: 899.99,
+        //         stock: 25,
+        //         subtotal: 17999.8
+        //     }
+        // ]
 
-//     res.send({ status: "success", items: result.rows, total: total.toFixed(2) });
-//   } catch (error) {
-//     console.log("Err", error);
-//     res.status(500).send({ status: "error", message: "Internal Server Error" });
-//   }
-// });
+        const total = result.rows.reduce((sum, item) => sum + parseFloat(item.subtotal), 0);
+
+        // 0
+        // [
+        //     {name: "abc", price: 5},
+        //     {name: "def", price: 15},
+        //     {name: "ghi", price: 25},
+        //     {name: "jkl", price: 17},
+        // ].reduce((sum, item) => sum + item.price, 0)
+        // 0 + 5, 5 + 15, 20 + 25, 45 + 17 = 62
+        // [
+        //     {name: "abc", price: 5},
+        //     {name: "def", price: 15},
+        //     {name: "ghi", price: 25},
+        //     {name: "jkl", price: 17},
+        // ].map((item) => {})
+
+        res.send({ status: "success", items: result.rows, total: total.toFixed(2) });
+    } catch (error) {
+        console.log("Err", error);
+        res.status(500).send({ status: "error", message: "Internal Server Error" });
+    }
+});
 
 // ADD to cart (increments if already in cart)
 //{productId: 1, quantity: 5}
 
 app.post("/api/v1/cart", async (req, res) => {
     const productId = parseInt(req.body.productId); // 302
-    const quantity = parseInt(req.body.quantity) || 1; // 30
+    const quantity = parseInt(req.body.quantity) || 1; // 3
+    // logedin user = 17
 
     if (isNaN(productId) || quantity < 1) {
         return res.status(400).send({ status: "error", message: "Invalid productId or quantity" });
@@ -561,15 +606,15 @@ app.post("/api/v1/cart", async (req, res) => {
             [req.user.id, productId]
             // 17 , 302
         );
-        const currentQty = existing.rows[0]?.quantity || 0; // 0
-
+        const currentQty = existing.rows[0]?.quantity || 0; // 20
+        //      20   +  3  =  23  >    25
         if (currentQty + quantity > product.rows[0].stock) {
             return res.status(400).send({ status: "error", message: "Not enough stock" });
         }
         // {
         //     user_id: 17,
-        //     product_id: 1,
-        //     quantity: 5
+        //     product_id: 302,
+        //     quantity: 20
         // }
         const result = await db.query(
             `
@@ -640,27 +685,209 @@ app.post("/api/v1/cart", async (req, res) => {
 // });
 
 
+/// ORDER APIS ///
 
-// req = {
-//     method: "POST",
-//     url: "/api/v1/category",
-//     body: {
-//         "name": "Electronic",
-//         "description": "Test Test Test"
+app.post("/api/v1/orders", async (req, res) => {
+    const { shippingAddress, phoneNumber, receiverName } = req.body;
+    if (!shippingAddress || !phoneNumber || !receiverName) {
+        return res.status(400).send({ status: "error", message: "Required Parameter Missing" });
+    }
+
+    // logedin user = 17
+
+    try {
+        await db.query("BEGIN");
+
+        // Lock product rows so two simultaneous orders can't oversell
+        const cart = await db.query(
+            `
+                SELECT ci.product_id, ci.quantity, p.name, p.price, p.stock
+                FROM cart_items ci
+                JOIN products p ON p.id = ci.product_id
+                WHERE ci.user_id = $1
+                FOR UPDATE OF p
+            `,
+            [req.user.id]
+        );
+
+        // [
+        //     {
+        //         product_id: 1,
+        //         quantity: 10,
+        //         name: "Test Product",
+        //         price: 250.00,
+        //         stock: 15
+        //     },
+        //     {
+        //         product_id: 302,
+        //         quantity: 20,
+        //         name: "Samsung Galaxy S25",
+        //         price: 899.99,
+        //         stock: 25
+        //     },
+        //     {
+        //         product_id: 1,
+        //         quantity: 10,
+        //         name: "Test Product",
+        //         price: 250.00,
+        //         stock: 15
+        //     },
+        //     {
+        //         product_id: 1,
+        //         quantity: 10,
+        //         name: "Test Product",
+        //         price: 250.00,
+        //         stock: 15
+        //     }
+        // ]
+
+        if (cart.rows.length === 0) {
+            await db.query("ROLLBACK");
+            return res.status(400).send({ status: "error", message: "Cart is empty" });
+        }
+
+        const outOfStock = cart.rows.filter((item) => item.quantity > item.stock);
+        if (outOfStock.length) {
+            await db.query("ROLLBACK");
+            return res.status(400).send({
+                status: "error",
+                message: "Some items are out of stock",
+                items: outOfStock.map((i) => ({ productId: i.product_id, name: i.name, available: i.stock })),
+            });
+        }
+
+        // Calculate in cents to avoid floating-point errors
+        const totalCents = cart.rows.reduce(
+            (sum, item) => sum + Math.round(parseFloat(item.price) * 100) * item.quantity,
+            0
+        );
+
+        const order = await db.query(
+            `INSERT INTO orders (user_id, total_amount, shipping_address, receiver_name, phone_number)
+            VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+            [req.user.id, totalCents / 100, shippingAddress.trim(), receiverName, phoneNumber]
+        );
+        const orderId = order.rows[0].id;
+
+        // Copy cart into order_items (price snapshot)
+        await db.query(
+            `
+            INSERT INTO order_items (order_id, product_id, product_name, price, quantity)
+            SELECT $1, ci.product_id, p.name, p.price, ci.quantity
+            FROM cart_items ci
+            JOIN products p ON p.id = ci.product_id
+            WHERE ci.user_id = $2
+            `,
+            [orderId, req.user.id]
+        );
+
+        // Reduce stock
+        await db.query(
+            `
+            UPDATE products p
+            SET stock = p.stock - ci.quantity, updated_at = CURRENT_TIMESTAMP
+            FROM cart_items ci
+            WHERE ci.product_id = p.id AND ci.user_id = $1
+            `,
+            [req.user.id]
+        );
+
+        // Empty the cart
+        await db.query("DELETE FROM cart_items WHERE user_id = $1", [req.user.id]);
+
+        await db.query("COMMIT");
+        res.status(201).send({ status: "success", order: order.rows[0] });
+    } catch (error) {
+        await db.query("ROLLBACK");
+        console.log("Err", error);
+        res.status(500).send({ status: "error", message: "Internal Server Error" });
+    } finally {
+        db.release(); // always return the client to the pool
+    }
+});
+
+// LIST my orders
+// app.get("/api/v1/orders", auth, async (req, res) => {
+//   try {
+//     const result = await db.query(
+//       `SELECT id, status, total_amount, created_at
+//        FROM orders WHERE user_id = $1
+//        ORDER BY created_at DESC`,
+//       [req.user.id]
+//     );
+//     res.send({ status: "success", orders: result.rows });
+//   } catch (error) {
+//     console.log("Err", error);
+//     res.status(500).send({ status: "error", message: "Internal Server Error" });
+//   }
+// });
+
+// GET single order with its items
+// app.get("/api/v1/orders/:id", auth, async (req, res) => {
+//   try {
+//     const result = await db.query(
+//       `
+//       SELECT
+//         o.*,
+//         json_agg(json_build_object(
+//           'product_id', oi.product_id,
+//           'name', oi.product_name,
+//           'price', oi.price,
+//           'quantity', oi.quantity
+//         )) AS items
+//       FROM orders o
+//       JOIN order_items oi ON oi.order_id = o.id
+//       WHERE o.id = $1 AND o.user_id = $2
+//       GROUP BY o.id
+//       `,
+//       [parseInt(req.params.id), req.user.id]
+//     );
+
+//     if (result.rows.length === 0) {
+//       return res.status(404).send({ status: "error", message: "Order not found" });
 //     }
-//     user: {
-//          id: 6,
-//          first_name: "Shariq",
-//          last_name: "Siddiqui",
-//          email: "shariq2@gmail.com",
-//          role: "buyer",
-//          phone: "033333333",
-//          is_active: true,
-//    }
-// }
+//     res.send({ status: "success", order: result.rows[0] });
+//   } catch (error) {
+//     console.log("Err", error);
+//     res.status(500).send({ status: "error", message: "Internal Server Error" });
+//   }
+// });
 
+// CANCEL order (only while pending) and restore stock
+// app.patch("/api/v1/orders/:id/cancel", auth, async (req, res) => {
+//   const client = await db.connect();
+//   try {
+//     await client.query("BEGIN");
 
-/// ADMIN APIS ///
+//     const order = await client.query(
+//       `UPDATE orders SET status = 'cancelled', updated_at = CURRENT_TIMESTAMP
+//        WHERE id = $1 AND user_id = $2 AND status = 'pending'
+//        RETURNING *`,
+//       [parseInt(req.params.id), req.user.id]
+//     );
+
+//     if (order.rows.length === 0) {
+//       await client.query("ROLLBACK");
+//       return res.status(400).send({ status: "error", message: "Order can't be cancelled" });
+//     }
+
+//     await client.query(
+//       `UPDATE products p SET stock = p.stock + oi.quantity
+//        FROM order_items oi
+//        WHERE oi.product_id = p.id AND oi.order_id = $1`,
+//       [order.rows[0].id]
+//     );
+
+//     await client.query("COMMIT");
+//     res.send({ status: "success", order: order.rows[0] });
+//   } catch (error) {
+//     await client.query("ROLLBACK");
+//     console.log("Err", error);
+//     res.status(500).send({ status: "error", message: "Internal Server Error" });
+//   } finally {
+//     client.release();
+//   }
+// });
 
 app.use("/api/v1/*splat", (req, res, next) => {
     if (req.user.role != "admin") {
@@ -669,25 +896,6 @@ app.use("/api/v1/*splat", (req, res, next) => {
         next();
     }
 })
-
-// req = {
-//     method: "Post",
-//     url: "/api/v1/category",
-//     body: {
-//         name: "Test",
-//         description: "Test Description"
-//     }
-//     cookies: {
-//         Token: "valid token"
-//     },
-//     user: {
-//         id: 12,
-//         email: "shariqsiddqui5145@gmail.com",
-//         role: "admin",
-//         created_at: "03:05:2026",
-//         updated_at: "03:05:2026",
-//     }
-// }
 
 app.post("/api/v1/category", async (req, res) => {
     // name --> required, description --> optional
@@ -724,142 +932,6 @@ app.post("/api/v1/product", async (req, res) => {
         res.status(500).send({ status: "error", message: "Internal Server Error" })
     }
 })
-
-// CREATE TABLE employees (
-//     id SERIAL PRIMARY KEY,
-//     name VARCHAR(100) NOT NULL,
-//     salary NUMERIC(10, 2),
-//     department_id INT,
-//     FOREIGN KEY (department_id)
-//         REFERENCES departments(id)
-// );
-
-// SELECT
-//     e.name,
-//     d.department_name
-// FROM employees e
-// INNER JOIN departments d
-//     ON e.department_id = d.id;
-
-// agar user login hai jb hi response jae wrna error aajae
-// app.get('/products', (req, res) => {
-//     res.send({
-//         products: [
-//             ...
-//         ]
-//     })
-// })
-
-
-
-// app.get("/api/v1/products", async (req, res) => {
-//     const {
-//         page = 1,
-//         limit = 10,
-//         category,
-//         search,
-//         minPrice,
-//         maxPrice,
-//         sort
-//     } = req.query;
-
-//     const pageNum = Math.max(parseInt(page) || 1, 1);
-//     const limitNum = Math.min(Math.max(parseInt(limit) || 10, 1), 100);
-//     const offset = (pageNum - 1) * limitNum;
-
-//     try {
-//         const values = [];
-//         const conditions = [];
-
-//         // Category filter
-//         if (category) {
-//             values.push(category);
-//             conditions.push(`p.category_id = $${values.length}`);
-//         }
-
-//         // Search filter
-//         if (search) {
-//             values.push(`%${search}%`);
-
-//             conditions.push(`(
-//                 p.name ILIKE $${values.length}
-//                 OR p.description ILIKE $${values.length}
-//             )`);
-//         }
-
-//         // Minimum price
-//         if (minPrice) {
-//             values.push(Number(minPrice));
-//             conditions.push(`p.price >= $${values.length}`);
-//         }
-
-//         // Maximum price
-//         if (maxPrice) {
-//             values.push(Number(maxPrice));
-//             conditions.push(`p.price <= $${values.length}`);
-//         }
-
-//         // WHERE clause
-//         const whereClause =
-//             conditions.length > 0
-//                 ? `WHERE ${conditions.join(" AND ")}`
-//                 : "";
-
-//         // Sorting
-//         let orderBy = "p.created_at DESC";
-
-//         if (sort === "price_asc") {
-//             orderBy = "p.price ASC";
-//         }
-
-//         if (sort === "price_desc") {
-//             orderBy = "p.price DESC";
-//         }
-
-//         // Pagination
-//         values.push(limitNum);
-//         const limitIndex = values.length;
-
-//         values.push(offset);
-//         const offsetIndex = values.length;
-
-//         const query = `
-//             SELECT
-//                 p.id,
-//                 p.name,
-//                 p.description,
-//                 p.images,
-//                 p.price,
-//                 p.stock,
-//                 c.name AS category_name,
-//                 c.description AS category_description
-//             FROM products p
-//             JOIN categories c
-//                 ON p.category_id = c.id
-//             ${whereClause}
-//             ORDER BY ${orderBy}
-//             LIMIT $${limitIndex}
-//             OFFSET $${offsetIndex}
-//         `;
-
-//         const products = await db.query(query, values);
-
-//         res.send({
-//             status: "success",
-//             page: pageNum,
-//             limit: limitNum,
-//             products: products.rows
-//         });
-
-//     } catch (error) {
-//         console.log("Err", error);
-
-//         res.status(500).send({
-//             status: "error",
-//             message: "Internal Server Error"
-//         });
-//     }
-// });
 
 const __dirname = path.resolve();//D:\shariq\saylani-batch-18\react-with-server\ecom-without-db
 const __frontend = path.join(__dirname, './web/build')//D:\shariq\saylani-batch-18\react-with-server\ecom-without-db\web\build
