@@ -410,6 +410,28 @@ app.get('/api/v1/me', (req, res) => {
 //     UNIQUE (user_id, product_id)   -- one row per product per user
 // );
 
+// CREATE TABLE orders (
+//     id SERIAL PRIMARY KEY,
+//     user_id INT NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
+//     status VARCHAR(20) NOT NULL DEFAULT 'pending'
+//         CHECK (status IN ('pending', 'paid', 'shipped', 'delivered', 'cancelled')),
+//     total_amount DECIMAL(10, 2) NOT NULL,
+//     shipping_address TEXT NOT NULL,
+//     phone_number VARCHAR(15) NOT NULL,
+//     receiver_name VARCHAR(255) NOT NULL,
+//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+// );
+
+// CREATE TABLE order_items (
+//     id SERIAL PRIMARY KEY,
+//     order_id INT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+//     product_id INT REFERENCES products(id) ON DELETE SET NULL,
+//     product_name VARCHAR(255) NOT NULL,   -- snapshot
+//     price DECIMAL(10, 2) NOT NULL,        -- snapshot of price at purchase time
+//     quantity INT NOT NULL CHECK (quantity > 0)
+// );
+
 
 app.get("/api/v1/categories", async (req, res) => {
     try {
@@ -600,21 +622,25 @@ app.post("/api/v1/cart", async (req, res) => {
         if (product.rows.length === 0) {
             return res.status(404).send({ status: "error", message: "Product not found" });
         }
-
+        // {
+        //     id: 17,
+        //     productId: 302,
+        //     quantity: 5
+        // }
         const existing = await db.query(
             "SELECT quantity FROM cart_items WHERE user_id = $1 AND product_id = $2",
             [req.user.id, productId]
             // 17 , 302
         );
-        const currentQty = existing.rows[0]?.quantity || 0; // 20
-        //      20   +  3  =  23  >    25
+        const currentQty = existing.rows[0]?.quantity || 0;
+
         if (currentQty + quantity > product.rows[0].stock) {
             return res.status(400).send({ status: "error", message: "Not enough stock" });
         }
         // {
         //     user_id: 17,
         //     product_id: 302,
-        //     quantity: 20
+        //     quantity: 5
         // }
         const result = await db.query(
             `
@@ -625,7 +651,7 @@ app.post("/api/v1/cart", async (req, res) => {
             RETURNING *
             `,
             [req.user.id, productId, quantity]
-            //17            302      ,  20
+            //17            302      ,  3
         );
 
         // {user_id: 1, product_id: 1, quantity: 3}
@@ -687,16 +713,16 @@ app.post("/api/v1/cart", async (req, res) => {
 
 /// ORDER APIS ///
 
-app.post("/api/v1/orders", async (req, res) => {
+app.post("/api/v1/order", async (req, res) => {
     const { shippingAddress, phoneNumber, receiverName } = req.body;
     if (!shippingAddress || !phoneNumber || !receiverName) {
         return res.status(400).send({ status: "error", message: "Required Parameter Missing" });
     }
 
-    // logedin user = 17
-
     try {
-        await db.query("BEGIN");
+        await db.query("BEGIN"); // transaction
+
+        // logedin user = 17
 
         // Lock product rows so two simultaneous orders can't oversell
         const cart = await db.query(
@@ -709,35 +735,34 @@ app.post("/api/v1/orders", async (req, res) => {
             `,
             [req.user.id]
         );
-
         // [
         //     {
         //         product_id: 1,
         //         quantity: 10,
         //         name: "Test Product",
         //         price: 250.00,
-        //         stock: 15
-        //     },
-        //     {
-        //         product_id: 302,
-        //         quantity: 20,
-        //         name: "Samsung Galaxy S25",
-        //         price: 899.99,
-        //         stock: 25
+        //         stock: 15,
         //     },
         //     {
         //         product_id: 1,
         //         quantity: 10,
         //         name: "Test Product",
         //         price: 250.00,
-        //         stock: 15
+        //         stock: 15,
         //     },
         //     {
         //         product_id: 1,
         //         quantity: 10,
         //         name: "Test Product",
         //         price: 250.00,
-        //         stock: 15
+        //         stock: 15,
+        //     },
+        //     {
+        //         product_id: 1,
+        //         quantity: 10,
+        //         name: "Test Product",
+        //         price: 250.00,
+        //         stock: 15,
         //     }
         // ]
 
@@ -755,6 +780,7 @@ app.post("/api/v1/orders", async (req, res) => {
                 items: outOfStock.map((i) => ({ productId: i.product_id, name: i.name, available: i.stock })),
             });
         }
+        // /products?id=1
 
         // Calculate in cents to avoid floating-point errors
         const totalCents = cart.rows.reduce(
