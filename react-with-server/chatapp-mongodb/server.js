@@ -8,7 +8,7 @@ import "dotenv/config"
 import cookieParser from "cookie-parser";
 // import path from "path";
 import mongoose from "mongoose";
-import { userModel } from "./model.js"
+import { userModel, messageModel } from "./model.js"
 
 const app = express();
 const PORT = 5000;
@@ -34,95 +34,158 @@ app.post('/api/v1/signup', async (req, res) => {
     try {
         const salt = await bcrypt.genSalt(12);
         const hash = await bcrypt.hash(password, salt);
-        await userModel.create({ firstName, lastName, email, password })
+        await userModel.create({ firstName, lastName, email, password: hash })
         res.status(201).send({ status: "success", message: `user created with email: ${email}` })
     } catch (error) {
         console.log("Err", error);
-        res.status(500).send({ status: "error", message: "Internal Server Error" })
-        // if (error.code == '23505') {
-        //     res.status(400).send({ status: "error", message: "User Already Logedin With This Email" })
-        // } else {
-        //     res.status(500).send({ status: "error", message: "Internal Server Error" })
-        // }
+        // res.status(500).send({ status: "error", message: "Internal Server Error" })
+        if (error.code == '11000') {
+            res.status(400).send({ status: "error", message: "User Already Logedin With This Email" })
+        } else {
+            res.status(500).send({ status: "error", message: "Internal Server Error" })
+        }
     }
 })
 
-// app.post('/api/v1/login', async (req, res) => {
-//     const reqBody = req.body;
-//     if (!reqBody.email || !reqBody.password) {
-//         res.status(400).send({ status: "error", message: "required parameter missing" })
-//         return;
-//     }
-//     try {
-//         const users = await db.query(`SELECT * FROM users WHERE email = $1 AND is_active = true`, [reqBody.email]);
+app.post('/api/v1/login', async (req, res) => {
+    const reqBody = req.body;
+    if (!reqBody.email || !reqBody.password) {
+        res.status(400).send({ status: "error", message: "required parameter missing" })
+        return;
+    }
+    try {
+        // const users = await db.query(`SELECT * FROM users WHERE email = $1 AND is_active = true`, [reqBody.email]);
+        const user = await userModel.findOne({ email: reqBody.email })
+        const currentUser = user.toJSON();
+        console.log("currentUser", currentUser)
+        // const currentUser = users.rows[0]
+        if (!currentUser) {
+            res.status(404).send({ status: "error", message: "User Not Found With This Email" })
+            return;
+        }
+        const isPassMatched = await bcrypt.compare(reqBody.password, currentUser.password); // true
+        if (!isPassMatched) {
+            res.status(401).send({ status: "error", message: "Password did not matched" })
+            return;
+        }
+        delete currentUser.password;
 
-//         const currentUser = users.rows[0]
-//         if (!currentUser) {
-//             res.status(404).send({ status: "error", message: "User Not Found With This Email" })
-//             return;
-//         }
-//         const isPassMatched = await bcrypt.compare(reqBody.password, currentUser.password_hash); // true
-//         if (!isPassMatched) {
-//             res.status(401).send({ status: "error", message: "Password did not matched" })
-//             return;
-//         }
-//         delete currentUser.password_hash;
+        let userToken = jwt.sign({
+            ...currentUser,
+            iat: Date.now() / 1000, // miliseconds to seconds
+            exp: (Date.now() / 1000) + (60 * 60 * 24) // add 1 day's second
+        }, SECRET);
 
-//         let userToken = jwt.sign({
-//             ...currentUser,
-//             iat: Date.now() / 1000, // miliseconds to seconds
-//             exp: (Date.now() / 1000) + (60 * 60 * 24) // add 1 day's second
-//         }, SECRET);
+        res.cookie('Token', userToken, {
+            maxAge: 86400000, // 1 day
+            httpOnly: true,
+            secure: true
+        })
 
-//         res.cookie('Token', userToken, {
-//             maxAge: 86400000, // 1 day
-//             httpOnly: true,
-//             secure: true
-//         })
+        res.status(200).send({ status: "success", user: currentUser })
+    } catch (error) {
+        console.log("Err", error);
+        res.status(500).send({ status: "error", message: "Internal Server Error" })
+    }
+})
 
-//         res.status(200).send({ status: "success", user: currentUser })
-//     } catch (error) {
-//         console.log("Err", error);
-//         res.status(500).send({ status: "error", message: "Internal Server Error" })
-//     }
-// })
-
-// app.use("/api/v1/*splat", (req, res, next) => {
-//     if (!req?.cookies?.Token) {
-//         return res.status(401).send({
-//             message: "Unauthorized"
-//         });
-//     }
-//     jwt.verify(req.cookies.Token, SECRET, (err, decodedData) => {
-//         if (!err) {
+app.use("/api/v1/*splat", (req, res, next) => {
+    if (!req?.cookies?.Token) {
+        return res.status(401).send({
+            message: "Unauthorized"
+        });
+    }
+    jwt.verify(req.cookies.Token, SECRET, (err, decodedData) => {
+        if (!err) {
 
 
-//             const nowDate = new Date().getTime() / 1000;
+            const nowDate = new Date().getTime() / 1000;
 
-//             if (decodedData.exp < nowDate) {
+            if (decodedData.exp < nowDate) {
 
-//                 res.status(401);
-//                 res.cookie('Token', '', {
-//                     maxAge: 1,
-//                     httpOnly: true,
-//                     // sameSite: "none",
-//                     secure: true
-//                 });
-//                 res.send({ message: "token expired" })
+                res.status(401);
+                res.cookie('Token', '', {
+                    maxAge: 1,
+                    httpOnly: true,
+                    // sameSite: "none",
+                    secure: true
+                });
+                res.send({ message: "token expired" })
 
-//             } else {
-//                 let userData = decodedData
-//                 delete userData.iat
-//                 delete userData.exp
-//                 req.user = userData
+            } else {
+                let userData = decodedData
+                delete userData.iat
+                delete userData.exp
+                req.user = userData
 
-//                 next();
-//             }
-//         } else {
-//             res.status(401).send({ message: "invalid token" })
-//         }
-//     });
-// })
+                next();
+            }
+        } else {
+            res.status(401).send({ message: "invalid token" })
+        }
+    });
+})
+
+app.get('/api/v1/me', (req, res) => {
+    res.send({ status: "success", user: req.user })
+})
+
+app.get("/api/v1/users", async (req, res) => {
+    try {
+        const users = await userModel.find();
+        res.send({ status: "succes", users })
+    } catch (error) {
+        res.status(500).send({ status: "error", messgae: "Internal Server Error" })
+    }
+})
+
+app.post('/api/v1/chat/:id', async (req, res) => {
+    let receiverId = req.params.id;
+    let senderId = req.user._id;
+    if (!req.body?.message) {
+        return res.status(400).send({ status: "error", message: "Message Field is Required" })
+    }
+    try {
+        let result = await messageModel.create({
+            from: senderId,
+            to: receiverId,
+            message: req.body.message
+        })
+        // let conversation = await messageModel.findById(result._id)
+        //     .populate({ path: 'from', select: "firstName lastName email" })
+        //     .populate({ path: 'to', select: "firstName lastName email" })
+        //     .exec();
+        res.send({ message: "Message Sent", chat: result })
+    } catch (error) {
+        res.status(500).send({ message: "Internal Server Error" })
+    }
+})
+
+app.get('/api/v1/conversation/:id', async (req, res) => {
+    let receiverId = req.params.id; // 2
+    let senderId = req.user._id // 1
+    try {
+        let conversation = await messageModel.find({
+            // from, to, message, file, createdOn
+            $or: [
+                {
+                    from: receiverId, // 2
+                    to: senderId // 1
+                },
+                {
+                    from: senderId, // 1
+                    to: receiverId, // 2
+                }
+            ]
+        })
+            .populate({ path: 'from', select: "firstName lastName email" })
+            .populate({ path: 'to', select: "firstName lastName email" })
+            .exec();
+        res.send({ message: "Message Found", conversation: conversation })
+    } catch (error) {
+        res.status(500).send({ message: "Internal Server Error" })
+    }
+})
 
 
 app.listen(PORT, () => {
