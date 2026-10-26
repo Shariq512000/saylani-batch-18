@@ -49,6 +49,7 @@ app.post('/api/v1/signup', async (req, res) => {
 
 app.post('/api/v1/login', async (req, res) => {
     const reqBody = req.body;
+    // email: user1@gmail.com, password: 123456
     if (!reqBody.email || !reqBody.password) {
         res.status(400).send({ status: "error", message: "required parameter missing" })
         return;
@@ -57,7 +58,6 @@ app.post('/api/v1/login', async (req, res) => {
         // const users = await db.query(`SELECT * FROM users WHERE email = $1 AND is_active = true`, [reqBody.email]);
         const user = await userModel.findOne({ email: reqBody.email })
         const currentUser = user.toJSON();
-        console.log("currentUser", currentUser)
         // const currentUser = users.rows[0]
         if (!currentUser) {
             res.status(404).send({ status: "error", message: "User Not Found With This Email" })
@@ -140,8 +140,8 @@ app.get("/api/v1/users", async (req, res) => {
 })
 
 app.post('/api/v1/chat/:id', async (req, res) => {
-    let receiverId = req.params.id;
-    let senderId = req.user._id;
+    let receiverId = req.params.id; // 2
+    let senderId = req.user._id;    // 1
     if (!req.body?.message) {
         return res.status(400).send({ status: "error", message: "Message Field is Required" })
     }
@@ -157,13 +157,48 @@ app.post('/api/v1/chat/:id', async (req, res) => {
         //     .exec();
         res.send({ message: "Message Sent", chat: result })
     } catch (error) {
+        console.log("error", error)
         res.status(500).send({ message: "Internal Server Error" })
     }
 })
 
+// [
+//     {from: 3, to: 1, ...}, // skip
+//     {from: 2, to: 3, ...},// skip
+//     {from: 2, to: 1, ...},
+//     {from: 1, to: 2, ...},
+//     {from: 2, to: 1, ...},
+//     {from: 1, to: 1, ...},// skip
+//     {from: 4, to: 1, ...},// skip
+//     {from: 5, to: 2, ...},// skip
+//     {from: 2, to: 3, ...},// skip
+//     {from: 1, to: 2, ...},
+//     {from: 2, to: 2, ...},// skip
+//     {from: 2, to: 1, ...},
+//     {from: 1, to: 2, ...},
+//     {from: 3, to: 2, ...},
+//     {from: 1, to: 2, ...},
+//     {from: 2, to: 1, ...},
+// ]
+
+// [{from: 2, to: 1, ...}, {from: 1, to: 2, ...}, {from: 1, to: 2, ...}, {from: 2, to: 1, ...}, {from: 1, to: 2, ...}]
+
+// $or: [
+//     {
+//         from: receiverId, // 2
+//         to: senderId // 1
+//     },
+//     {
+//         from: senderId, // 1
+//         to: receiverId, // 2
+//     }
+// ]
+
+//{logedinUser: 1, user2: 2}
+//api/v1/conversation/2
 app.get('/api/v1/conversation/:id', async (req, res) => {
-    let receiverId = req.params.id; // 2
-    let senderId = req.user._id // 1
+    let receiverId = req.params.id; // 2 selected user
+    let senderId = req.user._id // 1 // me
     try {
         let conversation = await messageModel.find({
             // from, to, message, file, createdOn
@@ -181,7 +216,7 @@ app.get('/api/v1/conversation/:id', async (req, res) => {
             .populate({ path: 'from', select: "firstName lastName email" })
             .populate({ path: 'to', select: "firstName lastName email" })
             .exec();
-        res.send({ message: "Message Found", conversation: conversation })
+        res.send({ message: "Message Found", conversations: conversation })
     } catch (error) {
         res.status(500).send({ message: "Internal Server Error" })
     }

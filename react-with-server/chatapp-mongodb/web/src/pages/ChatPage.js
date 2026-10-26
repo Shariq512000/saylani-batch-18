@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { apiRequest } from '../api';
+import api from '../component/api';
+import { GlobalContext } from '../context/Context';
 
 function initials(person) {
     return `${person?.firstName?.[0] || ''}${person?.lastName?.[0] || ''}`.toUpperCase() || '?';
@@ -20,7 +22,8 @@ function Avatar({ person, small = false }) {
     return <span className={`avatar avatar-${tone}${small ? ' avatar-small' : ''}`} aria-hidden="true">{initials(person)}</span>;
 }
 
-function ChatPage({ currentUser }) {
+function ChatPage() {
+    let { state, dispatch } = useContext(GlobalContext);
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -33,31 +36,46 @@ function ChatPage({ currentUser }) {
     const [mobileChatOpen, setMobileChatOpen] = useState(false);
     const endOfMessages = useRef(null);
 
+    const getUsers = async () => {
+        try {
+            const apiRes = await api.get('/users');
+            setUsers(apiRes.data.users);
+        } catch (error) {
+            console.log("Err", error)
+        }
+    }
+
     useEffect(() => {
-        let active = true;
-        setLoadingUsers(true);
-        apiRequest('/api/v1/users')
-            .then((result) => {
-                if (active) setUsers((result.users || []).filter((person) => person._id !== currentUser._id));
-            })
-            .catch((requestError) => { if (active) setError(requestError.message); })
-            .finally(() => { if (active) setLoadingUsers(false); });
-        return () => { active = false; };
-    }, [currentUser]);
+        getUsers()
+    }, [])
+
+    const getConversation = async () => {
+        try {
+            const apiRes = await api.get(`/conversation/${selectedUser._id}`);
+            setMessages(apiRes.data.conversations)
+        } catch (error) {
+            console.log("Err", error)
+        }
+    }
 
     useEffect(() => {
         if (!selectedUser) return;
-        let active = true;
-        setLoadingMessages(true);
-        setError('');
-        apiRequest(`/api/v1/conversation/${selectedUser._id}`)
-            .then((result) => {
-                if (active) setMessages((result.conversation || []).slice().sort((a, b) => new Date(a.createdOn) - new Date(b.createdOn)));
-            })
-            .catch((requestError) => { if (active) setError(requestError.message); })
-            .finally(() => { if (active) setLoadingMessages(false); });
-        return () => { active = false; };
-    }, [selectedUser]);
+        getConversation()
+    }, [selectedUser])
+
+    // useEffect(() => {
+    //     if (!selectedUser) return;
+    //     let active = true;
+    //     setLoadingMessages(true);
+    //     setError('');
+    //     apiRequest(`/api/v1/conversation/${selectedUser._id}`)
+    //         .then((result) => {
+    //             if (active) setMessages((result.data.conversation || []).slice().sort((a, b) => new Date(a.createdOn) - new Date(b.createdOn)));
+    //         })
+    //         .catch((requestError) => { if (active) setError(requestError.message); })
+    //         .finally(() => { if (active) setLoadingMessages(false); });
+    //     return () => { active = false; };
+    // }, [selectedUser]);
 
     useEffect(() => {
         endOfMessages.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -70,13 +88,9 @@ function ChatPage({ currentUser }) {
         setSending(true);
         setError('');
         try {
-            await apiRequest(`/api/v1/chat/${selectedUser._id}`, {
-                method: 'POST',
-                body: JSON.stringify({ message: text }),
-            });
+            await api.post(`/chat/${selectedUser._id}`, { message: text });
             setDraft('');
-            const result = await apiRequest(`/api/v1/conversation/${selectedUser._id}`);
-            setMessages((result.conversation || []).slice().sort((a, b) => new Date(a.createdOn) - new Date(b.createdOn)));
+            getConversation()
         } catch (requestError) {
             setError(requestError.message);
         } finally {
@@ -101,12 +115,12 @@ function ChatPage({ currentUser }) {
                     {filteredUsers.map((person) => (
                         <button className={`person-row${selectedUser?._id === person._id ? ' selected' : ''}`} key={person._id} type="button" onClick={() => { setSelectedUser(person); setMobileChatOpen(true); }}>
                             <Avatar person={person} />
-                            <span className="person-copy"><strong>{displayName(person)}</strong><span>{person.email}</span></span>
+                            <span className="person-copy"><strong>{person._id == state.user?._id ? "Me" : displayName(person)}</strong><span>{person.email}</span></span>
                             <span className="person-arrow" aria-hidden="true">›</span>
                         </button>
                     ))}
                 </div>
-                <div className="profile-row"><Avatar person={currentUser} small /><span className="profile-copy"><strong>{displayName(currentUser)}</strong><span>My account</span></span><span className="profile-presence" title="Available" /></div>
+                <div className="profile-row"><Avatar person={state.user} small /><span className="profile-copy"><strong>{displayName(state.user)}</strong><span>My account</span></span><span className="profile-presence" title="Available" /></div>
             </aside>
 
             <section className="conversation-panel" aria-label="Conversation">
@@ -121,7 +135,8 @@ function ChatPage({ currentUser }) {
                         <div className="conversation-start"><span className="start-rule" /><span>THIS IS THE START OF YOUR CONVERSATION</span><span className="start-rule" /></div>
                         {loadingMessages && <p className="list-state">Loading messages…</p>}
                         {!loadingMessages && messages.map((message) => {
-                            const mine = (message.from?._id || message.from) === currentUser._id;
+                            console.log("message", message, message.from?._id)
+                            const mine = (message.from?._id || message.from) === state.user._id;
                             return <div className={`message-row${mine ? ' mine' : ''}`} key={message._id}>
                                 {!mine && <Avatar person={message.from} small />}
                                 <div className="message-content"><div className="message-meta"><strong>{mine ? 'You' : displayName(message.from)}</strong><time>{formatTime(message.createdOn)}</time></div><p className="message-bubble">{message.message}</p></div>

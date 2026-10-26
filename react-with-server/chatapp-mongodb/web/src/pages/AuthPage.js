@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react';
-import { apiRequest } from '../api';
 import { GlobalContext } from '../context/Context';
 import api from '../component/api';
 
@@ -24,16 +23,16 @@ function AuthPage() {
         setBusy(true);
         try {
             if (mode === 'signup') {
-                const result = await api.post('/api/v1/signup', form);
-                setNotice(result.message || 'Your account is ready. Sign in to continue.');
+                const result = await api.post('/signup', form);
+                setNotice(result.data?.message || 'Your account is ready. Sign in to continue.');
                 setMode('login');
             } else {
                 const apiRes = await api.post(`/login`,
                     { "email": form.email, "password": form.password, });
                 dispatch({ type: "USER_LOGIN", user: apiRes.data.user });
             }
-        } catch (requestError) {
-            setError(requestError.message);
+        } catch (err) {
+            setError(err.response?.data?.message || err.message || 'Something went wrong. Please try again.');
         } finally {
             setBusy(false);
         }
