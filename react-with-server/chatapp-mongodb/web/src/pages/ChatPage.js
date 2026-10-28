@@ -38,7 +38,7 @@ function ChatPage() {
 
     const getUsers = async () => {
         try {
-            const apiRes = await api.get('/users');
+            const apiRes = await api.get('/users'); //
             setUsers(apiRes.data.users);
         } catch (error) {
             console.log("Err", error)
@@ -50,9 +50,11 @@ function ChatPage() {
     }, [])
 
     const getConversation = async () => {
+        setLoadingMessages(true);
         try {
             const apiRes = await api.get(`/conversation/${selectedUser._id}`);
             setMessages(apiRes.data.conversations)
+            setLoadingMessages(false);
         } catch (error) {
             console.log("Err", error)
         }
@@ -85,12 +87,37 @@ function ChatPage() {
         event.preventDefault();
         const text = draft.trim();
         if (!text || !selectedUser || sending) return;
+
         setSending(true);
         setError('');
         try {
-            await api.post(`/chat/${selectedUser._id}`, { message: text });
+            const apiRes = await api.post(`/chat/${selectedUser._id}`, { message: text });
+            console.log("apiRes", apiRes.data)
             setDraft('');
-            getConversation()
+            // [
+            //     {
+            //         from...
+            //         to...
+            //         message...
+            //     },
+            //     {
+            //         from...
+            //         to...
+            //         message...
+            //     },
+            //     {
+            //         from...
+            //         to...
+            //         message...
+            //     },
+            //     {
+            //         from...
+            //         to...
+            //         message...
+            //     }
+            // ]
+            setMessages((prevMessages) => [...prevMessages, apiRes.data.chat]);
+            // getConversation()
         } catch (requestError) {
             setError(requestError.message);
         } finally {
@@ -135,7 +162,6 @@ function ChatPage() {
                         <div className="conversation-start"><span className="start-rule" /><span>THIS IS THE START OF YOUR CONVERSATION</span><span className="start-rule" /></div>
                         {loadingMessages && <p className="list-state">Loading messages…</p>}
                         {!loadingMessages && messages.map((message) => {
-                            console.log("message", message, message.from?._id)
                             const mine = (message.from?._id || message.from) === state.user._id;
                             return <div className={`message-row${mine ? ' mine' : ''}`} key={message._id}>
                                 {!mine && <Avatar person={message.from} small />}

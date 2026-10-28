@@ -12,8 +12,8 @@ const userSchema = new mongoose.Schema({
 export const userModel = mongoose.model('Users', userSchema);
 
 const messageSchema = new mongoose.Schema({
-    from: { type: mongoose.Schema.ObjectId, ref: 'Users', required: true },
-    to: { type: mongoose.Schema.ObjectId, ref: 'Users', required: true },
+    from: { type: mongoose.Schema.ObjectId, ref: 'Users', required: true }, // kisne send kia hai
+    to: { type: mongoose.Schema.ObjectId, ref: 'Users', required: true }, // kisko send kia hai
     message: { type: String, required: true },
     file: { type: String },
     createdOn: { type: Date, default: Date.now }

@@ -57,7 +57,7 @@ app.post('/api/v1/login', async (req, res) => {
     try {
         // const users = await db.query(`SELECT * FROM users WHERE email = $1 AND is_active = true`, [reqBody.email]);
         const user = await userModel.findOne({ email: reqBody.email })
-        const currentUser = user.toJSON();
+        const currentUser = user?.toJSON();
         // const currentUser = users.rows[0]
         if (!currentUser) {
             res.status(404).send({ status: "error", message: "User Not Found With This Email" })
@@ -151,11 +151,11 @@ app.post('/api/v1/chat/:id', async (req, res) => {
             to: receiverId,
             message: req.body.message
         })
-        // let conversation = await messageModel.findById(result._id)
-        //     .populate({ path: 'from', select: "firstName lastName email" })
-        //     .populate({ path: 'to', select: "firstName lastName email" })
-        //     .exec();
-        res.send({ message: "Message Sent", chat: result })
+        let conversation = await messageModel.findById(result._id)
+            .populate({ path: 'from', select: "firstName lastName email" })
+            .populate({ path: 'to', select: "firstName lastName email" })
+            .exec();
+        res.send({ message: "Message Sent", chat: conversation })
     } catch (error) {
         console.log("error", error)
         res.status(500).send({ message: "Internal Server Error" })
