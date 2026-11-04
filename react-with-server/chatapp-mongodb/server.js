@@ -9,6 +9,8 @@ import cookieParser from "cookie-parser";
 // import path from "path";
 import mongoose from "mongoose";
 import { userModel, messageModel } from "./model.js"
+import { Server as socketIo } from "socket.io";
+import { createServer } from "http";
 
 const app = express();
 const PORT = 5000;
@@ -140,8 +142,8 @@ app.get("/api/v1/users", async (req, res) => {
 })
 
 app.post('/api/v1/chat/:id', async (req, res) => {
-    let receiverId = req.params.id; // 2
-    let senderId = req.user._id;    // 1
+    let receiverId = req.params.id; // 1 to: 1
+    let senderId = req.user._id;    // 3 from: 3
     if (!req.body?.message) {
         return res.status(400).send({ status: "error", message: "Message Field is Required" })
     }
@@ -155,10 +157,26 @@ app.post('/api/v1/chat/:id', async (req, res) => {
             .populate({ path: 'from', select: "firstName lastName email" })
             .populate({ path: 'to', select: "firstName lastName email" })
             .exec();
+        //            1-3
+        //6aded77440f824b8d4dd2918-6aded78840f824b8d4dd2919
+        //6aded77440f824b8d4dd2918-6aded78840f824b8d4dd2919
+        io.emit(`${receiverId}-${senderId}`, conversation)
         res.send({ message: "Message Sent", chat: conversation })
     } catch (error) {
         console.log("error", error)
         res.status(500).send({ message: "Internal Server Error" })
+    }
+})
+
+app.get('/api/v1/user-detail/:id', async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        const user = await userModel.findById(userId, "firstName lastName email")
+        res.send({ status: "success", user })
+    } catch (error) {
+        console.log("Err", error)
+        res.status(500).send({ status: "error", message: "Internal Server Error" })
     }
 })
 
@@ -195,21 +213,21 @@ app.post('/api/v1/chat/:id', async (req, res) => {
 // ]
 
 //{logedinUser: 1, user2: 2}
-//api/v1/conversation/2
+//api/v1/conversation/6aded78840f824b8d4dd2919
 app.get('/api/v1/conversation/:id', async (req, res) => {
-    let receiverId = req.params.id; // 2 selected user
-    let senderId = req.user._id // 1 // me
+    let receiverId = req.params.id; // 6aded78840f824b8d4dd2919
+    let senderId = req.user._id // 6aded77440f824b8d4dd2918 
     try {
         let conversation = await messageModel.find({
             // from, to, message, file, createdOn
             $or: [
                 {
-                    from: receiverId, // 2
-                    to: senderId // 1
+                    from: receiverId, // 6aded78840f824b8d4dd2919
+                    to: senderId // 6aded77440f824b8d4dd2918
                 },
                 {
-                    from: senderId, // 1
-                    to: receiverId, // 2
+                    from: senderId, // 6aded77440f824b8d4dd2918
+                    to: receiverId, // 6aded78840f824b8d4dd2919
                 }
             ]
         })
@@ -222,8 +240,23 @@ app.get('/api/v1/conversation/:id', async (req, res) => {
     }
 })
 
+const server = createServer(app)
 
-app.listen(PORT, () => {
+const io = new socketIo(server, {
+    cors: {
+        origin: ["http://localhost:3000", "*"], credentials: true
+    }
+})
+
+io.on("connection", (socket) => {
+    console.log("Client Connected With Id: ", socket.id)
+    socket.on("disconnect", () => {
+        console.log("Client Disconnected")
+    })
+})
+
+
+server.listen(PORT, () => {
     console.log(`Server is Running on Port ${PORT}`)
 })
 

@@ -5,6 +5,8 @@ import ChatPage from './pages/ChatPage';
 import { GlobalContext } from './context/Context';
 import api from './component/api';
 import { Navigate, Route, Routes } from 'react-router';
+import Users from './pages/Users';
+import ChatScreen from './pages/ChatScreen';
 
 function App() {
     let { state, dispatch } = useContext(GlobalContext);
@@ -37,7 +39,9 @@ function App() {
         <div className="App">
             {state.isLogin ?
                 <Routes>
-                    <Route path="/" element={<ChatPage />} />
+                    <Route path="/" element={<Users />} />
+                    {/* /chat/123456 */}
+                    <Route path="/chat/:userId" element={<ChatScreen />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
                 :

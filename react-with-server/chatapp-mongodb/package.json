@@ -19,6 +19,7 @@
     "express": "^5.3.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.11.2",
-    "nanoid": "^5.1.16"
+    "nanoid": "^5.1.16",
+    "socket.io": "^4.8.4"
   }
 }

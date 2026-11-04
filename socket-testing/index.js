@@ -25,7 +25,6 @@ server.listen(port, () => {
 
 io.on("connection", (socket) => {
     console.log("New client connected with id: ", socket.id);
-    // io.emit("Test topic", "Some Data");
     // Channel,    data
     socket.on("disconnect", (message) => {
         console.log("Client disconnected with id: ", message);
@@ -36,11 +35,13 @@ io.on("connection", (socket) => {
 setInterval(() => {
 
     io.emit("Test topic", { event: "ADDED_ITEM", data: "some data" });
-    console.log("emiting data to all client");
 
 }, 2000)
 
 
-// app.listen(5000, () => {
-//     console.log("Runing")
-// })
+setInterval(() => {
+
+    io.emit("Test topic2", { event: "ADDED_ITEM", data: "some data 2" });
+
+}, 1000)
+

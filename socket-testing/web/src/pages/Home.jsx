@@ -10,6 +10,10 @@ const Home = () => {
     });
 
     // Channel/Topic,    function
+    // socket.on("Test topic2", (data) => {
+    //   console.log("Received Data: ", data);
+    // });
+
     socket.on("Test topic", (data) => {
       console.log("Received Data: ", data);
     });
