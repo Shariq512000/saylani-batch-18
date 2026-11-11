@@ -38,12 +38,15 @@ function App() {
     return (
         <div className="App">
             {state.isLogin ?
-                <Routes>
-                    <Route path="/" element={<Users />} />
-                    {/* /chat/123456 */}
-                    <Route path="/chat/:userId" element={<ChatScreen />} />
-                    <Route path="*" element={<Navigate to="/" />} />
-                </Routes>
+                <>
+                    <header>{state.user.firstName} {state.user.lastName} ({state.user.email})</header>
+                    <Routes>
+                        <Route path="/" element={<Users />} />
+                        {/* /chat/123456 */}
+                        <Route path="/chat/:userId" element={<ChatScreen />} />
+                        <Route path="*" element={<Navigate to="/" />} />
+                    </Routes>
+                </>
                 :
                 state.isLogin == false ?
                     <Routes>

@@ -1,16 +1,13 @@
 import express from "express";
-// import { db } from "./db.js"
 import cors from "cors";
-import bcrypt from "bcryptjs";
-// import { customAlphabet } from "nanoid";
 import jwt from 'jsonwebtoken';
 import "dotenv/config"
 import cookieParser from "cookie-parser";
-// import path from "path";
 import mongoose from "mongoose";
 import { userModel, messageModel } from "./model.js"
 import { Server as socketIo } from "socket.io";
 import { createServer } from "http";
+import authApis from "./apis/auth.js"
 
 const app = express();
 const PORT = 5000;
@@ -22,74 +19,9 @@ app.use(cookieParser());
 
 mongoose.connect(process.env.MONGODB_URI).catch(err => console.log(err));
 
-// async function main() {
-//     await mongoose.connect(process.env.MONGODB_URI);   
-// }
+// /api/v1/login
 
-
-app.post('/api/v1/signup', async (req, res) => {
-    const { firstName, lastName, email, password } = req.body;
-    if (!firstName || !lastName || !email || !password) {
-        res.status(400).send({ status: "error", message: "Required Parameter Missing" })
-        return;
-    }
-    try {
-        const salt = await bcrypt.genSalt(12);
-        const hash = await bcrypt.hash(password, salt);
-        await userModel.create({ firstName, lastName, email, password: hash })
-        res.status(201).send({ status: "success", message: `user created with email: ${email}` })
-    } catch (error) {
-        console.log("Err", error);
-        // res.status(500).send({ status: "error", message: "Internal Server Error" })
-        if (error.code == '11000') {
-            res.status(400).send({ status: "error", message: "User Already Logedin With This Email" })
-        } else {
-            res.status(500).send({ status: "error", message: "Internal Server Error" })
-        }
-    }
-})
-
-app.post('/api/v1/login', async (req, res) => {
-    const reqBody = req.body;
-    // email: user1@gmail.com, password: 123456
-    if (!reqBody.email || !reqBody.password) {
-        res.status(400).send({ status: "error", message: "required parameter missing" })
-        return;
-    }
-    try {
-        // const users = await db.query(`SELECT * FROM users WHERE email = $1 AND is_active = true`, [reqBody.email]);
-        const user = await userModel.findOne({ email: reqBody.email })
-        const currentUser = user?.toJSON();
-        // const currentUser = users.rows[0]
-        if (!currentUser) {
-            res.status(404).send({ status: "error", message: "User Not Found With This Email" })
-            return;
-        }
-        const isPassMatched = await bcrypt.compare(reqBody.password, currentUser.password); // true
-        if (!isPassMatched) {
-            res.status(401).send({ status: "error", message: "Password did not matched" })
-            return;
-        }
-        delete currentUser.password;
-
-        let userToken = jwt.sign({
-            ...currentUser,
-            iat: Date.now() / 1000, // miliseconds to seconds
-            exp: (Date.now() / 1000) + (60 * 60 * 24) // add 1 day's second
-        }, SECRET);
-
-        res.cookie('Token', userToken, {
-            maxAge: 86400000, // 1 day
-            httpOnly: true,
-            secure: true
-        })
-
-        res.status(200).send({ status: "success", user: currentUser })
-    } catch (error) {
-        console.log("Err", error);
-        res.status(500).send({ status: "error", message: "Internal Server Error" })
-    }
-})
+app.use("/api/v1", authApis)
 
 app.use("/api/v1/*splat", (req, res, next) => {
     if (!req?.cookies?.Token) {
@@ -141,33 +73,6 @@ app.get("/api/v1/users", async (req, res) => {
     }
 })
 
-app.post('/api/v1/chat/:id', async (req, res) => {
-    let receiverId = req.params.id; // 1 to: 1
-    let senderId = req.user._id;    // 3 from: 3
-    if (!req.body?.message) {
-        return res.status(400).send({ status: "error", message: "Message Field is Required" })
-    }
-    try {
-        let result = await messageModel.create({
-            from: senderId,
-            to: receiverId,
-            message: req.body.message
-        })
-        let conversation = await messageModel.findById(result._id)
-            .populate({ path: 'from', select: "firstName lastName email" })
-            .populate({ path: 'to', select: "firstName lastName email" })
-            .exec();
-        //            1-3
-        //6aded77440f824b8d4dd2918-6aded78840f824b8d4dd2919
-        //6aded77440f824b8d4dd2918-6aded78840f824b8d4dd2919
-        io.emit(`${receiverId}-${senderId}`, conversation)
-        res.send({ message: "Message Sent", chat: conversation })
-    } catch (error) {
-        console.log("error", error)
-        res.status(500).send({ message: "Internal Server Error" })
-    }
-})
-
 app.get('/api/v1/user-detail/:id', async (req, res) => {
     const userId = req.params.id;
 
@@ -180,40 +85,32 @@ app.get('/api/v1/user-detail/:id', async (req, res) => {
     }
 })
 
-// [
-//     {from: 3, to: 1, ...}, // skip
-//     {from: 2, to: 3, ...},// skip
-//     {from: 2, to: 1, ...},
-//     {from: 1, to: 2, ...},
-//     {from: 2, to: 1, ...},
-//     {from: 1, to: 1, ...},// skip
-//     {from: 4, to: 1, ...},// skip
-//     {from: 5, to: 2, ...},// skip
-//     {from: 2, to: 3, ...},// skip
-//     {from: 1, to: 2, ...},
-//     {from: 2, to: 2, ...},// skip
-//     {from: 2, to: 1, ...},
-//     {from: 1, to: 2, ...},
-//     {from: 3, to: 2, ...},
-//     {from: 1, to: 2, ...},
-//     {from: 2, to: 1, ...},
-// ]
+app.post('/api/v1/chat/:id', async (req, res) => {
 
-// [{from: 2, to: 1, ...}, {from: 1, to: 2, ...}, {from: 1, to: 2, ...}, {from: 2, to: 1, ...}, {from: 1, to: 2, ...}]
+    let receiverId = req.params.id; // 2
+    let senderId = req.user._id;
+    if (!req.body?.message) {
+        return res.status(400).send({ status: "error", message: "Message Field is Required" })
+    }
+    try {
+        let result = await messageModel.create({
+            from: senderId, //user10
+            to: receiverId, //user1
+            message: req.body.message
+        })
+        let conversation = await messageModel.findById(result._id)
+            .populate({ path: 'from', select: "firstName lastName email" })
+            .populate({ path: 'to', select: "firstName lastName email" })
+            .exec();
+        io.emit(`${receiverId}`, conversation)
+        io.emit(`${receiverId}-${senderId}`, conversation)
+        res.send({ message: "Message Sent", chat: conversation })
+    } catch (error) {
+        console.log("error", error)
+        res.status(500).send({ message: "Internal Server Error" })
+    }
+})
 
-// $or: [
-//     {
-//         from: receiverId, // 2
-//         to: senderId // 1
-//     },
-//     {
-//         from: senderId, // 1
-//         to: receiverId, // 2
-//     }
-// ]
-
-//{logedinUser: 1, user2: 2}
-//api/v1/conversation/6aded78840f824b8d4dd2919
 app.get('/api/v1/conversation/:id', async (req, res) => {
     let receiverId = req.params.id; // 6aded78840f824b8d4dd2919
     let senderId = req.user._id // 6aded77440f824b8d4dd2918 
@@ -254,7 +151,6 @@ io.on("connection", (socket) => {
         console.log("Client Disconnected")
     })
 })
-
 
 server.listen(PORT, () => {
     console.log(`Server is Running on Port ${PORT}`)

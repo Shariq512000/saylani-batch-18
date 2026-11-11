@@ -5,7 +5,7 @@ import { GlobalContext } from "../context/Context";
 import io from "socket.io-client";
 
 const ChatScreen = () => {
-  let { state, dispatch } = useContext(GlobalContext);
+  let { state } = useContext(GlobalContext);
 
   const { userId } = useParams();
 
@@ -26,8 +26,11 @@ const ChatScreen = () => {
     // from: 3
     // to: 1
     // 6aded77440f824b8d4dd2918-6aded78840f824b8d4dd2919
+
+    //1-2
     socket.on(`${state.user._id}-${userId}`, (data) => {
-      console.log("Received Data: ", data);
+      // console.log("Received Data: ", data);
+      setMessages((prev) => [...prev, data]);
     });
 
     socket.on("disconnect", (reason) => {
