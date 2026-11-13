@@ -15,6 +15,7 @@ const ChatScreen = () => {
   const [error, setError] = useState("");
   const [draft, setDraft] = useState("");
   const [userDetails, setUserDetails] = useState({});
+  const [file, setFile] = useState("");
 
   const socket = io("http://localhost:5000", { withCredentials: true });
 
@@ -81,10 +82,15 @@ const ChatScreen = () => {
 
     setSending(true);
     setError("");
+
+    const apiData = new FormData(); // {}
+    apiData.append("message", text);
+    apiData.append("file", file);
+
+    // console.log("apiData", apiData);
+
     try {
-      const apiRes = await api.post(`/chat/${userId}`, {
-        message: text,
-      });
+      const apiRes = await api.post(`/chat/${userId}`, apiData);
       console.log("apiRes", apiRes.data);
       setDraft("");
       setMessages((prevMessages) => [...prevMessages, apiRes.data.chat]);
@@ -127,6 +133,13 @@ const ChatScreen = () => {
         })}
       </div>
       <form className="composer" onSubmit={sendMessage}>
+        <input
+          type="file"
+          onChange={(e) => {
+            console.log(e.currentTarget.files[0]);
+            setFile(e.currentTarget.files[0]);
+          }}
+        />
         <input
           aria-label="Write a message"
           placeholder={`Message…`}
