@@ -128,6 +128,9 @@ const ChatScreen = () => {
               </span>
               <br />
               <p>{eachMsg.message}</p>
+              {eachMsg.file ? (
+                <img src={eachMsg.file} style={{ width: "100%" }} />
+              ) : null}
             </div>
           );
         })}

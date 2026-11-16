@@ -9,12 +9,13 @@ import { Server as socketIo } from "socket.io";
 import { createServer } from "http";
 import authApis from "./apis/auth.js"
 import multer from "multer";
-import { v2 as cloudinary } from 'cloudinary'
+import { v2 as cloudinary } from 'cloudinary';
+import fs from "fs";
 
 cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: '771769493754838',
-    api_secret: 'DHGOWSEOfiLrPnceUjbX8-wpCwo'
+    cloud_name: "pvy15lhe",
+    api_key: '559398513949757',
+    api_secret: "GQhNH0_C39xmr646M-6RbCoZGPg"
 });
 
 console.log("process.env.CLOUDINARY_CLOUD_NAME", process.env.CLOUDINARY_CLOUD_NAME)
@@ -107,7 +108,17 @@ app.get('/api/v1/user-detail/:id', async (req, res) => {
     }
 })
 
+// {
+//     req ---> file / text
+//     req.body: text
+//     req.files: file
+// }
+
 app.post('/api/v1/chat/:id', uploadMiddleware.any(), async (req, res) => {
+
+    // console.log("req", req)
+    // console.log("req.body", req.body)
+    // console.log("req.files", req.files)
 
     // console.log("req.body", req.body);
     // console.log("req.files", req.files)
@@ -115,24 +126,27 @@ app.post('/api/v1/chat/:id', uploadMiddleware.any(), async (req, res) => {
     // console.log("file type: ", req.files[0].mimetype);
     // console.log("file name in server folders: ", req.files[0].filename);
     // console.log("file path in server folders: ", req.files[0].path);
-
-    const result = await cloudinary.uploader.upload(req.files[0].path, {
-        folder: 'chat-app',
-        resource_type: 'auto', // Automatically detects image, video, or raw file
-    });
-
-    console.log("result", result);
+    // console.log("result", result);
 
     let receiverId = req.params.id; // 2
     let senderId = req.user._id;
     if (!req.body?.message) {
         return res.status(400).send({ status: "error", message: "Message Field is Required" })
     }
+    let cloudinaryResult = {}
+    if (req.files[0]) {
+        cloudinaryResult = await cloudinary.uploader.upload(req.files[0].path, {
+            resource_type: 'auto', // Automatically detects image, video, or raw file
+        });
+        fs.unlinkSync(req.files[0].path)
+    }
+    // console.log("result", result)
     try {
         let result = await messageModel.create({
             from: senderId, //user10
             to: receiverId, //user1
-            message: req.body.message
+            message: req.body.message,
+            file: cloudinaryResult.url || ""
         })
         let conversation = await messageModel.findById(result._id)
             .populate({ path: 'from', select: "firstName lastName email" })
