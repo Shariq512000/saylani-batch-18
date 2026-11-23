@@ -113,7 +113,6 @@ app.get('/api/v1/user-detail/:id', async (req, res) => {
 //     req.body: text
 //     req.files: file
 // }
-
 app.post('/api/v1/chat/:id', uploadMiddleware.any(), async (req, res) => {
 
     // console.log("req", req)

@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { GlobalContext } from '../context/Context';
 import api from '../component/api';
+import { Link } from "react-router";
 
 function AuthPage() {
     let { state, dispatch } = useContext(GlobalContext);
@@ -9,6 +10,11 @@ function AuthPage() {
     const [error, setError] = useState('');
     const [notice, setNotice] = useState('');
     const [busy, setBusy] = useState(false);
+    const [forgetDetails, setForgetDetails] = useState({
+        email: "",
+        otp: "",
+        step: 1
+    })
 
     function changeMode(nextMode) {
         setMode(nextMode);
@@ -38,6 +44,17 @@ function AuthPage() {
         }
     }
 
+    const forgetPassword = async (e) => {
+        e.preventDefault()
+        try {
+            const apiRes = await api.post(forgetDetails.step == 1 ? "/forget-password" : "", forgetDetails)
+            console.log("apiRes", apiRes)
+            setForgetDetails((prev) => ({ ...prev, step: prev.step + 1 }))
+        } catch (error) {
+            console.log("err", error)
+        }
+    }
+
     return (
         <main className="auth-page">
             <section className="auth-aside" aria-label="Chat welcome">
@@ -51,38 +68,72 @@ function AuthPage() {
                 <div className="orbit orbit-one" /><div className="orbit orbit-two" />
             </section>
 
-            <section className="auth-main">
-                <div className="auth-mobile-brand"><span className="brand-mark">c</span><span>closer</span></div>
-                <div className="auth-box">
-                    <div className="auth-heading">
-                        <span className="eyebrow">{mode === 'login' ? 'WELCOME BACK' : 'A FRESH START'}</span>
-                        <h2>{mode === 'login' ? 'Sign in' : 'Create your account'}</h2>
-                        <p>{mode === 'login' ? 'Pick up where your conversations left off.' : 'Make an account and find your people.'}</p>
-                    </div>
+            {mode == "forget" ?
+                <section className="auth-main">
+                    <div className="auth-box">
+                        <form className="auth-form" onSubmit={forgetPassword}>
+                            {!forgetDetails.step == 1 ?
+                                <label>
+                                    Email address
+                                    <input type="email" autoComplete="email" value={forgetDetails.email} onChange={(event) => setForgetDetails({ ...forgetDetails, email: event.target.value })} placeholder="you@example.com" required />
+                                </label>
+                                :
+                                null
+                            }
 
-                    <div className="auth-tabs" role="tablist" aria-label="Account access">
-                        <button type="button" role="tab" aria-selected={mode === 'login'} className={mode === 'login' ? 'active' : ''} onClick={() => changeMode('login')}>Sign in</button>
-                        <button type="button" role="tab" aria-selected={mode === 'signup'} className={mode === 'signup' ? 'active' : ''} onClick={() => changeMode('signup')}>Create account</button>
-                    </div>
+                            {forgetDetails.step == 2 ?
+                                <label>
+                                    OTP
+                                    <input type="otp" autoComplete="otp" value={forgetDetails.otp} onChange={(event) => setForgetDetails({ ...forgetDetails, otp: event.target.value })} placeholder="insert your otp" required />
+                                </label>
+                                :
+                                null
+                            }
 
-                    <form className="auth-form" onSubmit={submit}>
-                        {mode === 'signup' && <div className="name-fields">
-                            <label>First name<input autoComplete="given-name" value={form.firstName} onChange={(event) => setForm({ ...form, firstName: event.target.value })} required /></label>
-                            <label>Last name<input autoComplete="family-name" value={form.lastName} onChange={(event) => setForm({ ...form, lastName: event.target.value })} required /></label>
-                        </div>}
-                        <label>Email address<input type="email" autoComplete="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} placeholder="you@example.com" required /></label>
-                        <label>Password<input type="password" autoComplete={mode === 'login' ? 'current-password' : 'new-password'} value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} placeholder="At least 8 characters" required /></label>
-                        {error && <p className="form-message error-message" role="alert">{error}</p>}
-                        {notice && <p className="form-message success-message" role="status">{notice}</p>}
-                        <button className="primary-button auth-submit" type="submit" disabled={busy}>
-                            {busy ? 'Please wait…' : mode === 'login' ? 'Sign in' : 'Create account'}
-                            {!busy && <span aria-hidden="true">→</span>}
-                        </button>
-                    </form>
-                    <p className="auth-footnote">By continuing, you agree to keep the conversation kind.</p>
-                </div>
-                <div className="auth-copyright">CLOSER · A SMALLER, NICER CORNER OF THE INTERNET</div>
-            </section>
+                            <button className="primary-button auth-submit" type="submit" disabled={busy}>
+                                {/* {busy ? 'Please wait…' : mode === 'login' ? 'Sign in' : 'Create account'} */}
+                                {/* {!busy && <span aria-hidden="true">→</span>} */}
+                                {forgetDetails.step == 1 ? "Send Otp" : "Verify OTP"}
+                                <span aria-hidden="true">→</span>
+                            </button>
+                        </form>
+                    </div>
+                </section>
+                :
+                <section className="auth-main">
+                    <div className="auth-mobile-brand"><span className="brand-mark">c</span><span>closer</span></div>
+                    <div className="auth-box">
+                        <div className="auth-heading">
+                            <span className="eyebrow">{mode === 'login' ? 'WELCOME BACK' : 'A FRESH START'}</span>
+                            <h2>{mode === 'login' ? 'Sign in' : 'Create your account'}</h2>
+                            <p>{mode === 'login' ? 'Pick up where your conversations left off.' : 'Make an account and find your people.'}</p>
+                        </div>
+
+                        <div className="auth-tabs" role="tablist" aria-label="Account access">
+                            <button type="button" role="tab" aria-selected={mode === 'login'} className={mode === 'login' ? 'active' : ''} onClick={() => changeMode('login')}>Sign in</button>
+                            <button type="button" role="tab" aria-selected={mode === 'signup'} className={mode === 'signup' ? 'active' : ''} onClick={() => changeMode('signup')}>Create account</button>
+                        </div>
+
+                        <form className="auth-form" onSubmit={submit}>
+                            {mode === 'signup' && <div className="name-fields">
+                                <label>First name<input autoComplete="given-name" value={form.firstName} onChange={(event) => setForm({ ...form, firstName: event.target.value })} required /></label>
+                                <label>Last name<input autoComplete="family-name" value={form.lastName} onChange={(event) => setForm({ ...form, lastName: event.target.value })} required /></label>
+                            </div>}
+                            <label>Email address<input type="email" autoComplete="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} placeholder="you@example.com" required /></label>
+                            <label>Password<input type="password" autoComplete={mode === 'login' ? 'current-password' : 'new-password'} value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} placeholder="At least 8 characters" required /></label>
+                            <div className='' onClick={() => { setMode("forget") }} style={{ cursor: "pointer", textDecoration: "underline" }}>Forget Password</div>
+                            {error && <p className="form-message error-message" role="alert">{error}</p>}
+                            {notice && <p className="form-message success-message" role="status">{notice}</p>}
+                            <button className="primary-button auth-submit" type="submit" disabled={busy}>
+                                {busy ? 'Please wait…' : mode === 'login' ? 'Sign in' : 'Create account'}
+                                {!busy && <span aria-hidden="true">→</span>}
+                            </button>
+                        </form>
+                        <p className="auth-footnote">By continuing, you agree to keep the conversation kind.</p>
+                    </div>
+                    <div className="auth-copyright">CLOSER · A SMALLER, NICER CORNER OF THE INTERNET</div>
+                </section>
+            }
         </main>
     );
 }

@@ -21,3 +21,12 @@ const messageSchema = new mongoose.Schema({
 
 
 export const messageModel = mongoose.model('Messages', messageSchema);
+
+const otpSchema = new mongoose.Schema({
+    email: { type: String, required: true },
+    opt: { type: String, required: true },
+    isUsed: { type: Boolean, required: true, default: false },
+    createdOn: { type: Date, default: Date.now }
+});
+
+export const otpModel = mongoose.model('Otps', otpSchema);
