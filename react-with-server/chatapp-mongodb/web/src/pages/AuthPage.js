@@ -13,6 +13,7 @@ function AuthPage() {
     const [forgetDetails, setForgetDetails] = useState({
         email: "",
         otp: "",
+        password: "",
         step: 1
     })
 
@@ -47,7 +48,7 @@ function AuthPage() {
     const forgetPassword = async (e) => {
         e.preventDefault()
         try {
-            const apiRes = await api.post(forgetDetails.step == 1 ? "/forget-password" : "", forgetDetails)
+            const apiRes = await api.post(forgetDetails.step == 1 ? "/forget-password" : "/change-password", forgetDetails)
             console.log("apiRes", apiRes)
             setForgetDetails((prev) => ({ ...prev, step: prev.step + 1 }))
         } catch (error) {
@@ -72,7 +73,7 @@ function AuthPage() {
                 <section className="auth-main">
                     <div className="auth-box">
                         <form className="auth-form" onSubmit={forgetPassword}>
-                            {!forgetDetails.step == 1 ?
+                            {forgetDetails.step == 1 ?
                                 <label>
                                     Email address
                                     <input type="email" autoComplete="email" value={forgetDetails.email} onChange={(event) => setForgetDetails({ ...forgetDetails, email: event.target.value })} placeholder="you@example.com" required />
@@ -82,10 +83,17 @@ function AuthPage() {
                             }
 
                             {forgetDetails.step == 2 ?
-                                <label>
-                                    OTP
-                                    <input type="otp" autoComplete="otp" value={forgetDetails.otp} onChange={(event) => setForgetDetails({ ...forgetDetails, otp: event.target.value })} placeholder="insert your otp" required />
-                                </label>
+                                <>
+                                    <label>
+                                        OTP
+                                        <input type="otp" autoComplete="otp" value={forgetDetails.otp} onChange={(event) => setForgetDetails({ ...forgetDetails, otp: event.target.value })} placeholder="insert your otp" required />
+                                    </label>
+
+                                    <label>
+                                        New Password
+                                        <input type="text" value={forgetDetails.password} onChange={(event) => setForgetDetails({ ...forgetDetails, password: event.target.value })} placeholder="Enter New Password" required />
+                                    </label>
+                                </>
                                 :
                                 null
                             }

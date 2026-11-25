@@ -5,13 +5,14 @@ import { userModel, otpModel } from "../model.js";
 import jwt from "jsonwebtoken";
 import { customAlphabet } from "nanoid"
 import { Resend } from 'resend';
+import moment from "moment";
 
 const router = express.Router()
 
 const SECRET = process.env.JWT_SECRET
 
 
-const resend = new Resend('re_7ixDJHGx_NVeMxuz6nJmCTcN6N3iCq7C3');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 router.post('/signup', async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
@@ -78,7 +79,7 @@ router.post('/login', async (req, res) => {
 })
 
 router.post('/forget-password', async (req, res) => {
-    const { email } = req.body;
+    const { email } = req.body; // abc@gmail.com
     if (!email) {
         return res.status(400).send({ message: "Email Field is Required" });
     }
@@ -103,169 +104,169 @@ router.post('/forget-password', async (req, res) => {
         });
 
         const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Reset OTP</title>
-</head>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Password Reset OTP</title>
+        </head>
 
-<body style="
-    margin: 0;
-    padding: 0;
-    background-color: #f4f6f9;
-    font-family: Arial, Helvetica, sans-serif;
-">
+        <body style="
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+            font-family: Arial, Helvetica, sans-serif;
+        ">
 
-    <table width="100%" cellpadding="0" cellspacing="0"
-        style="background-color: #f4f6f9; padding: 40px 15px;">
+            <table width="100%" cellpadding="0" cellspacing="0"
+                style="background-color: #f4f6f9; padding: 40px 15px;">
 
-        <tr>
-            <td align="center">
+                <tr>
+                    <td align="center">
 
-                <table width="100%" cellpadding="0" cellspacing="0"
-                    style="
-                        max-width: 500px;
-                        background-color: #ffffff;
-                        border-radius: 12px;
-                        overflow: hidden;
-                    ">
-
-                    <!-- Header -->
-                    <tr>
-                        <td align="center"
+                        <table width="100%" cellpadding="0" cellspacing="0"
                             style="
-                                background-color: #4f46e5;
-                                padding: 30px 20px;
-                                color: #ffffff;
-                            ">
-                            <h1 style="
-                                margin: 0;
-                                font-size: 26px;
-                            ">
-                                Chat App
-                            </h1>
-
-                            <p style="
-                                margin: 8px 0 0;
-                                font-size: 14px;
-                            ">
-                                Password Reset Request
-                            </p>
-                        </td>
-                    </tr>
-
-                    <!-- Content -->
-                    <tr>
-                        <td style="padding: 35px 30px;">
-
-                            <h2 style="
-                                color: #1f2937;
-                                font-size: 22px;
-                                margin-top: 0;
-                            ">
-                                Forgot your password?
-                            </h2>
-
-                            <p style="
-                                color: #6b7280;
-                                font-size: 15px;
-                                line-height: 1.7;
-                            ">
-                                We received a request to reset your
-                                password. Use the OTP below to verify
-                                your identity and continue.
-                            </p>
-
-                            <!-- OTP -->
-                            <div style="
-                                background-color: #f3f4f6;
-                                border: 1px dashed #4f46e5;
-                                border-radius: 10px;
-                                padding: 20px;
-                                text-align: center;
-                                margin: 25px 0;
+                                max-width: 500px;
+                                background-color: #ffffff;
+                                border-radius: 12px;
+                                overflow: hidden;
                             ">
 
-                                <p style="
-                                    margin: 0 0 10px;
-                                    color: #6b7280;
-                                    font-size: 13px;
-                                ">
-                                    YOUR VERIFICATION CODE
-                                </p>
+                            <!-- Header -->
+                            <tr>
+                                <td align="center"
+                                    style="
+                                        background-color: #4f46e5;
+                                        padding: 30px 20px;
+                                        color: #ffffff;
+                                    ">
+                                    <h1 style="
+                                        margin: 0;
+                                        font-size: 26px;
+                                    ">
+                                        Chat App
+                                    </h1>
 
-                                <h1 style="
-                                    margin: 0;
-                                    color: #4f46e5;
-                                    font-size: 36px;
-                                    letter-spacing: 10px;
-                                ">
-                                    ${otp}
-                                </h1>
+                                    <p style="
+                                        margin: 8px 0 0;
+                                        font-size: 14px;
+                                    ">
+                                        Password Reset Request
+                                    </p>
+                                </td>
+                            </tr>
 
-                            </div>
+                            <!-- Content -->
+                            <tr>
+                                <td style="padding: 35px 30px;">
 
-                            <p style="
-                                color: #6b7280;
-                                font-size: 14px;
-                                line-height: 1.6;
-                            ">
-                                This OTP is valid for
-                                <strong>5 minutes</strong>.
-                                Please do not share this code with anyone.
-                            </p>
+                                    <h2 style="
+                                        color: #1f2937;
+                                        font-size: 22px;
+                                        margin-top: 0;
+                                    ">
+                                        Forgot your password?
+                                    </h2>
 
-                            <p style="
-                                color: #6b7280;
-                                font-size: 14px;
-                                line-height: 1.6;
-                            ">
-                                If you didn't request a password reset,
-                                you can safely ignore this email.
-                            </p>
+                                    <p style="
+                                        color: #6b7280;
+                                        font-size: 15px;
+                                        line-height: 1.7;
+                                    ">
+                                        We received a request to reset your
+                                        password. Use the OTP below to verify
+                                        your identity and continue.
+                                    </p>
 
-                        </td>
-                    </tr>
+                                    <!-- OTP -->
+                                    <div style="
+                                        background-color: #f3f4f6;
+                                        border: 1px dashed #4f46e5;
+                                        border-radius: 10px;
+                                        padding: 20px;
+                                        text-align: center;
+                                        margin: 25px 0;
+                                    ">
 
-                    <!-- Footer -->
-                    <tr>
-                        <td align="center"
-                            style="
-                                background-color: #f9fafb;
-                                padding: 20px;
-                                border-top: 1px solid #e5e7eb;
-                            ">
+                                        <p style="
+                                            margin: 0 0 10px;
+                                            color: #6b7280;
+                                            font-size: 13px;
+                                        ">
+                                            YOUR VERIFICATION CODE
+                                        </p>
 
-                            <p style="
-                                margin: 0;
-                                color: #9ca3af;
-                                font-size: 12px;
-                            ">
-                                © 2026 MyApp. All rights reserved.
-                            </p>
+                                        <h1 style="
+                                            margin: 0;
+                                            color: #4f46e5;
+                                            font-size: 36px;
+                                            letter-spacing: 10px;
+                                        ">
+                                            ${otp}
+                                        </h1>
 
-                            <p style="
-                                margin: 8px 0 0;
-                                color: #9ca3af;
-                                font-size: 12px;
-                            ">
-                                This is an automated email.
-                                Please do not reply.
-                            </p>
+                                    </div>
 
-                        </td>
-                    </tr>
+                                    <p style="
+                                        color: #6b7280;
+                                        font-size: 14px;
+                                        line-height: 1.6;
+                                    ">
+                                        This OTP is valid for
+                                        <strong>5 minutes</strong>.
+                                        Please do not share this code with anyone.
+                                    </p>
 
-                </table>
+                                    <p style="
+                                        color: #6b7280;
+                                        font-size: 14px;
+                                        line-height: 1.6;
+                                    ">
+                                        If you didn't request a password reset,
+                                        you can safely ignore this email.
+                                    </p>
 
-            </td>
-        </tr>
+                                </td>
+                            </tr>
 
-    </table>
+                            <!-- Footer -->
+                            <tr>
+                                <td align="center"
+                                    style="
+                                        background-color: #f9fafb;
+                                        padding: 20px;
+                                        border-top: 1px solid #e5e7eb;
+                                    ">
 
-</body>
-</html>`
+                                    <p style="
+                                        margin: 0;
+                                        color: #9ca3af;
+                                        font-size: 12px;
+                                    ">
+                                        © 2026 MyApp. All rights reserved.
+                                    </p>
+
+                                    <p style="
+                                        margin: 8px 0 0;
+                                        color: #9ca3af;
+                                        font-size: 12px;
+                                    ">
+                                        This is an automated email.
+                                        Please do not reply.
+                                    </p>
+
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </td>
+                </tr>
+
+            </table>
+
+        </body>
+        </html>`
 
         resend.emails.send({
             from: 'onboarding@resend.dev',
@@ -283,9 +284,35 @@ router.post('/forget-password', async (req, res) => {
     }
 })
 
-router.post("/verify-otp", (req, res) => {
+router.post("/change-password", async (req, res) => {
+    const { email, otp, password } = req.body;
     try {
+        const otpRecord = await otpModel.findOne({ email }).sort({ _id: -1 }).exec()
+        // console.log("generatedOtp", generatedOtp)
+        if (!otpRecord || otpRecord?.isUsed == true) {
+            return res.status(401).send({ message: "OTP Record Not Found, Generate New OTP" })
+        }
+        const now = moment()
+        const otpCreatedTime = moment(otpRecord.createdOn)
+        const diffInTime = now.diff(otpCreatedTime, "seconds")
 
+        if (diffInTime > 600) {
+            return res.status(401).send({ message: "OTP Expired, Generate New OTP" })
+        }
+
+        const isValidOTP = await bcrypt.compare(otpRecord.otp, otp)
+
+        if (!isValidOTP) {
+            return res.status(400).send({ message: "Invalid OTP" });
+        }
+
+        const hash = await bcrypt.hash(password, 12);
+
+        await userModel.findOneAndUpdate({ email }, { password: hash });
+
+        res.status(200).send({ message: "Password Update Successfully" })
+
+        // res.send({ generatedOtp })
     } catch (error) {
 
     }
